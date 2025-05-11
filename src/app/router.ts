@@ -1,4 +1,4 @@
-import { createBrowserRouter, redirect } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/model/routes';
 
@@ -13,12 +13,8 @@ export const router = createBrowserRouter([
         lazy: () => import('@/features/auth/auth.page'),
       },
       {
-        path: ROUTES.TASK_BOARD,
-        lazy: () => import('@/features/task-board/task-board.page'),
-      },
-      {
         path: ROUTES.HOME,
-        loader: () => redirect(ROUTES.TASK_BOARD),
+        lazy: () => import('@/features/home/home.page'),
       },
     ],
   },

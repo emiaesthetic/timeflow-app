@@ -1,3 +1,4 @@
+/* stylelint-disable declaration-no-important */
 @use './media' as media;
 
 .visually-hidden {
@@ -7,36 +8,36 @@
 
 .hidden-laptop {
   @include media.laptop {
-    display: none;
+    display: none !important;
   }
 }
 
 .visible-laptop {
   @include media.laptop-above {
-    display: none;
+    display: none !important;
   }
 }
 
 .hidden-tablet {
   @include media.tablet {
-    display: none;
+    display: none !important;
   }
 }
 
 .visible-tablet {
   @include media.tablet-above {
-    display: none;
+    display: none !important;
   }
 }
 
 .hidden-mobile-large {
   @include media.mobile-large {
-    display: none;
+    display: none !important;
   }
 }
 
 .visible-mobile-large {
   @include media.mobile-large-above {
-    display: none;
+    display: none !important;
   }
 }
