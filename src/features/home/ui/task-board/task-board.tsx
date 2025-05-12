@@ -1,20 +1,11 @@
 import { Button } from '@/shared/ui/button';
+import { PlusIcon } from '@/shared/ui/icons';
 import { Layout } from '@/shared/ui/layout';
 
-import { TaskItem } from './ui/task-item';
-
-import PlusIcon from './img/plus.svg?react';
+import { ITask } from '../../model/types';
+import { TaskItem } from '../task-item';
 
 import style from './task-board.module.scss';
-
-export interface ITask {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  duration: string;
-  priority: string;
-}
 
 const tasks: ITask[] = [
   {

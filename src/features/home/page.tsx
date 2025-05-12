@@ -1,7 +1,7 @@
 import { Header } from './ui/header';
 import { TaskBoard } from './ui/task-board';
 
-import style from './home.module.scss';
+import style from './page.module.scss';
 
 const HomePage = () => {
   return (
