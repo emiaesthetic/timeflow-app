@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import style from './button.module.scss';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: 'primary' | 'icon';
+  variant: 'light' | 'dark' | 'icon';
   fullWidth?: boolean;
   children: React.ReactNode;
 }

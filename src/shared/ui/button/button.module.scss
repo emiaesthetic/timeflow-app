@@ -17,7 +17,16 @@
   @include mixins.transition(background-color, color);
   @include mixins.focus-outline;
 
-  &--primary {
+  &--light {
+    background-color: var(--background-primary);
+    color: var(--foreground-primary);
+
+    @include mixins.hover {
+      background-color: var(--background-tertiary);
+    }
+  }
+
+  &--dark {
     background-color: var(--background-secondary);
     color: var(--foreground-secondary);
 

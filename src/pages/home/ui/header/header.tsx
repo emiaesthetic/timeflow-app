@@ -10,7 +10,7 @@ export const Header = () => {
       <Layout>
         <div className={style.header__inner}>
           <Logo />
-          <Button variant="primary">Logout</Button>
+          <Button variant="dark">Logout</Button>
         </div>
       </Layout>
     </header>
