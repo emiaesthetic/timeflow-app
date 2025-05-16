@@ -21,6 +21,10 @@ body {
   font-family: var(--font-family);
   background-color: var(--background-primary);
   color: var(--foreground-primary);
+
+  &:has(dialog) {
+    overflow: hidden;
+  }
 }
 
 h1,

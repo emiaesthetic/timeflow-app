@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import { Button } from '@/shared/ui/button';
 import { Checkbox } from '@/shared/ui/checkbox';
+import { Dialog } from '@/shared/ui/dialog';
 import { DropdownMenu } from '@/shared/ui/dropdown-menu';
 import {
   CrossIcon,
@@ -15,6 +16,7 @@ import { Layout } from '@/shared/ui/layout';
 
 import { TASKS } from '../../constants';
 import { ITask } from '../../types';
+import { TaskForm } from '../task-form';
 
 import styleBoard from './task-board.module.scss';
 import styleItem from './task-item.module.scss';
@@ -105,25 +107,46 @@ export const TaskItem = ({
 };
 
 export const TaskBoard = () => {
-  return (
-    <section className={styleBoard['task-board']}>
-      <Layout>
-        <header className={styleBoard['task-board__header']}>
-          <h2 className={styleBoard['task-board__title']}>Task List</h2>
-          <Button variant="dark">
-            <PlusIcon width="24" height="24" aria-hidden="true" />
-            Add new task
-          </Button>
-        </header>
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-        <ul className={styleBoard['task-board__list']}>
-          {TASKS.map((task, index) => (
-            <li className={styleBoard['task-board__item']}>
-              <TaskItem key={index} {...task} />
-            </li>
-          ))}
-        </ul>
-      </Layout>
-    </section>
+  return (
+    <>
+      <section className={styleBoard['task-board']}>
+        <Layout>
+          <header className={styleBoard['task-board__header']}>
+            <h2 className={styleBoard['task-board__title']}>Task List</h2>
+            <Button
+              variant="dark"
+              onClick={() => dialogRef.current?.showModal()}
+            >
+              <PlusIcon width="24" height="24" aria-hidden="true" />
+              Add new task
+            </Button>
+          </header>
+
+          <ul className={styleBoard['task-board__list']}>
+            {TASKS.map((task, index) => (
+              <li className={styleBoard['task-board__item']}>
+                <TaskItem key={index} {...task} />
+              </li>
+            ))}
+          </ul>
+        </Layout>
+      </section>
+
+      <Dialog
+        ref={dialogRef}
+        dialogTitle={<h1 className="create-task__title">Create New Task</h1>}
+        dialogContent={<TaskForm />}
+        dialogFooter={
+          <Button variant="dark" type="submit" form="taskForm" fullWidth>
+            Create Task
+          </Button>
+        }
+        id="createTask"
+        aria-label="Task creation form"
+        onClose={() => dialogRef.current?.close()}
+      />
+    </>
   );
 };

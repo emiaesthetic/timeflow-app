@@ -1,0 +1,29 @@
+@use '@/shared/styles/media' as media;
+@use '@/shared/styles/mixins' as mixins;
+
+.input {
+  width: 100%;
+  height: var(--size-6);
+  padding-inline: var(--space-2) var(--space-2);
+  padding-block: var(--space-1);
+  border: 2px solid var(--border-gray);
+  border-radius: var(--border-radius-2);
+  background-color: transparent;
+
+  @include mixins.transition(background-color, border-color);
+
+  @include mixins.hover {
+    border-color: var(--border-dark);
+    background-color: var(--background-primary);
+  }
+
+  @include mixins.focus {
+    border-color: var(--border-dark);
+  }
+}
+
+.textarea {
+  height: calc(var(--size-1) * 16);
+  padding-inline: var(--space-1);
+  resize: none;
+}

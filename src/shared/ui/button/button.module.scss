@@ -47,4 +47,8 @@
       color: var(--foreground-secondary);
     }
   }
+
+  &--fullWidth {
+    width: 100%;
+  }
 }
