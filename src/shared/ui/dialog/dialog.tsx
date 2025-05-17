@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Button } from '../button';
@@ -10,6 +10,7 @@ interface IDialogProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
   dialogTitle: React.ReactNode;
   dialogContent: React.ReactNode;
   dialogFooter: React.ReactNode;
+  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -25,11 +26,58 @@ const DialogFooter = ({ children }: { children: React.ReactNode }) => {
   return <footer className={style.dialog__content}>{children}</footer>;
 };
 
-export const Dialog = React.forwardRef<HTMLDialogElement, IDialogProps>(
-  ({ dialogTitle, dialogContent, dialogFooter, onClose, ...props }, ref) => {
-    return createPortal(
-      <dialog className={style.dialog} ref={ref} {...props}>
-        <DialogHeader>
+export const Dialog = ({
+  dialogTitle,
+  dialogContent,
+  dialogFooter,
+  isOpen,
+  onClose,
+  ...props
+}: IDialogProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [isOpen]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (isOpen && event.key === 'Escape') onClose();
+    },
+    [isOpen, onClose],
+  );
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (isOpen && dialogRef.current === event.target) onClose();
+    },
+    [isOpen, onClose],
+  );
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    dialog.addEventListener('click', handleClickOutside);
+    dialog.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      dialog.removeEventListener('click', handleClickOutside);
+      dialog.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown, handleClickOutside]);
+
+  const dialogPortal = document.getElementById('dialog-portal');
+  if (!dialogPortal) return;
+
+  return createPortal(
+    <dialog className={style.dialog} ref={dialogRef} {...props}>
+      <div className={style.dialog__container}>
+        <Dialog.Header>
           {dialogTitle}
           <Button
             variant="icon"
@@ -41,13 +89,15 @@ export const Dialog = React.forwardRef<HTMLDialogElement, IDialogProps>(
           >
             <CrossIcon width="32" height="32" />
           </Button>
-        </DialogHeader>
-        <DialogContent>{dialogContent}</DialogContent>
-        <DialogFooter>{dialogFooter}</DialogFooter>
-      </dialog>,
-      document.getElementById('dialog-portal')!,
-    );
-  },
-);
+        </Dialog.Header>
+        <Dialog.Content>{dialogContent}</Dialog.Content>
+        <Dialog.Footer>{dialogFooter}</Dialog.Footer>
+      </div>
+    </dialog>,
+    dialogPortal,
+  );
+};
 
-Dialog.displayName = 'Dialog';
+Dialog.Header = DialogHeader;
+Dialog.Content = DialogContent;
+Dialog.Footer = DialogFooter;

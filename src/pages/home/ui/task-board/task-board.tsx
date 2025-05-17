@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 
 import { Button } from '@/shared/ui/button';
@@ -107,18 +107,14 @@ export const TaskItem = ({
 };
 
 export const TaskBoard = () => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
   return (
     <>
       <section className={styleBoard['task-board']}>
         <Layout>
           <header className={styleBoard['task-board__header']}>
             <h2 className={styleBoard['task-board__title']}>Task List</h2>
-            <Button
-              variant="dark"
-              onClick={() => dialogRef.current?.showModal()}
-            >
+            <Button variant="dark" onClick={() => setIsOpenDialog(true)}>
               <PlusIcon width="24" height="24" aria-hidden="true" />
               Add new task
             </Button>
@@ -135,7 +131,6 @@ export const TaskBoard = () => {
       </section>
 
       <Dialog
-        ref={dialogRef}
         dialogTitle={<h1 className="create-task__title">Create New Task</h1>}
         dialogContent={<TaskForm />}
         dialogFooter={
@@ -145,7 +140,8 @@ export const TaskBoard = () => {
         }
         id="createTask"
         aria-label="Task creation form"
-        onClose={() => dialogRef.current?.close()}
+        isOpen={isOpenDialog}
+        onClose={() => setIsOpenDialog(false)}
       />
     </>
   );
