@@ -21,4 +21,13 @@
   &__item:not(:last-child) {
     margin-bottom: var(--space-3);
   }
+
+  &__empty {
+    display: flex;
+    justify-content: center;
+
+    svg {
+      width: 50%;
+    }
+  }
 }

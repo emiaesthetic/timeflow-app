@@ -14,12 +14,18 @@ import {
 } from '@/shared/ui/icons';
 import { Layout } from '@/shared/ui/layout';
 
-import { TASKS } from '../../constants';
-import { ITask } from '../../types';
+import { ITask } from '../../model/types';
+import { useLocalStorage } from '../../model/useLocalStorage';
 import { TaskForm } from '../task-form';
+
+import EmptyIcon from './img/empty.svg?react';
 
 import styleBoard from './task-board.module.scss';
 import styleItem from './task-item.module.scss';
+
+interface ITaskItemProps extends ITask {
+  onRemove: (title: string) => void;
+}
 
 export const TaskItem = ({
   title,
@@ -28,7 +34,8 @@ export const TaskItem = ({
   time,
   duration,
   priority,
-}: ITask) => {
+  onRemove,
+}: ITaskItemProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   return (
@@ -49,16 +56,16 @@ export const TaskItem = ({
 
         <div className={styleItem.task__schedule}>
           <div className={styleItem.task__datetime}>
-            <time className={styleItem.task__date} dateTime="2025-09-10">
+            <time className={styleItem.task__date} dateTime={date}>
               {date},
             </time>
-            <time className={styleItem.task__time} dateTime="06:40">
-              {time}
+            <time className={styleItem.task__time} dateTime={time}>
+              {time} PM
             </time>
           </div>
 
           <data className={styleItem.task__duration} value="PT30M">
-            {duration}
+            {duration} minutes
           </data>
         </div>
       </div>
@@ -76,7 +83,7 @@ export const TaskItem = ({
             </Button>
           </li>
           <li className={styleItem['task__actions-item']}>
-            <Button variant="icon">
+            <Button variant="icon" onClick={() => onRemove(title)}>
               <CrossIcon width="32" height="32" />
             </Button>
           </li>
@@ -90,9 +97,21 @@ export const TaskItem = ({
             ariaLabel: 'Open task menu',
           }}
           items={[
-            { label: 'Start', icon: <PlayIcon width="20" height="20" /> },
-            { label: 'Edit', icon: <EditIcon width="20" height="20" /> },
-            { label: 'Delete', icon: <CrossIcon width="20" height="20" /> },
+            {
+              label: 'Start',
+              icon: <PlayIcon width="20" height="20" />,
+              onClick: () => {},
+            },
+            {
+              label: 'Edit',
+              icon: <EditIcon width="20" height="20" />,
+              onClick: () => {},
+            },
+            {
+              label: 'Delete',
+              icon: <CrossIcon width="20" height="20" />,
+              onClick: () => onRemove(title),
+            },
           ]}
           isOpen={isOpenDropdown}
           onToggle={() => setIsOpenDropdown(!isOpenDropdown)}
@@ -107,7 +126,14 @@ export const TaskItem = ({
 };
 
 export const TaskBoard = () => {
+  const { tasks, addTask, removeTask } = useLocalStorage();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+
+  const handleSubmit = (data: ITask) => {
+    addTask(data);
+    setIsOpenDialog(false);
+  };
+
   return (
     <>
       <section className={styleBoard['task-board']}>
@@ -120,19 +146,29 @@ export const TaskBoard = () => {
             </Button>
           </header>
 
-          <ul className={styleBoard['task-board__list']}>
-            {TASKS.map((task, index) => (
-              <li className={styleBoard['task-board__item']}>
-                <TaskItem key={index} {...task} />
-              </li>
-            ))}
-          </ul>
+          {tasks.length === 0 ? (
+            <div className={styleBoard['task-board__empty']}>
+              <EmptyIcon />
+            </div>
+          ) : (
+            <ul className={styleBoard['task-board__list']}>
+              {tasks.map((task, index) => (
+                <li className={styleBoard['task-board__item']}>
+                  <TaskItem
+                    key={index}
+                    {...task}
+                    onRemove={title => removeTask(title)}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
         </Layout>
       </section>
 
       <Dialog
         dialogTitle={<h1 className="create-task__title">Create New Task</h1>}
-        dialogContent={<TaskForm />}
+        dialogContent={<TaskForm onSubmit={handleSubmit} />}
         dialogFooter={
           <Button variant="dark" type="submit" form="taskForm" fullWidth>
             Create Task

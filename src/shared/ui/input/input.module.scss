@@ -20,6 +20,10 @@
   @include mixins.focus {
     border-color: var(--border-dark);
   }
+
+  &:invalid {
+    border-color: var(--border-red);
+  }
 }
 
 .textarea {

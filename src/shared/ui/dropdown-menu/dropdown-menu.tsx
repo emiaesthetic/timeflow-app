@@ -14,6 +14,7 @@ interface IDropdownTrigger {
 interface IDropdownItem {
   label: string;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 interface IDropdownMenu {
@@ -69,7 +70,10 @@ export const DropdownMenu = ({
           <ul className={style['dropdown-menu__list']} id="dropdown-menu">
             {items.map(item => (
               <li className={style['dropdown-menu__item']}>
-                <button className={style['dropdown-menu__button']}>
+                <button
+                  className={style['dropdown-menu__button']}
+                  onClick={item.onClick}
+                >
                   {item.icon}
                   {item.label}
                 </button>
