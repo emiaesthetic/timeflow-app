@@ -21,11 +21,9 @@ export const useLocalStorage = () => {
     setStorageValue(prevTasks => [...prevTasks, task]);
   };
 
-  const removeTask = (title: string) => {
-    if (!title) return;
-    setStorageValue(prevTasks =>
-      prevTasks.filter(item => item.title !== title),
-    );
+  const removeTask = (taskID: string) => {
+    if (!taskID) return;
+    setStorageValue(prevTasks => prevTasks.filter(item => item.id !== taskID));
   };
 
   return { tasks: storageValue, addTask, removeTask };

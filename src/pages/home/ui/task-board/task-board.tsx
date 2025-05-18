@@ -14,6 +14,7 @@ import {
 } from '@/shared/ui/icons';
 import { Layout } from '@/shared/ui/layout';
 
+import { formatDate } from '../../lib/formatDate';
 import { ITask } from '../../model/types';
 import { useLocalStorage } from '../../model/useLocalStorage';
 import { TaskForm } from '../task-form';
@@ -24,10 +25,11 @@ import styleBoard from './task-board.module.scss';
 import styleItem from './task-item.module.scss';
 
 interface ITaskItemProps extends ITask {
-  onRemove: (title: string) => void;
+  onRemove: (id: string) => void;
 }
 
 export const TaskItem = ({
+  id,
   title,
   description,
   date,
@@ -57,10 +59,10 @@ export const TaskItem = ({
         <div className={styleItem.task__schedule}>
           <div className={styleItem.task__datetime}>
             <time className={styleItem.task__date} dateTime={date}>
-              {date},
+              {formatDate(date)},
             </time>
             <time className={styleItem.task__time} dateTime={time}>
-              {time} PM
+              {time}
             </time>
           </div>
 
@@ -83,7 +85,7 @@ export const TaskItem = ({
             </Button>
           </li>
           <li className={styleItem['task__actions-item']}>
-            <Button variant="icon" onClick={() => onRemove(title)}>
+            <Button variant="icon" onClick={() => onRemove(id)}>
               <CrossIcon width="32" height="32" />
             </Button>
           </li>
@@ -110,7 +112,7 @@ export const TaskItem = ({
             {
               label: 'Delete',
               icon: <CrossIcon width="20" height="20" />,
-              onClick: () => onRemove(title),
+              onClick: () => onRemove(id),
             },
           ]}
           isOpen={isOpenDropdown}
@@ -129,8 +131,12 @@ export const TaskBoard = () => {
   const { tasks, addTask, removeTask } = useLocalStorage();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
 
-  const handleSubmit = (data: ITask) => {
-    addTask(data);
+  const handleSubmit = (data: Omit<ITask, 'id'>) => {
+    const taskWithID: ITask = {
+      id: crypto.randomUUID(),
+      ...data,
+    };
+    addTask(taskWithID);
     setIsOpenDialog(false);
   };
 
@@ -152,12 +158,14 @@ export const TaskBoard = () => {
             </div>
           ) : (
             <ul className={styleBoard['task-board__list']}>
-              {tasks.map((task, index) => (
-                <li className={styleBoard['task-board__item']}>
+              {tasks.map(task => (
+                <li key={task.id} className={styleBoard['task-board__item']}>
                   <TaskItem
-                    key={index}
                     {...task}
-                    onRemove={title => removeTask(title)}
+                    onRemove={id => {
+                      setIsOpenDialog(false);
+                      removeTask(id);
+                    }}
                   />
                 </li>
               ))}

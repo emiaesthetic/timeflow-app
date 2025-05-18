@@ -7,13 +7,17 @@ import { ITask } from '../../model/types';
 
 import style from './task-form.module.scss';
 
-export const TaskForm = ({ onSubmit }: { onSubmit: (data: ITask) => void }) => {
+export const TaskForm = ({
+  onSubmit,
+}: {
+  onSubmit: (data: Omit<ITask, 'id'>) => void;
+}) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<ITask>();
+  } = useForm<Omit<ITask, 'id'>>();
 
   return (
     <form
