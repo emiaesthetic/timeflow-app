@@ -2,9 +2,9 @@
 @use '@/shared/styles/mixins' as mixins;
 
 .input {
+  position: relative;
   width: 100%;
   height: var(--size-6);
-  padding-inline: var(--space-2) var(--space-2);
   padding-block: var(--space-1);
   border: 2px solid var(--border-gray);
   border-radius: var(--border-radius-2);
@@ -23,6 +23,10 @@
 
   &:invalid {
     border-color: var(--border-red);
+  }
+
+  &--default {
+    padding-inline: var(--space-2) var(--space-2);
   }
 }
 

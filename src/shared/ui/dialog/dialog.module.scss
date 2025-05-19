@@ -1,3 +1,5 @@
+@use '@/shared/styles/mixins' as mixins;
+
 .dialog {
   flex-direction: column;
   column-gap: var(--space-4);
@@ -7,6 +9,8 @@
   border: none;
   border-radius: var(--border-radius-3);
   font-family: var(--font-family);
+
+  @include mixins.focus-outline;
 
   &[open] {
     display: flex;

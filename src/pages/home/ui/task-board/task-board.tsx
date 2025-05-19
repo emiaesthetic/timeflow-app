@@ -14,7 +14,7 @@ import {
 } from '@/shared/ui/icons';
 import { Layout } from '@/shared/ui/layout';
 
-import { formatDate } from '../../lib/formatDate';
+import { formatDateParts } from '../../lib/formatDate';
 import { ITask } from '../../model/types';
 import { useLocalStorage } from '../../model/useLocalStorage';
 import { TaskForm } from '../task-form';
@@ -33,12 +33,13 @@ export const TaskItem = ({
   title,
   description,
   date,
-  time,
   duration,
   priority,
   onRemove,
 }: ITaskItemProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const { displayDate, displayTime, dateAttr, timeAttr } =
+    formatDateParts(date);
 
   return (
     <article
@@ -58,11 +59,11 @@ export const TaskItem = ({
 
         <div className={styleItem.task__schedule}>
           <div className={styleItem.task__datetime}>
-            <time className={styleItem.task__date} dateTime={date}>
-              {formatDate(date)},
+            <time className={styleItem.task__date} dateTime={dateAttr}>
+              {displayDate},
             </time>
-            <time className={styleItem.task__time} dateTime={time}>
-              {time}
+            <time className={styleItem.task__time} dateTime={timeAttr}>
+              {displayTime}
             </time>
           </div>
 

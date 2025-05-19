@@ -18,6 +18,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2) var(--space-4);
+    justify-content: space-between;
+    align-items: center;
     align-items: center;
 
     @include media.tablet {

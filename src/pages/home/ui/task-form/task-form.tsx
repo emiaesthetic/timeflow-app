@@ -1,8 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
+import { Calendar } from '@/shared/ui/calendar';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 
+import { formatDate } from '../../lib/formatDate';
 import { ITask } from '../../model/types';
 
 import style from './task-form.module.scss';
@@ -16,6 +18,7 @@ export const TaskForm = ({
     register,
     formState: { errors },
     handleSubmit,
+    control,
     reset,
   } = useForm<Omit<ITask, 'id'>>();
 
@@ -54,26 +57,25 @@ export const TaskForm = ({
       <div className={style['task-form__datetime']}>
         <div className={style['task-form__field']}>
           <Label children="Date" htmlFor="date" />
-          <Input
+          <Controller
+            name="date"
+            control={control}
+            rules={{ required: 'Обязательное поле' }}
+            render={({ field }) => (
+              <Calendar
+                value={field.value ? formatDate(field.value) : ''}
+                onSelect={field.onChange}
+              />
+            )}
+          />
+          {/* <Input
             {...register('date', {
               required: { value: true, message: 'Обязательное поле' },
             })}
-            type="date"
+            type="text"
             id="date"
             aria-invalid={!!errors.date}
-          />
-        </div>
-
-        <div className={style['task-form__field']}>
-          <Label children="Time" htmlFor="time" />
-          <Input
-            {...register('time', {
-              required: { value: true, message: 'Обязательное поле' },
-            })}
-            type="time"
-            id="time"
-            aria-invalid={!!errors.time}
-          />
+          /> */}
         </div>
 
         <div className={style['task-form__field']}>
