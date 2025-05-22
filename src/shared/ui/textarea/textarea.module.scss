@@ -1,17 +1,15 @@
 @use '@/shared/styles/media' as media;
 @use '@/shared/styles/mixins' as mixins;
 
-.input-wrapper {
-  position: relative;
-}
-
-.input {
+.textarea {
   width: 100%;
-  height: var(--size-6);
-  padding-block: var(--space-1);
+  height: calc(var(--size-1) * 16);
+  padding-inline: var(--space-2);
+  padding-block: var(--space-2);
   border: 2px solid var(--border-gray);
   border-radius: var(--border-radius-2);
   background-color: transparent;
+  resize: none;
 
   @include mixins.transition(background-color, border-color);
 
@@ -22,21 +20,5 @@
 
   @include mixins.focus {
     border-color: var(--border-dark);
-  }
-
-  &[aria-invalid='true'] {
-    border-color: var(--border-red);
-  }
-
-  &--default {
-    padding-inline: var(--space-2) var(--space-2);
-  }
-
-  &--icon-left {
-    padding-left: var(--space-4);
-  }
-
-  &--icon-right {
-    padding-right: var(--space-4);
   }
 }

@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Calendar } from '@/shared/ui/calendar';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
+import { TextArea } from '@/shared/ui/textarea';
 
 import { formatDate } from '../../lib/formatDate';
 import { ITask } from '../../model/types';
@@ -46,11 +47,10 @@ export const TaskForm = ({
 
       <div className={style['task-form__field']}>
         <Label children="Description" htmlFor="description" />
-        <Input
+        <TextArea
           {...register('description')}
-          type="text"
-          multiline
           id="description"
+          aria-invalid={!!errors.description}
         />
       </div>
 
@@ -68,14 +68,6 @@ export const TaskForm = ({
               />
             )}
           />
-          {/* <Input
-            {...register('date', {
-              required: { value: true, message: 'Обязательное поле' },
-            })}
-            type="text"
-            id="date"
-            aria-invalid={!!errors.date}
-          /> */}
         </div>
 
         <div className={style['task-form__field']}>

@@ -3,29 +3,30 @@ import clsx from 'clsx';
 
 import style from './input.module.scss';
 
-type InputElement = HTMLInputElement | HTMLTextAreaElement;
-
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  variant?: 'default';
-  multiline?: boolean;
+  variant?: 'default' | 'icon-left' | 'icon-right';
 }
 
-export const Input = React.forwardRef<InputElement, InputProps>(
-  ({ variant = 'default', multiline = false, ...props }, ref) => {
-    const className = clsx(style.input, style[`input--${variant}`], {
-      [style.textarea]: multiline,
-    });
+export const InputWrapper = ({
+  children,
+  icon,
+}: {
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) => {
+  <div className={style['input-wrapper']}>
+    {children}
+    {icon}
+  </div>;
+};
 
-    return multiline ? (
-      <textarea
-        ref={ref as React.Ref<HTMLTextAreaElement>}
-        className={className}
-        {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
-      />
-    ) : (
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ variant = 'default', type = 'text', ...props }, ref) => {
+    return (
       <input
-        ref={ref as React.Ref<HTMLInputElement>}
-        className={className}
+        className={clsx(style.input, style[`input--${variant}`])}
+        type={type}
+        ref={ref}
         {...props}
       />
     );

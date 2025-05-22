@@ -39,8 +39,8 @@ export const Calendar = ({
   return (
     <div className={style['calendar-wrapper']} ref={calendarRef}>
       <Input
-        onClick={() => setIsOpen(prevState => !prevState)}
         value={value}
+        onClick={() => setIsOpen(prevState => !prevState)}
         readOnly
       />
       {isOpen && (
