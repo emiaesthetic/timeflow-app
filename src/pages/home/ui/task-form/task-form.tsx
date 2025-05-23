@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
@@ -22,6 +23,8 @@ export const TaskForm = ({
     control,
     reset,
   } = useForm<Omit<ITask, 'id'>>();
+
+  const [isOpenCalendar, setIsOpenCalendar] = useState(false);
 
   return (
     <form
@@ -63,7 +66,16 @@ export const TaskForm = ({
             rules={{ required: 'Обязательное поле' }}
             render={({ field }) => (
               <Calendar
-                value={field.value ? formatDate(field.value) : ''}
+                value={new Date(field.value)}
+                input={
+                  <Input
+                    value={field.value ? formatDate(field.value) : ''}
+                    onClick={() => setIsOpenCalendar(prevState => !prevState)}
+                    readOnly
+                  />
+                }
+                isOpen={isOpenCalendar}
+                onClose={() => setIsOpenCalendar(false)}
                 onSelect={field.onChange}
               />
             )}
