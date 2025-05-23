@@ -3,6 +3,25 @@
 
 .input-wrapper {
   position: relative;
+  width: 100%;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  &--icon-left {
+    svg {
+      left: var(--space-1);
+    }
+  }
+
+  &--icon-right {
+    svg {
+      right: var(--space-1);
+    }
+  }
 }
 
 .input {
@@ -33,10 +52,10 @@
   }
 
   &--icon-left {
-    padding-left: var(--space-4);
+    padding-inline: var(--space-4) var(--space-2);
   }
 
   &--icon-right {
-    padding-right: var(--space-4);
+    padding-inline: var(--space-2) var(--space-4);
   }
 }

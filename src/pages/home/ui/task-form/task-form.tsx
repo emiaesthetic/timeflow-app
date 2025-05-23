@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
-import { Input } from '@/shared/ui/input';
+import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
+import { Input, InputWrapper } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { TextArea } from '@/shared/ui/textarea';
 
@@ -40,7 +41,7 @@ export const TaskForm = ({
         <Label children="Title" htmlFor="title" />
         <Input
           {...register('title', {
-            required: { value: true, message: 'Обязательное поле' },
+            required: { value: true, message: 'Required field' },
           })}
           type="text"
           id="title"
@@ -63,16 +64,28 @@ export const TaskForm = ({
           <Controller
             name="date"
             control={control}
-            rules={{ required: 'Обязательное поле' }}
+            rules={{ required: 'Required field' }}
             render={({ field }) => (
               <Calendar
                 value={new Date(field.value)}
                 input={
-                  <Input
-                    value={field.value ? formatDate(field.value) : ''}
-                    onClick={() => setIsOpenCalendar(prevState => !prevState)}
-                    readOnly
-                  />
+                  <InputWrapper
+                    variant="icon-right"
+                    icon={
+                      <CalendarIcon
+                        width="24"
+                        height="24"
+                        isClickable={false}
+                      />
+                    }
+                  >
+                    <Input
+                      variant="icon-right"
+                      value={field.value ? formatDate(field.value) : ''}
+                      onClick={() => setIsOpenCalendar(prevState => !prevState)}
+                      readOnly
+                    />
+                  </InputWrapper>
                 }
                 isOpen={isOpenCalendar}
                 onClose={() => setIsOpenCalendar(false)}
@@ -84,14 +97,24 @@ export const TaskForm = ({
 
         <div className={style['task-form__field']}>
           <Label children="Duration" htmlFor="duration" />
-          <Input
-            {...register('duration', {
-              required: { value: true, message: 'Обязательное поле' },
-            })}
-            type="number"
-            id="duration"
-            aria-invalid={!!errors.duration}
-          />
+          <InputWrapper
+            variant="icon-right"
+            icon={<TimerIcon width="24" height="24" isClickable={false} />}
+          >
+            <Input
+              {...register('duration', {
+                required: { value: true, message: 'Required field' },
+                pattern: {
+                  value: /^\d+$/,
+                  message: 'Numerical value',
+                },
+              })}
+              variant="icon-right"
+              type="text"
+              id="duration"
+              aria-invalid={!!errors.duration}
+            />
+          </InputWrapper>
         </div>
       </div>
 
@@ -99,7 +122,7 @@ export const TaskForm = ({
         <Label children="Priority" htmlFor="priority" />
         <select
           {...register('priority', {
-            required: { value: true, message: 'Обязательное поле' },
+            required: { value: true, message: 'Required field' },
           })}
           className={style['task-form__select']}
           id="priority"

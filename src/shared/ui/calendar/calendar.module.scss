@@ -2,14 +2,6 @@
 
 .calendar-wrapper {
   position: relative;
-
-  svg {
-    position: absolute;
-    top: 50%;
-    right: var(--space-1);
-    user-select: none;
-    translate: 0 -50%;
-  }
 }
 
 .calendar {

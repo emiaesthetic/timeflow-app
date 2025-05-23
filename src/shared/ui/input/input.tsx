@@ -8,16 +8,25 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const InputWrapper = ({
+  variant,
   children,
   icon,
 }: {
+  variant: 'icon-left' | 'icon-right';
   children: React.ReactNode;
   icon: React.ReactNode;
 }) => {
-  <div className={style['input-wrapper']}>
-    {children}
-    {icon}
-  </div>;
+  return (
+    <div
+      className={clsx(
+        style['input-wrapper'],
+        style[`input-wrapper--${variant}`],
+      )}
+    >
+      {children}
+      {icon}
+    </div>
+  );
 };
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
