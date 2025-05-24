@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
+import { Error } from '@/shared/ui/error';
 import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
 import { Input, InputWrapper } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
@@ -48,6 +49,7 @@ export const TaskForm = ({
           id="title"
           aria-invalid={!!errors.title}
         />
+        <Error text={errors.title?.message} />
       </div>
 
       <div className={style['task-form__field']}>
@@ -57,6 +59,7 @@ export const TaskForm = ({
           id="description"
           aria-invalid={!!errors.description}
         />
+        <Error text={errors.description?.message} />
       </div>
 
       <div className={style['task-form__datetime']}>
@@ -85,6 +88,7 @@ export const TaskForm = ({
                       value={field.value ? formatDate(field.value) : ''}
                       onClick={() => setIsOpenCalendar(prevState => !prevState)}
                       readOnly
+                      aria-invalid={!!errors.date}
                     />
                   </InputWrapper>
                 }
@@ -94,6 +98,7 @@ export const TaskForm = ({
               />
             )}
           />
+          <Error text={errors.date?.message} />
         </div>
 
         <div className={style['task-form__field']}>
@@ -119,6 +124,7 @@ export const TaskForm = ({
               aria-invalid={!!errors.duration}
             />
           </InputWrapper>
+          <Error text={errors.duration?.message} />
         </div>
       </div>
 
@@ -138,6 +144,7 @@ export const TaskForm = ({
             </>
           }
         />
+        <Error text={errors.priority?.message} />
       </div>
     </form>
   );
