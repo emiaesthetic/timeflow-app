@@ -1,32 +1,24 @@
 @use '@/shared/styles/media' as media;
 @use '@/shared/styles/mixins' as mixins;
 
-.input-wrapper {
+.select-wrapper {
   position: relative;
-  width: 100%;
+  width: max-content;
 
   svg {
     position: absolute;
     top: 50%;
+    right: var(--space-2);
+    pointer-events: none;
     translate: 0 -50%;
-  }
-
-  &--icon-left {
-    svg {
-      left: var(--space-1);
-    }
-  }
-
-  &--icon-right {
-    svg {
-      right: var(--space-1);
-    }
+    rotate: -90deg;
   }
 }
 
-.input {
-  width: 100%;
+.select {
+  width: max-content;
   height: var(--size-6);
+  padding-inline: var(--space-2) var(--space-5);
   padding-block: var(--space-1);
   border: 2px solid var(--border-gray);
   border-radius: var(--border-radius-2);
@@ -46,17 +38,5 @@
 
   &[aria-invalid='true'] {
     border-color: var(--border-red);
-  }
-
-  &--default {
-    padding-inline: var(--space-2) var(--space-2);
-  }
-
-  &--icon-left {
-    padding-inline: var(--space-4) var(--space-2);
-  }
-
-  &--icon-right {
-    padding-inline: var(--space-2) var(--space-4);
   }
 }

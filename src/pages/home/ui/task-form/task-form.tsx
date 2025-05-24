@@ -1,8 +1,13 @@
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
-import { Input } from '@/shared/ui/input';
+import { Error } from '@/shared/ui/error';
+import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
+import { Input, InputWrapper } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
+import { Select } from '@/shared/ui/select';
+import { TextArea } from '@/shared/ui/textarea';
 
 import { formatDate } from '../../lib/formatDate';
 import { ITask } from '../../model/types';
@@ -22,6 +27,8 @@ export const TaskForm = ({
     reset,
   } = useForm<Omit<ITask, 'id'>>();
 
+  const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+
   return (
     <form
       className={style['task-form']}
@@ -36,22 +43,23 @@ export const TaskForm = ({
         <Label children="Title" htmlFor="title" />
         <Input
           {...register('title', {
-            required: { value: true, message: 'Обязательное поле' },
+            required: { value: true, message: 'Required field' },
           })}
           type="text"
           id="title"
           aria-invalid={!!errors.title}
         />
+        <Error text={errors.title?.message} />
       </div>
 
       <div className={style['task-form__field']}>
         <Label children="Description" htmlFor="description" />
-        <Input
+        <TextArea
           {...register('description')}
-          type="text"
-          multiline
           id="description"
+          aria-invalid={!!errors.description}
         />
+        <Error text={errors.description?.message} />
       </div>
 
       <div className={style['task-form__datetime']}>
@@ -60,51 +68,83 @@ export const TaskForm = ({
           <Controller
             name="date"
             control={control}
-            rules={{ required: 'Обязательное поле' }}
+            rules={{ required: 'Required field' }}
             render={({ field }) => (
               <Calendar
-                value={field.value ? formatDate(field.value) : ''}
+                value={new Date(field.value)}
+                input={
+                  <InputWrapper
+                    variant="icon-right"
+                    icon={
+                      <CalendarIcon
+                        width="24"
+                        height="24"
+                        isClickable={false}
+                      />
+                    }
+                  >
+                    <Input
+                      variant="icon-right"
+                      value={field.value ? formatDate(field.value) : ''}
+                      onClick={() => setIsOpenCalendar(prevState => !prevState)}
+                      readOnly
+                      aria-invalid={!!errors.date}
+                    />
+                  </InputWrapper>
+                }
+                isOpen={isOpenCalendar}
+                onClose={() => setIsOpenCalendar(false)}
                 onSelect={field.onChange}
               />
             )}
           />
-          {/* <Input
-            {...register('date', {
-              required: { value: true, message: 'Обязательное поле' },
-            })}
-            type="text"
-            id="date"
-            aria-invalid={!!errors.date}
-          /> */}
+          <Error text={errors.date?.message} />
         </div>
 
         <div className={style['task-form__field']}>
           <Label children="Duration" htmlFor="duration" />
-          <Input
-            {...register('duration', {
-              required: { value: true, message: 'Обязательное поле' },
-            })}
-            type="number"
-            id="duration"
-            aria-invalid={!!errors.duration}
-          />
+          <InputWrapper
+            variant="icon-right"
+            icon={<TimerIcon width="24" height="24" isClickable={false} />}
+          >
+            <Input
+              {...register('duration', {
+                required: { value: true, message: 'Required field' },
+                pattern: {
+                  value: /^\d+$/,
+                  message: 'Numerical value',
+                },
+              })}
+              variant="icon-right"
+              type="number"
+              id="duration"
+              min="1"
+              max="1440"
+              step="1"
+              aria-invalid={!!errors.duration}
+            />
+          </InputWrapper>
+          <Error text={errors.duration?.message} />
         </div>
       </div>
 
       <div className={style['task-form__field']}>
         <Label children="Priority" htmlFor="priority" />
-        <select
+        <Select
           {...register('priority', {
-            required: { value: true, message: 'Обязательное поле' },
+            required: { value: true, message: 'Required field' },
           })}
-          className={style['task-form__select']}
           id="priority"
           aria-invalid={!!errors.priority}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+          options={
+            <>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </>
+          }
+        />
+        <Error text={errors.priority?.message} />
       </div>
     </form>
   );

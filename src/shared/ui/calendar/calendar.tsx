@@ -1,20 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
 
 import { ChevronIcon } from '../icons';
-import { Input } from '../input';
 
 import 'react-day-picker/style.css';
 import style from './calendar.module.scss';
 
 export const Calendar = ({
   value,
+  input,
+  isOpen,
+  onClose,
   onSelect,
 }: {
-  value: string | undefined;
+  value: Date | undefined;
+  input: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
   onSelect: () => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback(
@@ -24,10 +28,10 @@ export const Calendar = ({
         calendarRef.current &&
         !calendarRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        onClose();
       }
     },
-    [isOpen],
+    [isOpen, onClose],
   );
 
   useEffect(() => {
@@ -38,11 +42,7 @@ export const Calendar = ({
 
   return (
     <div className={style['calendar-wrapper']} ref={calendarRef}>
-      <Input
-        onClick={() => setIsOpen(prevState => !prevState)}
-        value={value}
-        readOnly
-      />
+      {input}
       {isOpen && (
         <DayPicker
           className={style.calendar}
@@ -57,6 +57,7 @@ export const Calendar = ({
           animate
           mode="single"
           navLayout="around"
+          selected={value}
           onSelect={onSelect}
           components={{
             Chevron: () => <ChevronIcon width="24" height="24" />,
