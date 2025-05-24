@@ -69,3 +69,13 @@ input:is(:-webkit-autofill, :autofill) {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: var(--foreground-primary);
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+input[type='number'] {
+  appearance: textfield;
+}

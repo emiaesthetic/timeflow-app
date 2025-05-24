@@ -5,6 +5,7 @@ import { Calendar } from '@/shared/ui/calendar';
 import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
 import { Input, InputWrapper } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
+import { Select } from '@/shared/ui/select';
 import { TextArea } from '@/shared/ui/textarea';
 
 import { formatDate } from '../../lib/formatDate';
@@ -110,8 +111,11 @@ export const TaskForm = ({
                 },
               })}
               variant="icon-right"
-              type="text"
+              type="number"
               id="duration"
+              min="1"
+              max="1440"
+              step="1"
               aria-invalid={!!errors.duration}
             />
           </InputWrapper>
@@ -120,18 +124,20 @@ export const TaskForm = ({
 
       <div className={style['task-form__field']}>
         <Label children="Priority" htmlFor="priority" />
-        <select
+        <Select
           {...register('priority', {
             required: { value: true, message: 'Required field' },
           })}
-          className={style['task-form__select']}
           id="priority"
           aria-invalid={!!errors.priority}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+          options={
+            <>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </>
+          }
+        />
       </div>
     </form>
   );
