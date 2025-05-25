@@ -15,8 +15,10 @@ import { ITask } from '../../model/types';
 import style from './task-form.module.scss';
 
 export const TaskForm = ({
+  defaultValues,
   onSubmit,
 }: {
+  defaultValues?: ITask | undefined;
   onSubmit: (data: Omit<ITask, 'id'>) => void;
 }) => {
   const {
@@ -25,7 +27,7 @@ export const TaskForm = ({
     handleSubmit,
     control,
     reset,
-  } = useForm<Omit<ITask, 'id'>>();
+  } = useForm<ITask>({ defaultValues });
 
   const dateRef = useRef<HTMLInputElement>(null);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
@@ -60,7 +62,6 @@ export const TaskForm = ({
     <form
       className={style['task-form']}
       id="taskForm"
-      action="/"
       onSubmit={handleSubmit(data => {
         onSubmit(data);
         reset();
@@ -142,10 +143,8 @@ export const TaskForm = ({
             <Input
               {...register('duration', {
                 required: { value: true, message: 'Required field' },
-                pattern: {
-                  value: /^\d+$/,
-                  message: 'Numerical value',
-                },
+                min: { value: 1, message: 'Minimum 1' },
+                max: { value: 1440, message: 'Maximum 1440' },
               })}
               variant="icon-right"
               type="number"

@@ -21,10 +21,19 @@ export const useLocalStorage = () => {
     setStorageValue(prevTasks => [...prevTasks, task]);
   };
 
-  const removeTask = (taskID: string) => {
+  const removeTask = (taskID: string): void => {
     if (!taskID) return;
-    setStorageValue(prevTasks => prevTasks.filter(item => item.id !== taskID));
+    setStorageValue(prevTasks => prevTasks.filter(task => task.id !== taskID));
   };
 
-  return { tasks: storageValue, addTask, removeTask };
+  const editTask = (updatedTask: ITask): void => {
+    if (!updatedTask) return;
+    setStorageValue(prevTasks =>
+      prevTasks.map(task =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task,
+      ),
+    );
+  };
+
+  return { tasks: storageValue, addTask, editTask, removeTask };
 };

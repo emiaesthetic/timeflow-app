@@ -25,16 +25,17 @@ import styleBoard from './task-board.module.scss';
 import styleItem from './task-item.module.scss';
 
 interface ITaskItemProps extends ITask {
-  onRemove: (id: string) => void;
+  onEdit: () => void;
+  onRemove: () => void;
 }
 
 export const TaskItem = ({
-  id,
   title,
   description,
   date,
   duration,
   priority,
+  onEdit,
   onRemove,
 }: ITaskItemProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
@@ -81,12 +82,12 @@ export const TaskItem = ({
             </Button>
           </li>
           <li className={styleItem['task__actions-item']}>
-            <Button variant="icon">
+            <Button variant="icon" onClick={onEdit}>
               <EditIcon width="32" height="32" />
             </Button>
           </li>
           <li className={styleItem['task__actions-item']}>
-            <Button variant="icon" onClick={() => onRemove(id)}>
+            <Button variant="icon" onClick={onRemove}>
               <CrossIcon width="32" height="32" />
             </Button>
           </li>
@@ -108,12 +109,18 @@ export const TaskItem = ({
             {
               label: 'Edit',
               icon: <EditIcon width="20" height="20" />,
-              onClick: () => {},
+              onClick: () => {
+                onEdit();
+                setIsOpenDropdown(false);
+              },
             },
             {
               label: 'Delete',
               icon: <CrossIcon width="20" height="20" />,
-              onClick: () => onRemove(id),
+              onClick: () => {
+                onRemove();
+                setIsOpenDropdown(false);
+              },
             },
           ]}
           isOpen={isOpenDropdown}
@@ -129,16 +136,23 @@ export const TaskItem = ({
 };
 
 export const TaskBoard = () => {
-  const { tasks, addTask, removeTask } = useLocalStorage();
+  const { tasks, addTask, editTask, removeTask } = useLocalStorage();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [activeTask, setActiveTask] = useState<ITask | undefined>();
 
-  const handleSubmit = (data: Omit<ITask, 'id'>) => {
-    const taskWithID: ITask = {
-      id: crypto.randomUUID(),
-      ...data,
-    };
-    addTask(taskWithID);
+  const handleSubmit = (data: ITask | Omit<ITask, 'id'>) => {
+    if (activeTask) {
+      editTask({ ...activeTask, ...data });
+    } else {
+      const taskWithID: ITask = {
+        id: crypto.randomUUID(),
+        ...data,
+      };
+      addTask(taskWithID);
+    }
+
     setIsOpenDialog(false);
+    setActiveTask(undefined);
   };
 
   return (
@@ -163,10 +177,11 @@ export const TaskBoard = () => {
                 <li key={task.id} className={styleBoard['task-board__item']}>
                   <TaskItem
                     {...task}
-                    onRemove={id => {
-                      setIsOpenDialog(false);
-                      removeTask(id);
+                    onEdit={() => {
+                      setIsOpenDialog(true);
+                      setActiveTask(task);
                     }}
+                    onRemove={() => removeTask(task.id)}
                   />
                 </li>
               ))}
@@ -176,17 +191,26 @@ export const TaskBoard = () => {
       </section>
 
       <Dialog
-        dialogTitle={<h1 className="create-task__title">Create New Task</h1>}
-        dialogContent={<TaskForm onSubmit={handleSubmit} />}
+        dialogTitle={<h1>{activeTask ? 'Edit task' : 'Create New Task'}</h1>}
+        dialogContent={
+          <TaskForm
+            key={activeTask ? activeTask.id : 'new'}
+            defaultValues={activeTask}
+            onSubmit={handleSubmit}
+          />
+        }
         dialogFooter={
           <Button variant="dark" type="submit" form="taskForm" fullWidth>
-            Create Task
+            {activeTask ? 'Update task' : 'Create Task'}
           </Button>
         }
-        id="createTask"
-        aria-label="Task creation form"
+        id="dialog"
+        aria-label="Task create/update form"
         isOpen={isOpenDialog}
-        onClose={() => setIsOpenDialog(false)}
+        onClose={() => {
+          setIsOpenDialog(false);
+          setActiveTask(undefined);
+        }}
       />
     </>
   );

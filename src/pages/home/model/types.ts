@@ -5,5 +5,5 @@ export interface ITask {
   date: string;
   time: string;
   duration: string;
-  priority: string;
+  priority: 'low' | 'medium' | 'high';
 }
