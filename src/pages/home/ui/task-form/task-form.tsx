@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
@@ -27,7 +27,34 @@ export const TaskForm = ({
     reset,
   } = useForm<Omit<ITask, 'id'>>();
 
+  const dateRef = useRef<HTMLInputElement>(null);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+  const [calendarPosition, setCalendarPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+
+  const updateCalendarPosition = useCallback(() => {
+    if (isOpenCalendar && dateRef.current) {
+      const rect = dateRef.current.getBoundingClientRect();
+      setCalendarPosition({
+        top: rect.bottom,
+        left: rect.left,
+      });
+    }
+  }, [isOpenCalendar]);
+
+  useLayoutEffect(() => {
+    updateCalendarPosition();
+
+    window.addEventListener('resize', updateCalendarPosition);
+    window.addEventListener('scroll', updateCalendarPosition);
+
+    return () => {
+      window.removeEventListener('resize', updateCalendarPosition);
+      window.removeEventListener('scroll', updateCalendarPosition);
+    };
+  }, [updateCalendarPosition]);
 
   return (
     <form
@@ -87,14 +114,19 @@ export const TaskForm = ({
                       variant="icon-right"
                       value={field.value ? formatDate(field.value) : ''}
                       onClick={() => setIsOpenCalendar(prevState => !prevState)}
-                      readOnly
                       aria-invalid={!!errors.date}
+                      ref={dateRef}
+                      readOnly
                     />
                   </InputWrapper>
                 }
+                position={calendarPosition}
                 isOpen={isOpenCalendar}
                 onClose={() => setIsOpenCalendar(false)}
-                onSelect={field.onChange}
+                onSelect={date => {
+                  field.onChange(date);
+                  setIsOpenCalendar(false);
+                }}
               />
             )}
           />

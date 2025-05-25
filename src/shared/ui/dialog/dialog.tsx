@@ -93,6 +93,7 @@ export const Dialog = ({
         <Dialog.Content>{dialogContent}</Dialog.Content>
         <Dialog.Footer>{dialogFooter}</Dialog.Footer>
       </div>
+      <div id="dialog-portal-overlay"></div>
     </dialog>,
     dialogPortal,
   );
