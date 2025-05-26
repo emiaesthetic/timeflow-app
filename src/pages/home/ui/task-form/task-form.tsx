@@ -9,8 +9,8 @@ import { Label } from '@/shared/ui/label';
 import { Select } from '@/shared/ui/select';
 import { TextArea } from '@/shared/ui/textarea';
 
-import { formatDate } from '../../lib/formatDate';
-import { ITask } from '../../model/types';
+import { formatDate } from '../../lib/format-date';
+import { ITaskFormData } from '../../model/types';
 
 import style from './task-form.module.scss';
 
@@ -18,8 +18,8 @@ export const TaskForm = ({
   defaultValues,
   onSubmit,
 }: {
-  defaultValues?: ITask | undefined;
-  onSubmit: (data: Omit<ITask, 'id'>) => void;
+  defaultValues?: ITaskFormData | undefined;
+  onSubmit: (data: ITaskFormData) => void;
 }) => {
   const {
     register,
@@ -27,7 +27,7 @@ export const TaskForm = ({
     handleSubmit,
     control,
     reset,
-  } = useForm<ITask>({ defaultValues });
+  } = useForm<ITaskFormData>({ defaultValues });
 
   const dateRef = useRef<HTMLInputElement>(null);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);

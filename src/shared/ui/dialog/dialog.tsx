@@ -74,6 +74,8 @@ export const Dialog = ({
   const dialogPortal = document.getElementById('dialog-portal');
   if (!dialogPortal) return;
 
+  if (!isOpen) return null;
+
   return createPortal(
     <dialog className={style.dialog} ref={dialogRef} {...props}>
       <div className={style.dialog__container}>

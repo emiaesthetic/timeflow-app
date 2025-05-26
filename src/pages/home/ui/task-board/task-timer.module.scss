@@ -1,0 +1,69 @@
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.timer {
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-2);
+  text-align: center;
+  background-color: var(--background-primary);
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: calc(100% + var(--size-2));
+    height: calc(100% + var(--size-2));
+    border-radius: var(--border-radius-3);
+    background: conic-gradient(
+      from var(--angle),
+      #ffe5ce,
+      #ffd0ba,
+      #ffb9b0,
+      #ffa2b0,
+      #fd8dba,
+      #ec7cca,
+      #cd72de,
+      #bc9ff6,
+      #ffe5ce
+    );
+    animation: spin 3s linear infinite;
+    translate: -50% -50%;
+  }
+
+  &:before {
+    filter: blur(20px);
+  }
+
+  @keyframes spin {
+    from {
+      --angle: 0deg;
+    }
+
+    to {
+      --angle: 360deg;
+    }
+  }
+
+  &__time {
+    font-weight: 500;
+    font-size: var(--font-size-1);
+    color: var(--foreground-primary);
+  }
+
+  &__actions {
+    display: flex;
+    column-gap: var(--space-4);
+    justify-content: center;
+    align-items: center;
+  }
+}

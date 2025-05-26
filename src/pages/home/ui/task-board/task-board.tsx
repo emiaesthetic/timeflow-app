@@ -14,17 +14,25 @@ import {
 } from '@/shared/ui/icons';
 import { Layout } from '@/shared/ui/layout';
 
-import { formatDateParts } from '../../lib/formatDate';
-import { ITask } from '../../model/types';
-import { useLocalStorage } from '../../model/useLocalStorage';
+import { formatDateParts } from '../../lib/format-date';
+import { formatTime } from '../../lib/format-time';
+import {
+  transformFormDateToTask,
+  transformTaskToFormDate,
+} from '../../lib/transform-task';
+import { ITask, ITaskFormData } from '../../model/types';
+import { useLocalStorage } from '../../model/use-local-storage';
+import { useTimer } from '../../model/use-timer';
 import { TaskForm } from '../task-form';
 
 import EmptyIcon from './img/empty.svg?react';
 
 import styleBoard from './task-board.module.scss';
 import styleItem from './task-item.module.scss';
+import styleTimer from './task-timer.module.scss';
 
 interface ITaskItemProps extends ITask {
+  onStart: () => void;
   onEdit: () => void;
   onRemove: () => void;
 }
@@ -35,6 +43,7 @@ export const TaskItem = ({
   date,
   duration,
   priority,
+  onStart,
   onEdit,
   onRemove,
 }: ITaskItemProps) => {
@@ -68,8 +77,11 @@ export const TaskItem = ({
             </time>
           </div>
 
-          <data className={styleItem.task__duration} value="PT30M">
-            {duration} minutes
+          <data
+            className={styleItem.task__duration}
+            value={`PT${duration / 60_000}M`}
+          >
+            {duration / 60_000} minutes
           </data>
         </div>
       </div>
@@ -77,7 +89,7 @@ export const TaskItem = ({
       <div className={styleItem.task__actions}>
         <ul className={`${styleItem['task__actions-list']} hidden-laptop`}>
           <li className={styleItem['task__actions-item']}>
-            <Button variant="icon">
+            <Button variant="icon" onClick={onStart}>
               <PlayIcon width="32" height="32" />
             </Button>
           </li>
@@ -104,7 +116,10 @@ export const TaskItem = ({
             {
               label: 'Start',
               icon: <PlayIcon width="20" height="20" />,
-              onClick: () => {},
+              onClick: () => {
+                onStart();
+                setIsOpenDropdown(false);
+              },
             },
             {
               label: 'Edit',
@@ -137,22 +152,38 @@ export const TaskItem = ({
 
 export const TaskBoard = () => {
   const { tasks, addTask, editTask, removeTask } = useLocalStorage();
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const [isOpenForm, setIsOpenForm] = useState(false);
+  const [isOpenTimer, setIsOpenTimer] = useState(false);
   const [activeTask, setActiveTask] = useState<ITask | undefined>();
 
-  const handleSubmit = (data: ITask | Omit<ITask, 'id'>) => {
+  const { remainingTime, isEnabled, toggleTimer, resetTimer } = useTimer(
+    activeTask?.duration || 0,
+  );
+
+  const handleSubmit = (data: ITaskFormData) => {
     if (activeTask) {
-      editTask({ ...activeTask, ...data });
+      editTask({ ...activeTask, ...transformFormDateToTask(data) });
     } else {
       const taskWithID: ITask = {
         id: crypto.randomUUID(),
-        ...data,
+        ...transformFormDateToTask(data),
       };
       addTask(taskWithID);
     }
 
-    setIsOpenDialog(false);
+    setIsOpenForm(false);
     setActiveTask(undefined);
+  };
+
+  const closeForm = () => {
+    setActiveTask(undefined);
+    setIsOpenForm(false);
+  };
+
+  const closeTimer = () => {
+    resetTimer();
+    setActiveTask(undefined);
+    setIsOpenTimer(false);
   };
 
   return (
@@ -161,7 +192,7 @@ export const TaskBoard = () => {
         <Layout>
           <header className={styleBoard['task-board__header']}>
             <h2 className={styleBoard['task-board__title']}>Task List</h2>
-            <Button variant="dark" onClick={() => setIsOpenDialog(true)}>
+            <Button variant="dark" onClick={() => setIsOpenForm(true)}>
               <PlusIcon width="24" height="24" aria-hidden="true" />
               Add new task
             </Button>
@@ -177,8 +208,13 @@ export const TaskBoard = () => {
                 <li key={task.id} className={styleBoard['task-board__item']}>
                   <TaskItem
                     {...task}
+                    onStart={() => {
+                      setIsOpenTimer(true);
+                      setActiveTask(task);
+                      toggleTimer();
+                    }}
                     onEdit={() => {
-                      setIsOpenDialog(true);
+                      setIsOpenForm(true);
                       setActiveTask(task);
                     }}
                     onRemove={() => removeTask(task.id)}
@@ -195,7 +231,9 @@ export const TaskBoard = () => {
         dialogContent={
           <TaskForm
             key={activeTask ? activeTask.id : 'new'}
-            defaultValues={activeTask}
+            defaultValues={
+              activeTask ? transformTaskToFormDate(activeTask) : undefined
+            }
             onSubmit={handleSubmit}
           />
         }
@@ -206,12 +244,45 @@ export const TaskBoard = () => {
         }
         id="dialog"
         aria-label="Task create/update form"
-        isOpen={isOpenDialog}
-        onClose={() => {
-          setIsOpenDialog(false);
-          setActiveTask(undefined);
-        }}
+        isOpen={isOpenForm}
+        onClose={closeForm}
       />
+
+      {activeTask && (
+        <Dialog
+          dialogTitle={<h1>TimeFlow app.</h1>}
+          dialogContent={
+            <div className={styleTimer.timer}>
+              <time
+                className={styleTimer.timer__time}
+                dateTime={formatTime(activeTask.duration)}
+              >
+                {formatTime(remainingTime)}
+              </time>
+            </div>
+          }
+          dialogFooter={
+            <div className={styleTimer.timer__actions}>
+              {remainingTime > 0 && (
+                <>
+                  <Button variant="dark" onClick={toggleTimer}>
+                    {isEnabled ? 'Pause' : 'Continue'}
+                  </Button>
+
+                  {!isEnabled && (
+                    <Button variant="dark" onClick={closeTimer}>
+                      Stop
+                    </Button>
+                  )}
+                </>
+              )}
+            </div>
+          }
+          id="dialog"
+          isOpen={isOpenTimer}
+          onClose={closeTimer}
+        />
+      )}
     </>
   );
 };
