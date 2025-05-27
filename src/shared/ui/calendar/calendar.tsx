@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
 import { createPortal } from 'react-dom';
+
+import { useOutsideClick } from '@/shared/model/use-outside-click';
 
 import { ChevronIcon } from '../icons';
 
@@ -22,32 +24,20 @@ export const Calendar = ({
   onClose: () => void;
   onSelect: (date: Date | undefined) => void;
 }) => {
+  const calendarWrapperRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (
-        isOpen &&
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    },
-    [isOpen, onClose],
-  );
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
-
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [handleClickOutside]);
+  useOutsideClick({
+    refs: [calendarWrapperRef, calendarRef],
+    callback: onClose,
+    isOpen,
+  });
 
   const calendarPortal = document.getElementById('dialog-portal-overlay');
   if (!calendarPortal) return;
 
   return (
-    <div className="calendar-wrapper" ref={calendarRef}>
+    <div className="calendar-wrapper" ref={calendarWrapperRef}>
       {input}
       {isOpen &&
         createPortal(
@@ -57,6 +47,7 @@ export const Calendar = ({
               top: `${position.top}px`,
               left: `${position.left}px`,
             }}
+            ref={calendarRef}
           >
             <DayPicker
               className={style.calendar}
@@ -76,6 +67,7 @@ export const Calendar = ({
               components={{
                 Chevron: () => <ChevronIcon width="24" height="24" />,
               }}
+              disabled={{ before: new Date() }}
             />
           </div>,
           calendarPortal,

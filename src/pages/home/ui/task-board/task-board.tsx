@@ -250,7 +250,7 @@ export const TaskBoard = () => {
 
       {activeTask && (
         <Dialog
-          dialogTitle={<h1>TimeFlow app.</h1>}
+          dialogTitle={<h1>{activeTask.title}</h1>}
           dialogContent={
             <div className={styleTimer.timer}>
               <time

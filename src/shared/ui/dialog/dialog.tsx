@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useOutsideClick } from '@/shared/model/use-outside-click';
+
 import { Button } from '../button';
 import { CrossIcon } from '../icons';
 
@@ -51,25 +53,18 @@ export const Dialog = ({
     [isOpen, onClose],
   );
 
-  const handleClickOutside = useCallback(
-    (event: MouseEvent) => {
-      if (isOpen && dialogRef.current === event.target) onClose();
-    },
-    [isOpen, onClose],
-  );
+  useOutsideClick({
+    refs: [dialogRef],
+    callback: onClose,
+    isDialog: true,
+    isOpen,
+  });
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
+    document.addEventListener('keydown', handleKeyDown);
 
-    dialog.addEventListener('click', handleClickOutside);
-    dialog.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      dialog.removeEventListener('click', handleClickOutside);
-      dialog.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handleKeyDown, handleClickOutside]);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   const dialogPortal = document.getElementById('dialog-portal');
   if (!dialogPortal) return;

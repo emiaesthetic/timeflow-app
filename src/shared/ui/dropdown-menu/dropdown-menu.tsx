@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 
+import { useOutsideClick } from '@/shared/model/use-outside-click';
+
 import { Button } from '../button';
 
 import style from './dropdown-menu.module.scss';
@@ -33,6 +35,8 @@ export const DropdownMenu = ({
   onToggle,
 }: IDropdownMenu) => {
   const ref = useRef<HTMLDivElement>(null);
+
+  useOutsideClick({ refs: [ref], callback: onToggle, isOpen });
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
