@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import clsx from 'clsx';
 
 import { useOutsideClick } from '@/shared/model/use-outside-click';
 
@@ -8,34 +9,36 @@ import { CrossIcon } from '../icons';
 
 import style from './dialog.module.scss';
 
-interface IDialogProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
-  dialogTitle: React.ReactNode;
-  dialogContent: React.ReactNode;
-  dialogFooter: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
+interface ICommonDialogProps
+  extends React.DialogHTMLAttributes<HTMLDialogElement> {
+  header: React.ReactNode;
+  body: React.ReactNode;
+  footer: React.ReactNode;
+  className?: string;
 }
 
-const DialogHeader = ({ children }: { children: React.ReactNode }) => {
-  return <header className={style.dialog__header}>{children}</header>;
-};
-
-const DialogContent = ({ children }: { children: React.ReactNode }) => {
-  return <div className={style.dialog__content}>{children}</div>;
-};
-
-const DialogFooter = ({ children }: { children: React.ReactNode }) => {
-  return <footer className={style.dialog__content}>{children}</footer>;
-};
+type TDialogProps =
+  | (ICommonDialogProps & {
+      canClose: true;
+      isOpen: boolean;
+      onClose: () => void;
+    })
+  | (ICommonDialogProps & {
+      canClose: false;
+      isOpen?: true;
+      onClose?: undefined;
+    });
 
 export const Dialog = ({
-  dialogTitle,
-  dialogContent,
-  dialogFooter,
-  isOpen,
+  header,
+  body,
+  footer,
+  className,
+  isOpen = true,
+  canClose,
   onClose,
   ...props
-}: IDialogProps) => {
+}: TDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -48,14 +51,16 @@ export const Dialog = ({
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (isOpen && event.key === 'Escape') onClose();
+      if (isOpen && canClose && event.key === 'Escape') {
+        onClose();
+      }
     },
-    [isOpen, onClose],
+    [isOpen, canClose, onClose],
   );
 
   useOutsideClick({
     refs: [dialogRef],
-    callback: onClose,
+    callback: onClose ? onClose : () => {},
     isDialog: true,
     isOpen,
   });
@@ -72,30 +77,32 @@ export const Dialog = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <dialog className={style.dialog} ref={dialogRef} {...props}>
+    <dialog
+      className={clsx(style.dialog, className)}
+      ref={dialogRef}
+      {...props}
+    >
       <div className={style.dialog__container}>
-        <Dialog.Header>
-          {dialogTitle}
-          <Button
-            variant="icon"
-            type="button"
-            aria-label="Close task creation form"
-            onClick={onClose}
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-          >
-            <CrossIcon width="32" height="32" />
-          </Button>
-        </Dialog.Header>
-        <Dialog.Content>{dialogContent}</Dialog.Content>
-        <Dialog.Footer>{dialogFooter}</Dialog.Footer>
+        {canClose && (
+          <div className={style.dialog__close}>
+            <Button
+              variant="icon"
+              type="button"
+              aria-label="Close modal window"
+              onClick={onClose}
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+            >
+              <CrossIcon width="32" height="32" />
+            </Button>
+          </div>
+        )}
+        {header}
+        {body}
+        {footer}
       </div>
       <div id="dialog-portal-overlay"></div>
     </dialog>,
     dialogPortal,
   );
 };
-
-Dialog.Header = DialogHeader;
-Dialog.Content = DialogContent;
-Dialog.Footer = DialogFooter;
