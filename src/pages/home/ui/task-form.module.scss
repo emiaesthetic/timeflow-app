@@ -13,13 +13,6 @@
     }
   }
 
-  &__label {
-    display: block;
-    margin-bottom: var(--space-0);
-    padding-left: var(--space-1);
-    font-weight: 500;
-  }
-
   &__datetime {
     display: grid;
     grid-template-columns: 2fr 1fr;

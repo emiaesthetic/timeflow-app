@@ -9,8 +9,8 @@ import { Label } from '@/shared/ui/label';
 import { Select } from '@/shared/ui/select';
 import { TextArea } from '@/shared/ui/textarea';
 
-import { formatDate } from '../../lib/format-date';
-import { ITaskFormData } from '../../model/types';
+import { formatDate } from '../lib/format-date';
+import { ITaskFormData } from '../model/types';
 
 import style from './task-form.module.scss';
 
