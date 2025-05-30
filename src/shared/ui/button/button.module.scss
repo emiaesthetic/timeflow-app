@@ -7,7 +7,7 @@
   align-items: center;
   min-width: var(--size-6);
   min-height: var(--size-6);
-  padding: var(--space-1) var(--space-2);
+  padding-block: var(--space-1);
   border: 2px solid transparent;
   border-radius: var(--border-radius-2);
   font-weight: 500;
@@ -24,6 +24,14 @@
     @include mixins.hover {
       background-color: var(--background-tertiary);
     }
+  }
+
+  &--default {
+    padding-inline: var(--space-2);
+  }
+
+  &--large {
+    padding-inline: var(--space-5);
   }
 
   &--dark {

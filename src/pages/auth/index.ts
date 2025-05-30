@@ -1,3 +1,3 @@
-import { LoginPage } from './page';
+import { AuthPage } from './page';
 
-export const Component = LoginPage;
+export const Component = AuthPage;

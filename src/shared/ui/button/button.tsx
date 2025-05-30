@@ -4,6 +4,7 @@ import style from './button.module.scss';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: 'light' | 'dark' | 'icon';
+  size?: 'default' | 'large';
   center?: boolean;
   fullWidth?: boolean;
   children: React.ReactNode;
@@ -11,15 +12,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = ({
   variant,
-  children,
+  size = 'default',
   center = false,
   fullWidth = false,
+  children,
   ...props
 }: ButtonProps) => {
   return (
     <button
       className={clsx(style.button, {
         [style[`button--${variant}`]]: variant,
+        [style[`button--${size}`]]: size,
         [style[`button--center`]]: center,
         [style[`button--fullWidth`]]: fullWidth,
       })}

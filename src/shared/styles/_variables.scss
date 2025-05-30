@@ -9,6 +9,7 @@
   --color-light-yellow: #fdf8ea;
   --color-light-purple: #f0f0ff;
   --color-red: #ff4d4d;
+  --color-green: #00cd67;
 
   /* Container */
   --container-width: 1200px;
@@ -28,6 +29,7 @@
   --foreground-tertiary: var(--color-gray);
   --foreground-accent: var(--color-red);
   --foreground-error: var(--color-red);
+  --foreground-success: var(--color-green);
 
   /* Fonts */
   --font-family: 'Roboto', sans-serif;
@@ -55,6 +57,7 @@
   --space-3: 24px;
   --space-4: 32px;
   --space-5: 40px;
+  --space-6: 48px;
 
   /* Borders */
   --border-radius-0: 4px;

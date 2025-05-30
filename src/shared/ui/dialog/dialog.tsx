@@ -11,9 +11,9 @@ import style from './dialog.module.scss';
 
 interface ICommonDialogProps
   extends React.DialogHTMLAttributes<HTMLDialogElement> {
-  header: React.ReactNode;
+  header?: React.ReactNode;
   body: React.ReactNode;
-  footer: React.ReactNode;
+  footer?: React.ReactNode;
   className?: string;
 }
 
