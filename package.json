@@ -11,12 +11,16 @@
     "lint": "eslint src/ --fix && stylelint '**/*.{css,scss}' --fix"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.8",
     "clsx": "^2.1.1",
+    "normalize.css": "^8.0.1",
     "react": "^19.0.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
-    "react-router-dom": "^7.6.0"
+    "react-router-dom": "^7.6.0",
+    "sass": "^1.89.1",
+    "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -36,15 +40,14 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^15.15.0",
     "prettier": "^3.5.3",
-    "stylelint": "^16.18.0",
-    "stylelint-config-standard": "^37.0.0",
-    "stylelint-config-standard-scss": "^14.0.0",
-    "stylelint-order": "^6.0.4",
-    "stylelint-prettier": "^5.0.3",
-    "stylelint-scss": "^6.11.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
     "vite-plugin-svgr": "^4.3.0"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
