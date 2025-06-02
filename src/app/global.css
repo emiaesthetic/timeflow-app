@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-weight: 700;
+  font-style: normal;
+  font-family: 'Roboto';
+  src: url('/fonts/Roboto-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Common colors */
+    --color-darker: #1c1c1c;
+    --color-dark: #6a6a6a;
+    --color-gray: #bababa;
+    --color-light: #dadada;
+    --color-lighter: #fafafa;
+    --color-red: #ff4d4d;
+    --color-green: #00cd67;
+
+    /* Bg colors */
+    --background-primary: var(--color-lighter);
+    --background-secondary: var(--color-darker);
+    --background-muted: var(--color-light);
+    --background-task-high: #f0f0ff;
+    --background-task-medium: #fdf8ea;
+    --background-task-low: #e6feec;
+
+    /* Text colors */
+    --foreground-primary: var(--color-darker);
+    --foreground-secondary: var(--color-lighter);
+    --foreground-muted: var(--color-dark);
+
+    /* Border colors */
+    --border-primary: var(--color-darker);
+    --border-secondary: var(--color-lighter);
+    --border-muted: var(--color-gray);
+
+    /* Fonts */
+    --font-family: 'Roboto', sans-serif;
+  }
+}
+
+html {
+  position: relative;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+}
