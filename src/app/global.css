@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @font-face {
   font-weight: 400;
@@ -58,20 +56,18 @@
     /* Fonts */
     --font-family: 'Roboto', sans-serif;
   }
-}
 
-html {
-  position: relative;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
+  html {
+    @apply relative scroll-smooth box-border;
+  }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
+  *,
+  *:before,
+  *:after {
+    @apply box-border;
+  }
 
-body {
-  font-family: var(--font-family);
+  body {
+    @apply relative overflow-x-hidden min-w-[390] h-full min-h-vh font-normal font-[family-name: var(--font-family)] bg-[var(--background-primary)] text-[var(--foreground-primary)];
+  }
 }
