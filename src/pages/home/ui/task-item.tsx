@@ -69,17 +69,17 @@ export const TaskItem = ({
       <div className={style.task__actions}>
         <ul className={`${style['task__actions-list']} hidden-laptop`}>
           <li className={style['task__actions-item']}>
-            <Button variant="icon" onClick={onStart}>
+            <Button variant="secondary" size="icon" onClick={onStart}>
               <PlayIcon width="32" height="32" />
             </Button>
           </li>
           <li className={style['task__actions-item']}>
-            <Button variant="icon" onClick={onEdit}>
+            <Button variant="secondary" size="icon" onClick={onEdit}>
               <EditIcon width="32" height="32" />
             </Button>
           </li>
           <li className={style['task__actions-item']}>
-            <Button variant="icon" onClick={onRemove}>
+            <Button variant="secondary" size="icon" onClick={onRemove}>
               <CrossIcon width="32" height="32" />
             </Button>
           </li>
@@ -87,11 +87,16 @@ export const TaskItem = ({
 
         <DropdownMenu
           className="visible-laptop"
-          trigger={{
-            children: <DottedIcon />,
-            variant: 'icon',
-            ariaLabel: 'Open task menu',
-          }}
+          renderTrigger={props => (
+            <Button
+              {...props}
+              variant="secondary"
+              size="icon"
+              aria-label="Open task menu"
+            >
+              <DottedIcon />
+            </Button>
+          )}
           items={[
             {
               label: 'Start',

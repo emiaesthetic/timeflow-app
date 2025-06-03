@@ -58,7 +58,7 @@ export const TaskBoard = () => {
         <Layout>
           <header className={styleBoard['task-board__header']}>
             <h2 className={styleBoard['task-board__title']}>Task List</h2>
-            <Button variant="dark" onClick={() => setIsOpenForm(true)}>
+            <Button onClick={() => setIsOpenForm(true)}>
               <PlusIcon width="24" height="24" aria-hidden="true" />
               Add new task
             </Button>

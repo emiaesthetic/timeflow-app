@@ -3,15 +3,7 @@ import clsx from 'clsx';
 
 import { useOutsideClick } from '@/shared/model/use-outside-click';
 
-import { Button } from '../button';
-
 import style from './dropdown-menu.module.scss';
-
-interface IDropdownTrigger {
-  children: React.ReactNode;
-  variant: 'icon' | 'dark';
-  ariaLabel?: string;
-}
 
 interface IDropdownItem {
   label: string;
@@ -21,7 +13,9 @@ interface IDropdownItem {
 
 interface IDropdownMenu {
   className: string;
-  trigger: IDropdownTrigger;
+  renderTrigger: (
+    props: React.ButtonHTMLAttributes<HTMLButtonElement>,
+  ) => React.ReactNode;
   items: IDropdownItem[];
   isOpen: boolean;
   onToggle: () => void;
@@ -29,9 +23,9 @@ interface IDropdownMenu {
 
 export const DropdownMenu = ({
   className,
-  trigger,
   items,
   isOpen,
+  renderTrigger,
   onToggle,
 }: IDropdownMenu) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -60,15 +54,11 @@ export const DropdownMenu = ({
   return (
     <div className={clsx(style['dropdown-menu'], className)} ref={ref}>
       <>
-        <Button
-          variant={trigger.variant}
-          aria-expanded={isOpen}
-          aria-controls="dropdown-menu"
-          aria-label={trigger.ariaLabel}
-          onClick={onToggle}
-        >
-          {trigger.children}
-        </Button>
+        {renderTrigger({
+          'aria-expanded': isOpen,
+          'aria-controls': 'dropdown-menu',
+          onClick: onToggle,
+        })}
 
         {isOpen && (
           <ul className={style['dropdown-menu__list']} id="dropdown-menu">

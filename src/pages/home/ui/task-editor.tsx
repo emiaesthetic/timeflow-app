@@ -38,7 +38,7 @@ export const TaskEditor = ({
       }
       footer={
         <footer className={style.footer}>
-          <Button variant="dark" type="submit" form="taskForm" fullWidth>
+          <Button className="w-full" type="submit" form="taskForm">
             {task ? 'Update task' : 'Create Task'}
           </Button>
         </footer>

@@ -44,15 +44,11 @@ export const TaskTimer = ({
         <footer className={style['task-timer__footer']}>
           {remainingTime > 0 && (
             <>
-              <Button variant="dark" onClick={onToggle}>
+              <Button onClick={onToggle}>
                 {isEnabled ? 'Pause' : 'Continue'}
               </Button>
 
-              {!isEnabled && (
-                <Button variant="dark" onClick={onClose}>
-                  Stop
-                </Button>
-              )}
+              {!isEnabled && <Button onClick={onClose}>Stop</Button>}
             </>
           )}
         </footer>

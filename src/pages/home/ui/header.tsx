@@ -14,9 +14,7 @@ export const Header = () => {
       <Layout>
         <div className={style.header__inner}>
           <Logo />
-          <Button variant="dark" onClick={() => navigate('/auth')}>
-            Logout
-          </Button>
+          <Button onClick={() => navigate('/auth')}>Logout</Button>
         </div>
       </Layout>
     </header>

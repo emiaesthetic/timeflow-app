@@ -59,7 +59,12 @@ export const Notification = ({
         <p className={style.notification__message}>{message}</p>
       </div>
 
-      <Button variant="icon" type="button" onClick={() => setIsShow(false)}>
+      <Button
+        variant="secondary"
+        size="icon"
+        type="button"
+        onClick={() => setIsShow(false)}
+      >
         <CrossIcon />
       </Button>
     </div>,

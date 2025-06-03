@@ -64,9 +64,7 @@ const AuthForm = ({ onSubmit }: { onSubmit: (data: IAuthForm) => void }) => {
         <Error text={errors.password?.message} />
       </div>
 
-      <Button variant="dark" size="large" type="submit" center>
-        Sign In
-      </Button>
+      <Button type="submit">Sign In</Button>
     </form>
   );
 };
