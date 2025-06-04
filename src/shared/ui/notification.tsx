@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import clsx from 'clsx';
 
-import { Button } from '../button';
-import { CrossIcon, ErrorIcon, SuccessIcon } from '../icons';
+import { cn } from '@/shared/lib/utils';
 
-import style from './notification.module.scss';
+import { Button } from './button';
+import { CrossIcon, ErrorIcon, SuccessIcon } from './icons';
 
 interface INotificationProps {
   type: 'error';
   message: string;
+  className?: string;
   position?: 'top-right' | 'bottom-right';
   container?: HTMLElement;
 }
@@ -22,6 +22,7 @@ const notifications = {
 export const Notification = ({
   type,
   message,
+  className,
   position = 'top-right',
   container,
 }: INotificationProps) => {
@@ -44,19 +45,19 @@ export const Notification = ({
 
   return createPortal(
     <div
-      className={clsx(
-        style.notification,
-        style[`notification--${type}`],
-        style[`notification--${position}`],
+      className={cn(
+        'fixed z-1001 inline-flex gap-x-4 justify-between items-center w-max p-4 rounded-2xl',
+        position === 'top-right' && 'top-4 right-4',
+        position === 'bottom-right' && 'bottom-4 right-4',
+        `bg-[var(--background-primary)] text-[var(--foreground-${type})] shadow-[var(--shadow)]`,
+        className,
       )}
     >
-      <div className={style.notification__icon}>
-        <Icon />
-      </div>
+      <Icon />
 
-      <div className={style.notification__content}>
-        <h3 className={style.notification__title}>{title}</h3>
-        <p className={style.notification__message}>{message}</p>
+      <div className="text-[var(--foreground-primary)]">
+        <h3 className="mb-2 font-bold ">{title}</h3>
+        <p>{message}</p>
       </div>
 
       <Button

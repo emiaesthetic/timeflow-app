@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import clsx from 'clsx';
 
+import { cn } from '@/shared/lib/utils';
 import { useOutsideClick } from '@/shared/model/use-outside-click';
 
-import { Button } from '../button';
-import { CrossIcon } from '../icons';
-
-import style from './dialog.module.scss';
+import { Button } from './button';
+import { CrossIcon } from './icons';
 
 interface ICommonDialogProps
   extends React.DialogHTMLAttributes<HTMLDialogElement> {
@@ -78,24 +76,27 @@ export const Dialog = ({
 
   return createPortal(
     <dialog
-      className={clsx(style.dialog, className)}
+      className={cn(
+        'flex flex-col gap-x-8 h-max m-auto p-0 border-0 rounded-2xl',
+        className,
+      )}
       ref={dialogRef}
       {...props}
     >
-      <div className={style.dialog__container}>
+      <div className="relative px-8 py-10">
         {canClose && (
-          <div className={style.dialog__close}>
-            <Button
-              variant="icon"
-              type="button"
-              aria-label="Close modal window"
-              onClick={onClose}
-              // eslint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus
-            >
-              <CrossIcon width="32" height="32" />
-            </Button>
-          </div>
+          <Button
+            className="absolute top-4 right-4"
+            variant="secondary"
+            size="icon"
+            type="button"
+            aria-label="Close modal window"
+            onClick={onClose}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+          >
+            <CrossIcon width="32" height="32" />
+          </Button>
         )}
         {header}
         {body}

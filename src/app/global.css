@@ -27,47 +27,53 @@
 @layer base {
   :root {
     /* Common colors */
-    --color-darker: #1c1c1c;
-    --color-dark: #6a6a6a;
+    --color-dark: #1c1c1c;
+    --color-gray-dark: #a8a8a8;
     --color-gray: #bababa;
-    --color-light: #dadada;
-    --color-lighter: #fafafa;
+    --color-gray-light: #dadada;
+    --color-light: #fafafa;
     --color-red: #ff4d4d;
     --color-green: #00cd67;
 
     /* Bg colors */
-    --background-primary: var(--color-lighter);
-    --background-secondary: var(--color-darker);
-    --background-muted: var(--color-light);
+    --background-primary: var(--color-light);
+    --background-secondary: var(--color-dark);
+    --background-muted: var(--color-gray);
     --background-task-high: #f0f0ff;
     --background-task-medium: #fdf8ea;
     --background-task-low: #e6feec;
 
     /* Text colors */
-    --foreground-primary: var(--color-darker);
-    --foreground-secondary: var(--color-lighter);
-    --foreground-muted: var(--color-dark);
+    --foreground-primary: var(--color-dark);
+    --foreground-secondary: var(--color-light);
+    --foreground-muted: var(--color-gray);
+    --foreground-error: var(--color-red);
 
     /* Border colors */
-    --border-primary: var(--color-darker);
-    --border-secondary: var(--color-lighter);
-    --border-muted: var(--color-gray);
+    --border-primary: var(--color-dark);
+    --border-secondary: var(--color-light);
+    --border-muted: var(--color-gray-light);
+    --border-error: var(--color-red);
 
     /* Fonts */
     --font-family: 'Roboto', sans-serif;
+
+    /* Container */
+    --container-width: 1200px;
+    --container-padding-x: var(--space-2);
+
+    /* Shadow */
+    --shadow: 0 4px 10px var(--color-gray);
   }
 
   html {
     @apply relative scroll-smooth box-border;
   }
 
-  *,
-  *:before,
-  *:after {
-    @apply box-border;
-  }
-
   body {
-    @apply relative overflow-x-hidden min-w-[390] h-full min-h-vh font-normal font-[family-name: var(--font-family)] bg-[var(--background-primary)] text-[var(--foreground-primary)];
+    @apply relative overflow-x-hidden min-w-[320px] h-full min-h-screen font-normal;
+    font-family: var(--font-family);
+    background-color: var(--background-primary);
+    color: var(--foreground-primary);
   }
 }

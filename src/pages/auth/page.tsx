@@ -11,8 +11,6 @@ import { Notification } from '@/shared/ui/notification';
 
 import { IAuthForm } from './types';
 
-import style from './page.module.scss';
-
 const TEST_CREDENTIALS: IAuthForm = {
   email: 'user123@gmail.com',
   password: '12345',
@@ -20,9 +18,9 @@ const TEST_CREDENTIALS: IAuthForm = {
 
 const AuthHeader = () => {
   return (
-    <div className={style.header}>
-      <h1 className={style.header__title}>Login</h1>
-      <p className={style.header__subtitle}>
+    <div className="mb-4 pb-4 border-b-1 border-solid border-[var(--border-muted)]">
+      <h1 className="mt-0 mb-2 font-bold text-2xl">Login</h1>
+      <p className="font-normal text-[var(--foreground-muted)]">
         Welcome back, please login to your account
       </p>
     </div>
@@ -37,8 +35,8 @@ const AuthForm = ({ onSubmit }: { onSubmit: (data: IAuthForm) => void }) => {
   } = useForm<IAuthForm>();
 
   return (
-    <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className={style.form__field}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="relative mb-4 has-[[data-error='true']]:mb-6">
         <Label children="Email" htmlFor="email" />
         <Input
           {...register('email', {
@@ -48,10 +46,10 @@ const AuthForm = ({ onSubmit }: { onSubmit: (data: IAuthForm) => void }) => {
           id="email"
           aria-invalid={!!errors.email}
         />
-        <Error text={errors.email?.message} />
+        <Error message={errors.email?.message} />
       </div>
 
-      <div className={style.form__field}>
+      <div className="relative mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Password" htmlFor="password" />
         <Input
           {...register('password', {
@@ -61,10 +59,12 @@ const AuthForm = ({ onSubmit }: { onSubmit: (data: IAuthForm) => void }) => {
           id="password"
           aria-invalid={!!errors.password}
         />
-        <Error text={errors.password?.message} />
+        <Error message={errors.password?.message} />
       </div>
 
-      <Button type="submit">Sign In</Button>
+      <Button className="w-full" type="submit">
+        Sign In
+      </Button>
     </form>
   );
 };
@@ -92,7 +92,7 @@ export const AuthPage = () => {
         header={<AuthHeader />}
         body={<AuthForm onSubmit={handleSubmit} />}
         canClose={false}
-        className="auth"
+        className="w-100"
         id="auth"
         aria-label="Auth form"
       />
