@@ -1,18 +1,13 @@
-import style from './page-layout.module.scss';
+import { Header } from './header';
+import { TaskBoard } from './task-board';
 
-export const PageLayout = ({
-  header,
-  taskBoard,
-}: {
-  header: React.ReactNode;
-  taskBoard: React.ReactNode;
-}) => {
+export const PageLayout = () => {
   return (
-    <div className={style.page}>
-      {header}
-      <main className="content">
+    <div className="grid grid-rows-[auto_1fr] h-full min-h-screen">
+      <Header />
+      <main className="h-full">
         <h1 className="visually-hidden">TimeFlow App.</h1>
-        {taskBoard}
+        <TaskBoard />
       </main>
     </div>
   );

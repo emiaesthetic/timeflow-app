@@ -77,7 +77,7 @@ export const Dialog = ({
   return createPortal(
     <dialog
       className={cn(
-        'flex flex-col gap-x-8 h-max m-auto p-0 border-0 rounded-2xl',
+        'flex flex-col gap-x-8 h-max m-auto p-0 border-0 rounded-3xl bg-[var(--background-primary)] [&::backdrop]:backdrop-blur-[10px]',
         className,
       )}
       ref={dialogRef}
@@ -95,7 +95,7 @@ export const Dialog = ({
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           >
-            <CrossIcon width="32" height="32" />
+            <CrossIcon className="size-8" />
           </Button>
         )}
         {header}

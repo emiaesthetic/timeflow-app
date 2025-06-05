@@ -1,22 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/shared/ui/button';
-import { Layout } from '@/shared/ui/layout';
 import { Logo } from '@/shared/ui/logo';
-
-import style from './header.module.scss';
 
 export const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className={style.header}>
-      <Layout>
-        <div className={style.header__inner}>
+    <header className="py-4">
+      <div className="max-w-300 mx-auto px-4">
+        <div className="pb-4 border-b-1 border-solid border-[var(--border-muted)] flex justify-between items-center gap-x-8">
           <Logo />
           <Button onClick={() => navigate('/auth')}>Logout</Button>
         </div>
-      </Layout>
+      </div>
     </header>
   );
 };

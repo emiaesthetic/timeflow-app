@@ -1,15 +1,10 @@
-export const DottedIcon = ({
-  width = '31',
-  height = '30',
-}: {
-  width?: string;
-  height?: string;
-}) => {
+export const DottedIcon = ({ className }: { className?: string }) => {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width="31"
+      height="30"
       viewBox="0 0 31 30"
       fill="none"
       aria-hidden="true"

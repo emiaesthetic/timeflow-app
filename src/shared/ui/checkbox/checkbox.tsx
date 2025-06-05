@@ -1,7 +1,19 @@
-import style from './checkbox.module.scss';
+import { cn } from '@/shared/lib/utils';
 
 export const Checkbox = ({
+  className,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement>) => {
-  return <input className={style.checkbox} type="checkbox" {...props} />;
+  return (
+    <input
+      className={cn(
+        'relative size-8 border-2 border-solid border-[var(--border-primary)] rounded-lg bg-transparent appearance-none',
+        '[&:checked]:bg-[var(--background-secondary)]',
+        'outline-0 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[var(--border-primary)] focus-visible:outline-offset-2',
+        className,
+      )}
+      type="checkbox"
+      {...props}
+    />
+  );
 };

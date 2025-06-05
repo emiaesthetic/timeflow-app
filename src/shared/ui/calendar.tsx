@@ -4,10 +4,9 @@ import { createPortal } from 'react-dom';
 
 import { useOutsideClick } from '@/shared/model/use-outside-click';
 
-import { ChevronIcon } from '../icons';
+import { ChevronIcon } from './icons';
 
 import 'react-day-picker/style.css';
-import style from './calendar.module.scss';
 
 export const Calendar = ({
   value,
@@ -37,7 +36,7 @@ export const Calendar = ({
   if (!calendarPortal) return;
 
   return (
-    <div className="calendar-wrapper" ref={calendarWrapperRef}>
+    <div ref={calendarWrapperRef}>
       {input}
       {isOpen &&
         createPortal(
@@ -50,14 +49,18 @@ export const Calendar = ({
             ref={calendarRef}
           >
             <DayPicker
-              className={style.calendar}
+              className="w-max p-4 border-0 rounded-2xl bg-[var(--background-primary)] text-[var(--foreground-primary)] shadow-[var(--shadow)]"
               classNames={{
-                day_button: `${style['calendar__day-button']}`,
-                today: `${style.calendar__today}`,
-                selected: `${style.calendar__selected}`,
-                button_previous: `${style['calendar__chevron-button']} ${style['calendar__chevron-button--previous']}`,
-                button_next: `${style['calendar__chevron-button']} ${style['calendar__chevron-button--next']}`,
-                chevron: `${style['calendar__chevron-icon']}`,
+                day_button:
+                  'size-full rounded-xl bg-inherit text-inherit hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
+                today: 'text-[var(--foreground-accent)]',
+                selected:
+                  'rounded-xl bg-[var(--background-secondary)] text-[var(--foreground-secondary)]',
+                button_previous:
+                  'absolute top-0 left-0 flex justify-center items-center size-10 rounded-xl bg-[var(--background-primary)] text-[var(--foreground-primary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
+                button_next:
+                  'absolute top-0 right-0 flex justify-center items-center size-10 rounded-xl -rotate-180 bg-[var(--background-primary)] text-[var(--foreground-primary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
+                chevron: 'text-inherit',
               }}
               animate
               mode="single"
@@ -65,7 +68,7 @@ export const Calendar = ({
               selected={value}
               onSelect={onSelect}
               components={{
-                Chevron: () => <ChevronIcon width="24" height="24" />,
+                Chevron: () => <ChevronIcon className="size-6" />,
               }}
               disabled={{ before: new Date() }}
             />

@@ -4,15 +4,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { Calendar } from '@/shared/ui/calendar';
 import { Error } from '@/shared/ui/error';
 import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
-import { Input, InputWrapper } from '@/shared/ui/input';
+import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select } from '@/shared/ui/select';
 import { TextArea } from '@/shared/ui/textarea';
 
 import { formatDate } from '../lib/format-date';
 import { ITaskFormData } from '../model/types';
-
-import style from './task-form.module.scss';
 
 export const TaskForm = ({
   defaultValues,
@@ -60,14 +58,14 @@ export const TaskForm = ({
 
   return (
     <form
-      className={style['task-form']}
+      className="mb-8"
       id="taskForm"
       onSubmit={handleSubmit(data => {
         onSubmit(data);
         reset();
       })}
     >
-      <div className={style['task-form__field']}>
+      <div className="mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Title" htmlFor="title" />
         <Input
           {...register('title', {
@@ -77,21 +75,21 @@ export const TaskForm = ({
           id="title"
           aria-invalid={!!errors.title}
         />
-        <Error text={errors.title?.message} />
+        <Error message={errors.title?.message} />
       </div>
 
-      <div className={style['task-form__field']}>
+      <div className="mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Description" htmlFor="description" />
         <TextArea
           {...register('description')}
           id="description"
           aria-invalid={!!errors.description}
         />
-        <Error text={errors.description?.message} />
+        <Error message={errors.description?.message} />
       </div>
 
-      <div className={style['task-form__datetime']}>
-        <div className={style['task-form__field']}>
+      <div className="grid grid-cols-[2fr_1fr] gap-x-8 gap-y-4 justify-between items-center">
+        <div className="mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Date" htmlFor="date" />
           <Controller
             name="date"
@@ -101,25 +99,16 @@ export const TaskForm = ({
               <Calendar
                 value={new Date(field.value)}
                 input={
-                  <InputWrapper
-                    variant="icon-right"
-                    icon={
-                      <CalendarIcon
-                        width="24"
-                        height="24"
-                        isClickable={false}
-                      />
-                    }
-                  >
+                  <div className="relative">
+                    <CalendarIcon className="absolute top-1/2 -translate-y-1/2 right-2.5 size-6 pointer-events-none" />
                     <Input
-                      variant="icon-right"
                       value={field.value ? formatDate(field.value) : ''}
                       onClick={() => setIsOpenCalendar(prevState => !prevState)}
                       aria-invalid={!!errors.date}
                       ref={dateRef}
                       readOnly
                     />
-                  </InputWrapper>
+                  </div>
                 }
                 position={calendarPosition}
                 isOpen={isOpenCalendar}
@@ -131,22 +120,20 @@ export const TaskForm = ({
               />
             )}
           />
-          <Error text={errors.date?.message} />
+          <Error message={errors.date?.message} />
         </div>
 
-        <div className={style['task-form__field']}>
+        <div className="mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Duration" htmlFor="duration" />
-          <InputWrapper
-            variant="icon-right"
-            icon={<TimerIcon width="24" height="24" isClickable={false} />}
-          >
+          <div className="relative">
+            <TimerIcon className="absolute top-1/2 -translate-y-1/2 right-2.5 size-6 pointer-events-none" />
             <Input
               {...register('duration', {
                 required: { value: true, message: 'Required field' },
                 min: { value: 1, message: 'Minimum 1' },
                 max: { value: 1440, message: 'Maximum 1440' },
               })}
-              variant="icon-right"
+              className="no-spinner"
               type="number"
               id="duration"
               min="1"
@@ -154,12 +141,12 @@ export const TaskForm = ({
               step="1"
               aria-invalid={!!errors.duration}
             />
-          </InputWrapper>
-          <Error text={errors.duration?.message} />
+          </div>
+          <Error message={errors.duration?.message} />
         </div>
       </div>
 
-      <div className={style['task-form__field']}>
+      <div className="mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Priority" htmlFor="priority" />
         <Select
           {...register('priority', {
@@ -175,7 +162,7 @@ export const TaskForm = ({
             </>
           }
         />
-        <Error text={errors.priority?.message} />
+        <Error message={errors.priority?.message} />
       </div>
     </form>
   );

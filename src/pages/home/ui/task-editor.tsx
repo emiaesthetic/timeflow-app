@@ -5,8 +5,6 @@ import { transformTaskToFormDate } from '../lib/transform-task';
 import { ITask, ITaskFormData } from '../model/types';
 import { TaskForm } from './task-form';
 
-import style from './task-editor.module.scss';
-
 interface ITaskEditorProps {
   task?: ITask;
   isOpen: boolean;
@@ -23,8 +21,8 @@ export const TaskEditor = ({
   return (
     <Dialog
       header={
-        <header className={style.header}>
-          <h1 className={style.header__title}>
+        <header className="mb-6 pb-4 border-b-1 border-solid border-[var(--border-muted)]">
+          <h1 className="font-bold text-3xl">
             {task ? 'Edit task' : 'Create New Task'}
           </h1>
         </header>
@@ -37,13 +35,13 @@ export const TaskEditor = ({
         />
       }
       footer={
-        <footer className={style.footer}>
+        <footer className="flex justify-center items-center">
           <Button className="w-full" type="submit" form="taskForm">
             {task ? 'Update task' : 'Create Task'}
           </Button>
         </footer>
       }
-      className="task-form"
+      className="max-w-144 w-full"
       id="taskFormLayout"
       aria-label="Task create/update form"
       canClose={true}

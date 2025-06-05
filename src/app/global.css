@@ -47,6 +47,7 @@
     --foreground-primary: var(--color-dark);
     --foreground-secondary: var(--color-light);
     --foreground-muted: var(--color-gray);
+    --foreground-accent: var(--color-red);
     --foreground-error: var(--color-red);
 
     /* Border colors */
@@ -57,10 +58,6 @@
 
     /* Fonts */
     --font-family: 'Roboto', sans-serif;
-
-    /* Container */
-    --container-width: 1200px;
-    --container-padding-x: var(--space-2);
 
     /* Shadow */
     --shadow: 0 4px 10px var(--color-gray);
@@ -75,5 +72,22 @@
     font-family: var(--font-family);
     background-color: var(--background-primary);
     color: var(--foreground-primary);
+  }
+}
+
+@layer utilities {
+  .visually-hidden {
+    position: fixed;
+    transform: scale(0);
+  }
+
+  .no-spinner::-webkit-inner-spin-button,
+  .no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .no-spinner {
+    appearance: textfield;
   }
 }

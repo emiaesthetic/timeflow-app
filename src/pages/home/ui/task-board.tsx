@@ -2,19 +2,15 @@ import { useState } from 'react';
 
 import { Button } from '@/shared/ui/button';
 import { PlusIcon } from '@/shared/ui/icons';
-import { Layout } from '@/shared/ui/layout';
 
 import { transformFormDateToTask } from '../lib/transform-task';
 import { ITask, ITaskFormData } from '../model/types';
 import { useLocalStorage } from '../model/use-local-storage';
 import { useTimer } from '../model/use-timer';
+import emptyImg from './img/empty.svg';
 import { TaskEditor } from './task-editor';
 import { TaskItem } from './task-item';
 import { TaskTimer } from './task-timer';
-
-import EmptyIcon from './img/empty.svg?react';
-
-import styleBoard from './task-board.module.scss';
 
 export const TaskBoard = () => {
   const { tasks, addTask, editTask, removeTask } = useLocalStorage();
@@ -54,24 +50,24 @@ export const TaskBoard = () => {
 
   return (
     <>
-      <section className={styleBoard['task-board']}>
-        <Layout>
-          <header className={styleBoard['task-board__header']}>
-            <h2 className={styleBoard['task-board__title']}>Task List</h2>
+      <section className="py-4">
+        <div className="max-w-300 mx-auto px-4">
+          <header className="flex justify-between items-center gap-x-8 mb-8">
+            <h2 className="font-bold text-4xl">Task List</h2>
             <Button onClick={() => setIsOpenForm(true)}>
-              <PlusIcon width="24" height="24" aria-hidden="true" />
+              <PlusIcon className="size-6" aria-hidden="true" />
               Add new task
             </Button>
           </header>
 
           {tasks.length === 0 ? (
-            <div className={styleBoard['task-board__empty']}>
-              <EmptyIcon />
+            <div className="flex content-center w-full">
+              <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
             </div>
           ) : (
-            <ul className={styleBoard['task-board__list']}>
+            <ul>
               {tasks.map(task => (
-                <li key={task.id} className={styleBoard['task-board__item']}>
+                <li key={task.id} className="[&:not(:last-child)]:mb-6">
                   <TaskItem
                     {...task}
                     onStart={() => {
@@ -89,7 +85,7 @@ export const TaskBoard = () => {
               ))}
             </ul>
           )}
-        </Layout>
+        </div>
       </section>
 
       <TaskEditor

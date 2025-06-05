@@ -1,15 +1,10 @@
-export const LogoIcon = ({
-  width = '39',
-  height = '47',
-}: {
-  width?: string;
-  height?: string;
-}) => {
+export const LogoIcon = ({ className }: { className?: string }) => {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width="39"
+      height="47"
       viewBox="0 0 39 47"
       fill="none"
       aria-hidden="true"

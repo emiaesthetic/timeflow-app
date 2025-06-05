@@ -1,4 +1,5 @@
 export { CalendarIcon } from './calendar';
+export { CheckIcon } from './check';
 export { ChevronIcon } from './chevron';
 export { CrossIcon } from './cross';
 export { DottedIcon } from './dotted';
