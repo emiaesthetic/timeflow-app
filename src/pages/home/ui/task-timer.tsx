@@ -4,8 +4,6 @@ import { Dialog } from '@/shared/ui/dialog';
 import { formatTime } from '../lib/format-time';
 import { ITask } from '../model/types';
 
-import style from './task-timer.module.scss';
-
 export const TaskTimer = ({
   task,
   isOpen,
@@ -26,14 +24,14 @@ export const TaskTimer = ({
   return (
     <Dialog
       header={
-        <header className={style['task-timer__header']}>
-          <h1 className={style['task-timer__title']}>{task.title}</h1>
+        <header className="mb-8 pb-4 border-b border-solid border-[var(--border-muted)]">
+          <h1 className="font-bold text-3xl">{task.title}</h1>
         </header>
       }
       body={
-        <div className={style['task-timer__content']}>
+        <div className="w-max mx-auto mb-10 p-8 rounded-xl text-center bg-[var(--background-primary)] timer-border">
           <time
-            className={style['task-timer__time']}
+            className="font-medium text-3xl md:text-5xl"
             dateTime={formatTime(task.duration)}
           >
             {formatTime(remainingTime)}
@@ -41,7 +39,7 @@ export const TaskTimer = ({
         </div>
       }
       footer={
-        <footer className={style['task-timer__footer']}>
+        <footer className="flex justify-center items-center gap-x-8">
           {remainingTime > 0 && (
             <>
               <Button onClick={onToggle}>
@@ -53,7 +51,7 @@ export const TaskTimer = ({
           )}
         </footer>
       }
-      className="task-timer"
+      className="max-w-120 w-full"
       id="taskTimer"
       isOpen={isOpen}
       canClose={true}

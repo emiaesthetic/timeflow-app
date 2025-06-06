@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import clsx from 'clsx';
 
+import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { DropdownMenu } from '@/shared/ui/dropdown-menu';
@@ -8,8 +8,6 @@ import { CrossIcon, DottedIcon, EditIcon, PlayIcon } from '@/shared/ui/icons';
 
 import { formatDateParts } from '../lib/format-date';
 import { ITask } from '../model/types';
-
-import style from './task-item.module.scss';
 
 interface ITaskItemProps extends ITask {
   onStart: () => void;
@@ -33,60 +31,57 @@ export const TaskItem = ({
 
   return (
     <article
-      className={clsx(style.task, style[`task--${priority}`], {
-        [style['task--has-open-dropdown']]: isOpenDropdown,
-      })}
+      className={cn(
+        'relative grid grid-rows-[repeat(2,auto)] grid-cols-[1fr_auto] gap-6 md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10 place-items-center p-8 rounded-2xl bg-[var(--background-primary)] text-[var(--foreground-text)] shadow-[var(--shadow)] hover:scale-[1.005] transition-[scale]',
+        priority === 'high' && 'bg-[var(--background-task-high)]',
+        priority === 'medium' && 'bg-[var(--background-task-medium)]',
+        priority === 'low' && 'bg-[var(--background-task-low)]',
+        isOpenDropdown && 'z-1001',
+      )}
     >
-      <div className={`${style.task__complete} hidden-mobile-large`}>
+      <div className="hidden md:flex">
         <Checkbox name="complete" aria-label="Mark task as complete" />
       </div>
 
-      <div className={style.task__content}>
-        <div className={style.task__details}>
-          <h3 className={style.task__name}>{title}</h3>
-          <p className={style.task__description}>{description}</p>
+      <div className="row-span-2 md:grid grid-cols-[2fr_1fr] justify-start items-center gap-x-8 w-full">
+        <div className="mb-2 md:mb-0">
+          <h3 className="mb-2 font-semibold text-2xl">{title}</h3>
+          <p className="font-normal">{description}</p>
         </div>
 
-        <div className={style.task__schedule}>
-          <div className={style.task__datetime}>
-            <time className={style.task__date} dateTime={dateAttr}>
-              {displayDate},
-            </time>
-            <time className={style.task__time} dateTime={timeAttr}>
-              {displayTime}
-            </time>
+        <div className="flex flex-wrap gap-x-2 items-center text-center md:block">
+          <div className="md:flex flex-wrap justify-center gap-x-2 gap-y-1 md:mb-1 font-medium text-lg">
+            <time dateTime={dateAttr}>{displayDate},</time>
+            <time dateTime={timeAttr}>{displayTime}</time>
           </div>
 
-          <data
-            className={style.task__duration}
-            value={`PT${duration / 60_000}M`}
-          >
+          <data value={`PT${duration / 60_000}M`}>
             {duration / 60_000} minutes
           </data>
         </div>
       </div>
 
-      <div className={style.task__actions}>
-        <ul className={`${style['task__actions-list']} hidden-laptop`}>
-          <li className={style['task__actions-item']}>
+      <div className="relative bg-inherit">
+        <ul className="hidden gap-x-4 lg:inline-flex">
+          <li>
             <Button variant="secondary" size="icon" onClick={onStart}>
-              <PlayIcon width="32" height="32" />
+              <PlayIcon className="size-8" />
             </Button>
           </li>
-          <li className={style['task__actions-item']}>
+          <li>
             <Button variant="secondary" size="icon" onClick={onEdit}>
-              <EditIcon width="32" height="32" />
+              <EditIcon className="size-8" />
             </Button>
           </li>
-          <li className={style['task__actions-item']}>
+          <li>
             <Button variant="secondary" size="icon" onClick={onRemove}>
-              <CrossIcon width="32" height="32" />
+              <CrossIcon className="size-8" />
             </Button>
           </li>
         </ul>
 
         <DropdownMenu
-          className="visible-laptop"
+          className="lg:hidden"
           renderTrigger={props => (
             <Button
               {...props}
@@ -100,7 +95,7 @@ export const TaskItem = ({
           items={[
             {
               label: 'Start',
-              icon: <PlayIcon width="20" height="20" />,
+              icon: <PlayIcon className="size-5" />,
               onClick: () => {
                 onStart();
                 setIsOpenDropdown(false);
@@ -108,7 +103,7 @@ export const TaskItem = ({
             },
             {
               label: 'Edit',
-              icon: <EditIcon width="20" height="20" />,
+              icon: <EditIcon className="size-5" />,
               onClick: () => {
                 onEdit();
                 setIsOpenDropdown(false);
@@ -116,7 +111,7 @@ export const TaskItem = ({
             },
             {
               label: 'Delete',
-              icon: <CrossIcon width="20" height="20" />,
+              icon: <CrossIcon className="size-5" />,
               onClick: () => {
                 onRemove();
                 setIsOpenDropdown(false);
@@ -128,7 +123,7 @@ export const TaskItem = ({
         />
       </div>
 
-      <div className={`${style.task__complete} visible-mobile-large`}>
+      <div className="[grid-row:2] [grid-column:2] md:hidden">
         <Checkbox name="complete" aria-label="Mark task as complete" />
       </div>
     </article>

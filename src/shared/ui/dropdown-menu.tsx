@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
-import clsx from 'clsx';
 
+import { cn } from '@/shared/lib/utils';
 import { useOutsideClick } from '@/shared/model/use-outside-click';
-
-import style from './dropdown-menu.module.scss';
 
 interface IDropdownItem {
   label: string;
@@ -52,7 +50,7 @@ export const DropdownMenu = ({
   }, [handleClickOutside]);
 
   return (
-    <div className={clsx(style['dropdown-menu'], className)} ref={ref}>
+    <div className={cn('relative z-2 bg-inherit', className)} ref={ref}>
       <>
         {renderTrigger({
           'aria-expanded': isOpen,
@@ -61,11 +59,14 @@ export const DropdownMenu = ({
         })}
 
         {isOpen && (
-          <ul className={style['dropdown-menu__list']} id="dropdown-menu">
+          <ul
+            className="absolute top-[calc(100% + 2px)] right-0 z-100 w-max rounded-lg shadow-[var(--shadow)] bg-inherit"
+            id="dropdown-menu"
+          >
             {items.map(item => (
-              <li className={style['dropdown-menu__item']}>
+              <li>
                 <button
-                  className={style['dropdown-menu__button']}
+                  className="flex gap-x-2 items-center w-full py-4 pl-6 pr-10 rounded-lg bg-transparent text-[var(--foreground-primary)] hover:bg-[var(--background-primary)]"
                   onClick={item.onClick}
                 >
                   {item.icon}

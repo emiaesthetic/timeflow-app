@@ -75,6 +75,20 @@
   }
 }
 
+@theme {
+  --animate-spin: spin 3s linear infinite;
+
+  @keyframes spin {
+    from {
+      --angle: 0deg;
+    }
+
+    to {
+      --angle: 360deg;
+    }
+  }
+}
+
 @layer utilities {
   .visually-hidden {
     position: fixed;
@@ -89,5 +103,65 @@
 
   .no-spinner {
     appearance: textfield;
+  }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  .timer-border {
+    position: relative;
+  }
+
+  .timer-border:before,
+  .timer-border:after {
+    @apply animate-spin;
+
+    --border: 16px;
+
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: calc(100% + var(--border));
+    height: calc(100% + var(--border));
+    border-radius: 16px;
+    background: conic-gradient(
+      from var(--angle),
+      #ffe5ce,
+      #ffd0ba,
+      #ffb9b0,
+      #ffa2b0,
+      #fd8dba,
+      #ec7cca,
+      #cd72de,
+      #bc9ff6,
+      #ffe5ce
+    );
+    translate: -50% -50%;
+  }
+
+  .timer-border:before {
+    filter: blur(20px);
+  }
+
+  .checkbox {
+    position: relative;
+  }
+
+  .checkbox:checked:before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 16px;
+    height: 10px;
+    border-bottom: 3px solid var(--border-secondary);
+    border-left: 3px solid var(--border-secondary);
+    translate: -50% 0;
+    rotate: -45deg;
   }
 }
