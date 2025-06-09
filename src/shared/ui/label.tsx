@@ -7,7 +7,7 @@ export const Label = ({
 }: React.LabelHTMLAttributes<HTMLLabelElement>) => {
   return (
     <label
-      className={cn('block font-medium mb-1 pl-1', className)}
+      className={cn('mb-1 block pl-1 font-medium', className)}
       htmlFor={htmlFor}
     >
       {children}

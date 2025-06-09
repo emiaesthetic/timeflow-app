@@ -49,7 +49,7 @@ export const Calendar = ({
             ref={calendarRef}
           >
             <DayPicker
-              className="w-max p-4 border-0 rounded-2xl bg-[var(--background-primary)] text-[var(--foreground-primary)] shadow-[var(--shadow)]"
+              className="w-max rounded-2xl border-0 bg-[var(--background-primary)] p-4 text-[var(--foreground-primary)] shadow-[var(--shadow)]"
               classNames={{
                 day_button:
                   'size-full rounded-xl bg-inherit text-inherit hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',

@@ -21,8 +21,8 @@ export const TaskEditor = ({
   return (
     <Dialog
       header={
-        <header className="mb-6 pb-4 border-b-1 border-solid border-[var(--border-muted)]">
-          <h1 className="font-bold text-3xl">
+        <header className="mb-6 border-b-1 border-solid border-[var(--border-muted)] pb-4">
+          <h1 className="text-3xl font-bold">
             {task ? 'Edit task' : 'Create New Task'}
           </h1>
         </header>
@@ -35,13 +35,13 @@ export const TaskEditor = ({
         />
       }
       footer={
-        <footer className="flex justify-center items-center">
+        <footer className="flex items-center justify-center">
           <Button className="w-full" type="submit" form="taskForm">
             {task ? 'Update task' : 'Create Task'}
           </Button>
         </footer>
       }
-      className="max-w-144 w-full"
+      className="w-full max-w-144"
       id="taskFormLayout"
       aria-label="Task create/update form"
       canClose={true}

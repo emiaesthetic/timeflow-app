@@ -11,17 +11,17 @@ export const Select = ({ className, options, ...props }: SelectProps) => {
     <div className="relative w-max">
       <select
         className={cn(
-          'w-full h-12 pl-4 pr-8 py-2 border-1 rounded-2xl border-[var(--border-muted)] font-normal text-base appearance-none',
+          'h-12 w-full appearance-none rounded-2xl border-1 border-[var(--border-muted)] py-2 pr-8 pl-4 text-base font-normal',
           'bg-[var(--background-primary)] text-[var(--foreground-primary)] placeholder:text-[var(--foreground-muted)]',
-          'outline-0 aria-invalid:border-[var(--border-error)] disabled:pointer-events-none disabled:opacity-50',
-          'hover:border-[var(--border-primary)] focus:border-[var(--border-primary)] transition-[border-color]',
+          'outline-0 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-[var(--border-error)]',
+          'transition-[border-color] hover:border-[var(--border-primary)] focus:border-[var(--border-primary)]',
           className,
         )}
         {...props}
       >
         {options}
       </select>
-      <ChevronIcon className="absolute top-1/2 right-2.5 -translate-y-1/2 size-3.5 -rotate-90 pointer-events-none" />
+      <ChevronIcon className="pointer-events-none absolute top-1/2 right-2.5 size-3.5 -translate-y-1/2 -rotate-90" />
     </div>
   );
 };

@@ -9,10 +9,10 @@ export const TextArea = React.forwardRef<
   return (
     <textarea
       className={cn(
-        'w-full h-32 p-4 border-1 rounded-2xl border-[var(--border-muted)] font-normal text-base resize-none',
+        'h-32 w-full resize-none rounded-2xl border-1 border-[var(--border-muted)] p-4 text-base font-normal',
         'bg-[var(--background-primary)] text-[var(--foreground-primary)] placeholder:text-[var(--foreground-muted)]',
-        'outline-0 aria-invalid:border-[var(--border-error)] disabled:pointer-events-none disabled:opacity-50',
-        'hover:border-[var(--border-primary)] focus:border-[var(--border-primary)] transition-[border-color]',
+        'outline-0 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-[var(--border-error)]',
+        'transition-[border-color] hover:border-[var(--border-primary)] focus:border-[var(--border-primary)]',
         className,
       )}
       ref={ref}

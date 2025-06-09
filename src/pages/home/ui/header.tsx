@@ -8,8 +8,8 @@ export const Header = () => {
 
   return (
     <header className="py-4">
-      <div className="max-w-300 mx-auto px-4">
-        <div className="pb-4 border-b-1 border-solid border-[var(--border-muted)] flex justify-between items-center gap-x-8">
+      <div className="mx-auto max-w-300 px-4">
+        <div className="flex items-center justify-between gap-x-8 border-b-1 border-solid border-[var(--border-muted)] pb-4">
           <Logo />
           <Button onClick={() => navigate('/auth')}>Logout</Button>
         </div>

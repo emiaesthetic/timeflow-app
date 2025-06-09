@@ -88,7 +88,7 @@ export const TaskForm = ({
         <Error message={errors.description?.message} />
       </div>
 
-      <div className="grid grid-cols-[2fr_1fr] gap-x-8 gap-y-4 justify-between items-center">
+      <div className="grid grid-cols-[2fr_1fr] items-center justify-between gap-x-8 gap-y-4">
         <div className="mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Date" htmlFor="date" />
           <Controller
@@ -100,7 +100,7 @@ export const TaskForm = ({
                 value={new Date(field.value)}
                 input={
                   <div className="relative">
-                    <CalendarIcon className="absolute top-1/2 -translate-y-1/2 right-2.5 size-6 pointer-events-none" />
+                    <CalendarIcon className="pointer-events-none absolute top-1/2 right-2.5 size-6 -translate-y-1/2" />
                     <Input
                       value={field.value ? formatDate(field.value) : ''}
                       onClick={() => setIsOpenCalendar(prevState => !prevState)}
@@ -126,7 +126,7 @@ export const TaskForm = ({
         <div className="mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Duration" htmlFor="duration" />
           <div className="relative">
-            <TimerIcon className="absolute top-1/2 -translate-y-1/2 right-2.5 size-6 pointer-events-none" />
+            <TimerIcon className="pointer-events-none absolute top-1/2 right-2.5 size-6 -translate-y-1/2" />
             <Input
               {...register('duration', {
                 required: { value: true, message: 'Required field' },

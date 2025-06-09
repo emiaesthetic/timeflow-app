@@ -24,14 +24,14 @@ export const TaskTimer = ({
   return (
     <Dialog
       header={
-        <header className="mb-8 pb-4 border-b border-solid border-[var(--border-muted)]">
-          <h1 className="font-bold text-3xl">{task.title}</h1>
+        <header className="mb-8 border-b border-solid border-[var(--border-muted)] pb-4">
+          <h1 className="text-3xl font-bold">{task.title}</h1>
         </header>
       }
       body={
-        <div className="w-max mx-auto mb-10 p-8 rounded-xl text-center bg-[var(--background-primary)] timer-border">
+        <div className="timer-border mx-auto mb-10 w-max rounded-xl bg-[var(--background-primary)] p-8 text-center">
           <time
-            className="font-medium text-3xl md:text-5xl"
+            className="text-3xl font-medium md:text-5xl"
             dateTime={formatTime(task.duration)}
           >
             {formatTime(remainingTime)}
@@ -39,7 +39,7 @@ export const TaskTimer = ({
         </div>
       }
       footer={
-        <footer className="flex justify-center items-center gap-x-8">
+        <footer className="flex items-center justify-center gap-x-8">
           {remainingTime > 0 && (
             <>
               <Button onClick={onToggle}>
@@ -51,7 +51,7 @@ export const TaskTimer = ({
           )}
         </footer>
       }
-      className="max-w-120 w-full"
+      className="w-full max-w-120"
       id="taskTimer"
       isOpen={isOpen}
       canClose={true}

@@ -8,7 +8,7 @@ export const Checkbox = ({
     <>
       <input
         className={cn(
-          'checkbox size-8 border-2 border-solid border-[var(--border-primary)] rounded-lg bg-transparent appearance-none [&:checked]:bg-[var(--background-secondary)]  outline-0 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[var(--border-primary)] focus-visible:outline-offset-2 peer',
+          'checkbox size-8 appearance-none rounded-lg border-2 border-solid border-[var(--border-primary)] bg-transparent outline-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--border-primary)] focus-visible:outline-dashed [&:checked]:bg-[var(--background-secondary)]',
           className,
         )}
         type="checkbox"

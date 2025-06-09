@@ -51,9 +51,9 @@ export const TaskBoard = () => {
   return (
     <>
       <section className="py-4">
-        <div className="max-w-300 mx-auto px-4">
-          <header className="flex justify-between items-center gap-x-8 mb-8">
-            <h2 className="font-bold text-4xl">Task List</h2>
+        <div className="mx-auto max-w-300 px-4">
+          <header className="mb-8 flex items-center justify-between gap-x-8">
+            <h2 className="text-4xl font-bold">Task List</h2>
             <Button onClick={() => setIsOpenForm(true)}>
               <PlusIcon className="size-6" aria-hidden="true" />
               Add new task
@@ -61,7 +61,7 @@ export const TaskBoard = () => {
           </header>
 
           {tasks.length === 0 ? (
-            <div className="flex content-center w-full">
+            <div className="flex w-full content-center">
               <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
             </div>
           ) : (

@@ -46,9 +46,9 @@ export const Notification = ({
   return createPortal(
     <div
       className={cn(
-        'fixed z-1001 inline-flex gap-x-4 justify-between items-center w-max p-4 rounded-2xl',
+        'fixed z-1001 inline-flex w-max items-center justify-between gap-x-4 rounded-2xl p-4',
         position === 'top-right' && 'top-4 right-4',
-        position === 'bottom-right' && 'bottom-4 right-4',
+        position === 'bottom-right' && 'right-4 bottom-4',
         `bg-[var(--background-primary)] text-[var(--foreground-${type})] shadow-[var(--shadow)]`,
         className,
       )}
@@ -56,7 +56,7 @@ export const Notification = ({
       <Icon />
 
       <div className="text-[var(--foreground-primary)]">
-        <h3 className="mb-2 font-bold ">{title}</h3>
+        <h3 className="mb-2 font-bold">{title}</h3>
         <p>{message}</p>
       </div>
 

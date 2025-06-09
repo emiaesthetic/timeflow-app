@@ -18,8 +18,8 @@ const TEST_CREDENTIALS: IAuthForm = {
 
 const AuthHeader = () => {
   return (
-    <div className="mb-4 pb-4 border-b-1 border-solid border-[var(--border-muted)]">
-      <h1 className="mt-0 mb-2 font-bold text-2xl">Login</h1>
+    <div className="mb-4 border-b-1 border-solid border-[var(--border-muted)] pb-4">
+      <h1 className="mt-0 mb-2 text-2xl font-bold">Login</h1>
       <p className="font-normal text-[var(--foreground-muted)]">
         Welcome back, please login to your account
       </p>

@@ -32,7 +32,7 @@ export const TaskItem = ({
   return (
     <article
       className={cn(
-        'relative grid grid-rows-[repeat(2,auto)] grid-cols-[1fr_auto] gap-6 md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10 place-items-center p-8 rounded-2xl bg-[var(--background-primary)] text-[var(--foreground-text)] shadow-[var(--shadow)] hover:scale-[1.005] transition-[scale]',
+        'relative grid grid-cols-[1fr_auto] grid-rows-[repeat(2,auto)] place-items-center gap-6 rounded-2xl bg-[var(--background-primary)] p-8 text-[var(--foreground-text)] shadow-[var(--shadow)] transition-[scale] hover:scale-[1.005] md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10',
         priority === 'high' && 'bg-[var(--background-task-high)]',
         priority === 'medium' && 'bg-[var(--background-task-medium)]',
         priority === 'low' && 'bg-[var(--background-task-low)]',
@@ -43,14 +43,14 @@ export const TaskItem = ({
         <Checkbox name="complete" aria-label="Mark task as complete" />
       </div>
 
-      <div className="row-span-2 md:grid grid-cols-[2fr_1fr] justify-start items-center gap-x-8 w-full">
+      <div className="row-span-2 w-full grid-cols-[2fr_1fr] items-center justify-start gap-x-8 md:grid">
         <div className="mb-2 md:mb-0">
-          <h3 className="mb-2 font-semibold text-2xl">{title}</h3>
+          <h3 className="mb-2 text-2xl font-semibold">{title}</h3>
           <p className="font-normal">{description}</p>
         </div>
 
-        <div className="flex flex-wrap gap-x-2 items-center text-center md:block">
-          <div className="md:flex flex-wrap justify-center gap-x-2 gap-y-1 md:mb-1 font-medium text-lg">
+        <div className="flex flex-wrap items-center gap-x-2 text-center md:block">
+          <div className="flex-wrap justify-center gap-x-2 gap-y-1 text-lg font-medium md:mb-1 md:flex">
             <time dateTime={dateAttr}>{displayDate},</time>
             <time dateTime={timeAttr}>{displayTime}</time>
           </div>
@@ -123,7 +123,7 @@ export const TaskItem = ({
         />
       </div>
 
-      <div className="[grid-row:2] [grid-column:2] md:hidden">
+      <div className="[grid-column:2] [grid-row:2] md:hidden">
         <Checkbox name="complete" aria-label="Mark task as complete" />
       </div>
     </article>

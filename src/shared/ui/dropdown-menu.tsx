@@ -60,13 +60,13 @@ export const DropdownMenu = ({
 
         {isOpen && (
           <ul
-            className="absolute top-[calc(100% + 2px)] right-0 z-100 w-max rounded-lg shadow-[var(--shadow)] bg-inherit"
+            className="top-[calc(100% + 2px)] absolute right-0 z-100 w-max rounded-lg bg-inherit shadow-[var(--shadow)]"
             id="dropdown-menu"
           >
             {items.map(item => (
               <li>
                 <button
-                  className="flex gap-x-2 items-center w-full py-4 pl-6 pr-10 rounded-lg bg-transparent text-[var(--foreground-primary)] hover:bg-[var(--background-primary)]"
+                  className="flex w-full items-center gap-x-2 rounded-lg bg-transparent py-4 pr-10 pl-6 text-[var(--foreground-primary)] hover:bg-[var(--background-primary)]"
                   onClick={item.onClick}
                 >
                   {item.icon}
