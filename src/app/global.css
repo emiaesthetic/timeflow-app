@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
   font-weight: 400;
@@ -64,11 +64,12 @@
   }
 
   html {
-    @apply relative scroll-smooth box-border;
+    @apply relative box-border scroll-smooth;
   }
 
   body {
-    @apply relative overflow-x-hidden min-w-[320px] h-full min-h-screen font-normal;
+    @apply relative h-full min-h-screen min-w-[320px] overflow-x-hidden font-normal;
+
     font-family: var(--font-family);
     background-color: var(--background-primary);
     color: var(--foreground-primary);
@@ -97,8 +98,8 @@
 
   .no-spinner::-webkit-inner-spin-button,
   .no-spinner::-webkit-outer-spin-button {
-    -webkit-appearance: none;
     margin: 0;
+    appearance: none;
   }
 
   .no-spinner {
