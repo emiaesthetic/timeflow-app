@@ -49,13 +49,13 @@ export const Notification = ({
         'fixed z-1001 inline-flex w-max items-center justify-between gap-x-4 rounded-2xl p-4',
         position === 'top-right' && 'top-4 right-4',
         position === 'bottom-right' && 'right-4 bottom-4',
-        `bg-[var(--background-primary)] text-[var(--foreground-${type})] shadow-[var(--shadow)]`,
+        `bg-popover text-popover-foreground shadow-[var(--shadow)]`,
         className,
       )}
     >
-      <Icon />
+      <Icon className={cn(type === 'error' && 'text-destructive')} />
 
-      <div className="text-[var(--foreground-primary)]">
+      <div>
         <h3 className="mb-2 font-bold">{title}</h3>
         <p>{message}</p>
       </div>

@@ -24,12 +24,12 @@ export const TaskTimer = ({
   return (
     <Dialog
       header={
-        <header className="mb-8 border-b border-solid border-[var(--border-muted)] pb-4">
+        <header className="border-border/5 mb-8 border-b border-solid pb-4">
           <h1 className="text-3xl font-bold">{task.title}</h1>
         </header>
       }
       body={
-        <div className="timer-border mx-auto mb-10 w-max rounded-xl bg-[var(--background-primary)] p-8 text-center">
+        <div className="timer-border bg-secondary mx-auto mb-10 w-max rounded-xl p-8 text-center">
           <time
             className="text-3xl font-medium md:text-5xl"
             dateTime={formatTime(task.duration)}

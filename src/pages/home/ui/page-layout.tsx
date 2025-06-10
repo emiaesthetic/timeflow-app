@@ -6,7 +6,7 @@ export const PageLayout = () => {
     <div className="grid h-full min-h-screen grid-rows-[auto_1fr]">
       <Header />
       <main className="h-full">
-        <h1 className="visually-hidden">TimeFlow App.</h1>
+        <h1 className="sr-only">TimeFlow App.</h1>
         <TaskBoard />
       </main>
     </div>

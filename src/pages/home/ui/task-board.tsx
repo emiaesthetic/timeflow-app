@@ -65,9 +65,9 @@ export const TaskBoard = () => {
               <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
             </div>
           ) : (
-            <ul>
+            <ul className="space-y-4">
               {tasks.map(task => (
-                <li key={task.id} className="[&:not(:last-child)]:mb-6">
+                <li key={task.id}>
                   <TaskItem
                     {...task}
                     onStart={() => {

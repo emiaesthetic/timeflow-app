@@ -49,17 +49,16 @@ export const Calendar = ({
             ref={calendarRef}
           >
             <DayPicker
-              className="w-max rounded-2xl border-0 bg-[var(--background-primary)] p-4 text-[var(--foreground-primary)] shadow-[var(--shadow)]"
+              className="bg-background text-foreground w-max rounded-2xl border-0 p-4 shadow-md"
               classNames={{
                 day_button:
-                  'size-full rounded-xl bg-inherit text-inherit hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
-                today: 'text-[var(--foreground-accent)]',
-                selected:
-                  'rounded-xl bg-[var(--background-secondary)] text-[var(--foreground-secondary)]',
+                  'hover:bg-primary hover:text-primary-foreground size-full rounded-xl bg-inherit text-inherit transition-colors',
+                today: 'text-accent-foreground',
+                selected: 'bg-primary text-primary-foreground rounded-xl',
                 button_previous:
-                  'absolute top-0 left-0 flex justify-center items-center size-10 rounded-xl bg-[var(--background-primary)] text-[var(--foreground-primary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
+                  'bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground absolute top-0 left-0 flex size-10 items-center justify-center rounded-xl transition-colors',
                 button_next:
-                  'absolute top-0 right-0 flex justify-center items-center size-10 rounded-xl -rotate-180 bg-[var(--background-primary)] text-[var(--foreground-primary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)] transition-[background-color,color]',
+                  'bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground absolute top-0 right-0 flex size-10 -rotate-180 items-center justify-center rounded-xl transition-colors',
                 chevron: 'text-inherit',
               }}
               animate

@@ -3,14 +3,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/shared/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 border-2 border-transparent rounded-2xl font-medium text-base whitespace-nowrap cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-0 focus-visible:outline-2 focus-visible:outline-dashed focus-visible:outline-[var(--border-primary)] focus-visible:outline-offset-2 transition-[background-color,color,border-color]',
+  'focus-visible-outline inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent text-base font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        primary:
-          'bg-[var(--background-secondary)] text-[var(--foreground-secondary)] hover:bg-[var(--background-primary)] hover:text-[var(--foreground-primary)] hover:border-[var(--border-primary)]',
+        primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
         secondary:
-          'bg-transparent text-[var(--foreground-primary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground-secondary)]',
+          'text-secondary-foreground hover:bg-primary/90 hover:text-primary-foreground bg-transparent',
       },
       size: {
         primary: 'h-12 p-4',

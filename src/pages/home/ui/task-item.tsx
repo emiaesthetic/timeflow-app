@@ -32,10 +32,10 @@ export const TaskItem = ({
   return (
     <article
       className={cn(
-        'relative grid grid-cols-[1fr_auto] grid-rows-[repeat(2,auto)] place-items-center gap-6 rounded-2xl bg-[var(--background-primary)] p-8 text-[var(--foreground-text)] shadow-[var(--shadow)] transition-[scale] hover:scale-[1.005] md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10',
-        priority === 'high' && 'bg-[var(--background-task-high)]',
-        priority === 'medium' && 'bg-[var(--background-task-medium)]',
-        priority === 'low' && 'bg-[var(--background-task-low)]',
+        'bg-card text-card-foreground relative grid grid-cols-[1fr_auto] grid-rows-[repeat(2,auto)] place-items-center gap-6 rounded-2xl p-8 shadow-md shadow-neutral-200 transition-[scale] hover:scale-[1.005] md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10',
+        priority === 'high' && 'bg-card-high',
+        priority === 'medium' && 'bg-card-medium',
+        priority === 'low' && 'bg-card-low',
         isOpenDropdown && 'z-1001',
       )}
     >

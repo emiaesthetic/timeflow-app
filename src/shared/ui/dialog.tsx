@@ -77,7 +77,7 @@ export const Dialog = ({
   return createPortal(
     <dialog
       className={cn(
-        'm-auto flex h-max flex-col gap-x-8 rounded-3xl border-0 bg-[var(--background-primary)] p-0 [&::backdrop]:backdrop-blur-[10px]',
+        'bg-popover text-popover-foreground m-auto flex h-max flex-col gap-x-8 rounded-3xl border-0 p-0',
         className,
       )}
       ref={dialogRef}

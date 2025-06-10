@@ -11,10 +11,7 @@ export const Select = ({ className, options, ...props }: SelectProps) => {
     <div className="relative w-max">
       <select
         className={cn(
-          'h-12 w-full appearance-none rounded-2xl border-1 border-[var(--border-muted)] py-2 pr-8 pl-4 text-base font-normal',
-          'bg-[var(--background-primary)] text-[var(--foreground-primary)] placeholder:text-[var(--foreground-muted)]',
-          'outline-0 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-[var(--border-error)]',
-          'transition-[border-color] hover:border-[var(--border-primary)] focus:border-[var(--border-primary)]',
+          'border-input bg-secondary text-secondary-foreground placeholder:text-muted-foreground aria-invalid:border-destructive hover:bg-muted focus-visible:bg-muted h-12 w-full appearance-none rounded-2xl border-1 py-2 pr-8 pl-4 text-base font-normal outline-0 transition-colors disabled:pointer-events-none disabled:opacity-50',
           className,
         )}
         {...props}

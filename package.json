@@ -20,9 +20,7 @@
     "react-hook-form": "^7.56.4",
     "react-router-dom": "^7.6.0",
     "sass": "^1.89.1",
-    "tailwind-merge": "^3.3.0",
-    "tailwindcss": "^4.1.8",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -46,13 +44,15 @@
     "stylelint": "^16.20.0",
     "stylelint-order": "^7.0.0",
     "stylelint-prettier": "^5.0.3",
+    "tailwindcss": "^4.1.8",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
     "vite-plugin-svgr": "^4.3.0"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
+  "description": "",
+  "main": "src/app/main.tsx",
   "keywords": [],
   "author": "",
   "license": "ISC"

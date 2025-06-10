@@ -1,0 +1,13 @@
+@layer base {
+  html {
+    @apply relative box-border scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground relative h-full min-h-screen min-w-[360px] overflow-x-hidden font-sans font-normal;
+  }
+
+  ::backdrop {
+    @apply backdrop-blur-md;
+  }
+}

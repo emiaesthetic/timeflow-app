@@ -21,7 +21,7 @@ export const TaskEditor = ({
   return (
     <Dialog
       header={
-        <header className="mb-6 border-b-1 border-solid border-[var(--border-muted)] pb-4">
+        <header className="border-border/5 mb-6 border-b-1 border-solid pb-4">
           <h1 className="text-3xl font-bold">
             {task ? 'Edit task' : 'Create New Task'}
           </h1>

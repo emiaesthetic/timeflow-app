@@ -65,7 +65,7 @@ export const TaskForm = ({
         reset();
       })}
     >
-      <div className="mb-6 has-[[data-error='true']]:mb-8">
+      <div className="relative mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Title" htmlFor="title" />
         <Input
           {...register('title', {
@@ -78,7 +78,7 @@ export const TaskForm = ({
         <Error message={errors.title?.message} />
       </div>
 
-      <div className="mb-6 has-[[data-error='true']]:mb-8">
+      <div className="relative mb-6 has-[[data-error='true']]:mb-8">
         <Label children="Description" htmlFor="description" />
         <TextArea
           {...register('description')}
@@ -89,7 +89,7 @@ export const TaskForm = ({
       </div>
 
       <div className="grid grid-cols-[2fr_1fr] items-center justify-between gap-x-8 gap-y-4">
-        <div className="mb-6 has-[[data-error='true']]:mb-8">
+        <div className="relative mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Date" htmlFor="date" />
           <Controller
             name="date"
@@ -123,7 +123,7 @@ export const TaskForm = ({
           <Error message={errors.date?.message} />
         </div>
 
-        <div className="mb-6 has-[[data-error='true']]:mb-8">
+        <div className="relative mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Duration" htmlFor="duration" />
           <div className="relative">
             <TimerIcon className="pointer-events-none absolute top-1/2 right-2.5 size-6 -translate-y-1/2" />
