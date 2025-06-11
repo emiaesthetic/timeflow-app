@@ -1,15 +1,10 @@
-export const ErrorIcon = ({
-  width = '32',
-  height = '32',
-}: {
-  width?: string;
-  height?: string;
-}) => {
+export const ErrorIcon = ({ className }: { className?: string }) => {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width="32"
+      height="32"
       viewBox="0 0 32 32"
       fill="none"
       aria-hidden="true"

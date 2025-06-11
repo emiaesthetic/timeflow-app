@@ -1,15 +1,10 @@
-export const SuccessIcon = ({
-  width = '32',
-  height = '32',
-}: {
-  width?: string;
-  height?: string;
-}) => {
+export const SuccessIcon = ({ className }: { className?: string }) => {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width="24"
+      height="24"
       fill="none"
       viewBox="0 0 24 24"
       aria-hidden="true"

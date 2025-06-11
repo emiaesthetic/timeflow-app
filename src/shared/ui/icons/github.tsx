@@ -1,15 +1,10 @@
-export const GitHubIcon = ({
-  width = '98',
-  height = '96',
-}: {
-  width?: string;
-  height?: string;
-}) => {
+export const GitHubIcon = ({ className }: { className?: string }) => {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
+      width="98"
+      height="96"
       viewBox="0 0 98 96"
       fill="none"
       aria-hidden="true"
