@@ -1,4 +1,4 @@
-export const formatTime = (timestamp?: number): string => {
+export const formatTimer = (timestamp?: number): string => {
   if (!timestamp) return '00:00:00';
 
   const HOURS_PER_DAY = 24;

@@ -8,8 +8,8 @@ export const formatDate = (dateString: string) => {
   }).format(new Date(dateString));
 };
 
-export const formatDateParts = (dateString: string) => {
-  if (!dateString) {
+export const formatDateParts = (dateString: string, timeString: string) => {
+  if (!dateString || !timeString) {
     return {
       displayDate: '',
       displayTime: '',
@@ -18,7 +18,8 @@ export const formatDateParts = (dateString: string) => {
     };
   }
 
-  const date = new Date(dateString);
+  const dateTimeString = dateString.split('T')[0] + 'T' + timeString;
+  const date = new Date(dateTimeString);
 
   const displayDate = new Intl.DateTimeFormat('en-US', {
     month: 'long',

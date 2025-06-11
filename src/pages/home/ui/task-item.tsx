@@ -19,6 +19,7 @@ export const TaskItem = ({
   title,
   description,
   date,
+  time,
   duration,
   priority,
   onStart,
@@ -26,8 +27,10 @@ export const TaskItem = ({
   onRemove,
 }: ITaskItemProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const { displayDate, displayTime, dateAttr, timeAttr } =
-    formatDateParts(date);
+  const { displayDate, displayTime, dateAttr, timeAttr } = formatDateParts(
+    date,
+    time,
+  );
 
   return (
     <article

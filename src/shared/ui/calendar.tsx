@@ -10,14 +10,14 @@ import 'react-day-picker/style.css';
 
 export const Calendar = ({
   value,
-  input,
+  trigger,
   position,
   isOpen,
   onClose,
   onSelect,
 }: {
   value: Date | undefined;
-  input: React.ReactNode;
+  trigger: React.ReactNode;
   position: { top: number; left: number };
   isOpen: boolean;
   onClose: () => void;
@@ -37,7 +37,7 @@ export const Calendar = ({
 
   return (
     <div ref={calendarWrapperRef}>
-      {input}
+      {trigger}
       {isOpen &&
         createPortal(
           <div

@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/button';
 import { Dialog } from '@/shared/ui/dialog';
 
-import { formatTime } from '../lib/format-time';
+import { formatTimer } from '../lib/format-timer';
 import { ITask } from '../model/types';
 
 export const TaskTimer = ({
@@ -32,9 +32,9 @@ export const TaskTimer = ({
         <div className="timer-border bg-secondary mx-auto mb-10 w-max rounded-xl p-8 text-center">
           <time
             className="text-3xl font-medium md:text-5xl"
-            dateTime={formatTime(task.duration)}
+            dateTime={formatTimer(task.duration)}
           >
-            {formatTime(remainingTime)}
+            {formatTimer(remainingTime)}
           </time>
         </div>
       }

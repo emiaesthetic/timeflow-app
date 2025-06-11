@@ -1,5 +1,6 @@
 export { CalendarIcon } from './calendar';
 export { ChevronIcon } from './chevron';
+export { ClockIcon } from './clock';
 export { CrossIcon } from './cross';
 export { DottedIcon } from './dotted';
 export { EditIcon } from './edit';

@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { Calendar } from '@/shared/ui/calendar';
 import { Error } from '@/shared/ui/error';
-import { CalendarIcon, TimerIcon } from '@/shared/ui/icons';
+import { CalendarIcon, ClockIcon, TimerIcon } from '@/shared/ui/icons';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select } from '@/shared/ui/select';
@@ -88,7 +88,7 @@ export const TaskForm = ({
         <Error message={errors.description?.message} />
       </div>
 
-      <div className="grid grid-cols-[2fr_1fr] items-center justify-between gap-x-8 gap-y-4">
+      <div className="grid grid-cols-2 items-center justify-between gap-x-8 gap-y-4">
         <div className="relative mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Date" htmlFor="date" />
           <Controller
@@ -98,10 +98,11 @@ export const TaskForm = ({
             render={({ field }) => (
               <Calendar
                 value={new Date(field.value)}
-                input={
+                trigger={
                   <div className="relative">
-                    <CalendarIcon className="pointer-events-none absolute top-1/2 right-2.5 size-6 -translate-y-1/2" />
+                    <CalendarIcon className="pointer-events-none absolute top-1/2 right-3.5 size-6 -translate-y-1/2" />
                     <Input
+                      id="date"
                       value={field.value ? formatDate(field.value) : ''}
                       onClick={() => setIsOpenCalendar(prevState => !prevState)}
                       aria-invalid={!!errors.date}
@@ -114,7 +115,7 @@ export const TaskForm = ({
                 isOpen={isOpenCalendar}
                 onClose={() => setIsOpenCalendar(false)}
                 onSelect={date => {
-                  field.onChange(date);
+                  field.onChange(date?.toISOString());
                   setIsOpenCalendar(false);
                 }}
               />
@@ -124,9 +125,29 @@ export const TaskForm = ({
         </div>
 
         <div className="relative mb-6 has-[[data-error='true']]:mb-8">
+          <Label children="Time" htmlFor="time" />
+          <div className="relative">
+            <ClockIcon className="pointer-events-none absolute top-1/2 right-3.5 size-6 -translate-y-1/2" />
+            <Input
+              {...register('time', {
+                required: { value: true, message: 'Required field' },
+              })}
+              className="[&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              id="time"
+              type="time"
+              step="60"
+              defaultValue="00:00"
+            />
+          </div>
+          <Error message={errors.time?.message} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 items-center gap-x-8 gap-y-4">
+        <div className="relative mb-6 has-[[data-error='true']]:mb-8">
           <Label children="Duration" htmlFor="duration" />
           <div className="relative">
-            <TimerIcon className="pointer-events-none absolute top-1/2 right-2.5 size-6 -translate-y-1/2" />
+            <TimerIcon className="pointer-events-none absolute top-1/2 right-3.5 size-6 -translate-y-1/2" />
             <Input
               {...register('duration', {
                 required: { value: true, message: 'Required field' },
@@ -144,25 +165,26 @@ export const TaskForm = ({
           </div>
           <Error message={errors.duration?.message} />
         </div>
-      </div>
 
-      <div className="mb-6 has-[[data-error='true']]:mb-8">
-        <Label children="Priority" htmlFor="priority" />
-        <Select
-          {...register('priority', {
-            required: { value: true, message: 'Required field' },
-          })}
-          id="priority"
-          aria-invalid={!!errors.priority}
-          options={
-            <>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </>
-          }
-        />
-        <Error message={errors.priority?.message} />
+        <div className="mb-6 has-[[data-error='true']]:mb-8">
+          <Label children="Priority" htmlFor="priority" />
+          <Select
+            {...register('priority', {
+              required: { value: true, message: 'Required field' },
+            })}
+            className="w-full"
+            id="priority"
+            aria-invalid={!!errors.priority}
+            options={
+              <>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </>
+            }
+          />
+          <Error message={errors.priority?.message} />
+        </div>
       </div>
     </form>
   );

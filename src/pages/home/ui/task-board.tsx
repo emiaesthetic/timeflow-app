@@ -61,7 +61,7 @@ export const TaskBoard = () => {
           </header>
 
           {tasks.length === 0 ? (
-            <div className="flex w-full content-center">
+            <div className="flex w-full items-center justify-center">
               <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
             </div>
           ) : (
