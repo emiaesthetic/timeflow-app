@@ -6,8 +6,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
+
 
 export default tseslint.config(
   { ignores: ['node_modules', 'dist', 'build'] },
@@ -27,8 +26,6 @@ export default tseslint.config(
       'react': eslintReact,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      'import': importPlugin,
-      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -48,25 +45,6 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
       'no-console': 'warn',
-      'import/first': 'warn',
-      'import/newline-after-import': 'warn',
-      'import/no-duplicates': 'warn',
-      'import/order': 'off',
-      'simple-import-sort/imports': [
-        'warn',
-        {
-          groups: [
-            ['^node:'],
-            ['^react', '^@?\\w'],
-            ['^@/'],
-            ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-            ['^.+\\.svg\\?react'],
-            ['^.+\\.(gif|png|jpg|jpeg|webp)$'],
-            ['^.+\\.(css|scss|less)$'],
-          ]
-        }
-      ],
-      'simple-import-sort/exports': 'warn',
     },
   },
 );

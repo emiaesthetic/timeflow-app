@@ -7,6 +7,7 @@ import { transformFormDateToTask } from '../lib/transform-task';
 import { ITask, ITaskFormData } from '../model/types';
 import { useLocalStorage } from '../model/use-local-storage';
 import { useTimer } from '../model/use-timer';
+
 import emptyImg from './img/empty.svg';
 import { TaskEditor } from './task-editor';
 import { TaskItem } from './task-item';
