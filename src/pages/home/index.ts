@@ -1,3 +1,1 @@
-import { HomePage } from './page';
-
-export const Component = HomePage;
+export { HomePage } from './page';

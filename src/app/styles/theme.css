@@ -23,6 +23,7 @@
   --color-ring: var(--ring);
   --color-checkbox-mark: var(--checkbox-mark);
   --animate-spin: spin 3s linear infinite;
+  --animate-loading: loading 1.2s linear infinite;
 
   @keyframes spin {
     from {
@@ -31,6 +32,18 @@
 
     to {
       --angle: 360deg;
+    }
+  }
+
+  @keyframes loading {
+    0% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.1;
+    }
+    100% {
+      scale: 1;
     }
   }
 }

@@ -3,7 +3,7 @@ import { TaskBoard } from './task-board';
 
 export const PageLayout = () => {
   return (
-    <div className="grid h-full min-h-screen grid-rows-[auto_1fr]">
+    <div className="grid min-h-screen grid-rows-[auto_1fr]">
       <Header />
       <main className="h-full">
         <h1 className="sr-only">TimeFlow App.</h1>
