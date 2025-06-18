@@ -1,36 +1,35 @@
 import { useState } from 'react';
 
-import { Button } from '@/shared/ui/button';
+import { Button } from '@/shared/ui/Button';
 import { PlusIcon } from '@/shared/ui/icons';
 
-import { transformFormDateToTask } from '../lib/transform-task';
-import { ITask, ITaskFormData } from '../model/types';
-import { useLocalStorage } from '../model/use-local-storage';
-import { useTimer } from '../model/use-timer';
-
-import emptyImg from './img/empty.svg';
-import { TaskEditor } from './task-editor';
-import { TaskItem } from './task-item';
-import { TaskTimer } from './task-timer';
+import { transformFormDateToTask } from './lib/transformTask';
+import { useTimer } from './lib/useTimer';
+import { useLocalStorage } from './model/useLocalStorage';
+import { Task, TaskFormData } from './types';
+import { TaskEditor } from './ui/TaskEditor';
+import { TaskItem } from './ui/TaskItem';
+import { TaskList } from './ui/TaskList';
+import { TaskTimer } from './ui/TaskTimer';
 
 export const TaskBoard = () => {
   const { tasks, addTask, editTask, removeTask } = useLocalStorage();
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [isOpenTimer, setIsOpenTimer] = useState(false);
-  const [activeTask, setActiveTask] = useState<ITask | undefined>();
+  const [activeTask, setActiveTask] = useState<Task | undefined>();
 
   const { remainingTime, isEnabled, toggleTimer, resetTimer } = useTimer(
     activeTask?.duration || 0,
   );
 
-  const handleSubmit = (data: ITaskFormData) => {
+  const handleSubmit = (data: TaskFormData) => {
     if (activeTask) {
       editTask({ ...activeTask, ...transformFormDateToTask(data) });
     } else {
-      const taskWithID: ITask = {
+      const taskWithID = {
         id: crypto.randomUUID(),
         ...transformFormDateToTask(data),
-      };
+      } as Task;
       addTask(taskWithID);
     }
 
@@ -61,31 +60,24 @@ export const TaskBoard = () => {
             </Button>
           </header>
 
-          {tasks.length === 0 ? (
-            <div className="flex w-full items-center justify-center">
-              <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
-            </div>
-          ) : (
-            <ul className="space-y-4">
-              {tasks.map(task => (
-                <li key={task.id}>
-                  <TaskItem
-                    {...task}
-                    onStart={() => {
-                      setIsOpenTimer(true);
-                      setActiveTask(task);
-                      toggleTimer();
-                    }}
-                    onEdit={() => {
-                      setIsOpenForm(true);
-                      setActiveTask(task);
-                    }}
-                    onRemove={() => removeTask(task.id)}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
+          <TaskList
+            tasks={tasks}
+            renderTask={task => (
+              <TaskItem
+                {...task}
+                onStart={() => {
+                  setIsOpenTimer(true);
+                  setActiveTask(task);
+                  toggleTimer();
+                }}
+                onEdit={() => {
+                  setIsOpenForm(true);
+                  setActiveTask(task);
+                }}
+                onRemove={() => removeTask(task.id)}
+              />
+            )}
+          />
         </div>
       </section>
 

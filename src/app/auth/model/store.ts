@@ -2,8 +2,9 @@ import { AxiosError } from 'axios';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { SessionState } from '../types';
+
 import { fetchToken, fetchUserProfile } from './api';
-import { SessionState } from './types';
 
 export const useAuthStore = create(
   persist<SessionState>(
@@ -97,6 +98,10 @@ export const useAuthStore = create(
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
+      partialize: state =>
+        ({
+          token: state.token,
+        }) as SessionState,
     },
   ),
 );

@@ -1,23 +1,23 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Calendar } from '@/shared/ui/calendar';
-import { Error } from '@/shared/ui/error';
+import { Calendar } from '@/shared/ui/Calendar';
+import { Error } from '@/shared/ui/Error';
+import { Input } from '@/shared/ui/Input';
+import { Label } from '@/shared/ui/Label';
+import { Select } from '@/shared/ui/Select';
+import { TextArea } from '@/shared/ui/Textarea';
 import { CalendarIcon, ClockIcon, TimerIcon } from '@/shared/ui/icons';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
-import { Select } from '@/shared/ui/select';
-import { TextArea } from '@/shared/ui/textarea';
 
-import { formatDate } from '../lib/format-date';
-import { ITaskFormData } from '../model/types';
+import { formatDate } from '../lib/formatDate';
+import { TaskFormData } from '../types';
 
 export const TaskForm = ({
   defaultValues,
   onSubmit,
 }: {
-  defaultValues?: ITaskFormData | undefined;
-  onSubmit: (data: ITaskFormData) => void;
+  defaultValues?: TaskFormData | undefined;
+  onSubmit: (data: TaskFormData) => void;
 }) => {
   const {
     register,
@@ -25,7 +25,7 @@ export const TaskForm = ({
     handleSubmit,
     control,
     reset,
-  } = useForm<ITaskFormData>({ defaultValues });
+  } = useForm<TaskFormData>({ defaultValues });
 
   const dateRef = useRef<HTMLInputElement>(null);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);

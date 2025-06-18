@@ -40,5 +40,10 @@ export const useTimer = (timestamp: number) => {
     setAccumulatedTime(0);
   };
 
-  return { remainingTime, isEnabled: !!startAt, toggleTimer, resetTimer };
+  return {
+    remainingTime,
+    isEnabled: !!startAt,
+    toggleTimer,
+    resetTimer,
+  };
 };

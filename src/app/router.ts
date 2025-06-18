@@ -2,8 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/model/routes';
 
-import { App } from './app';
-import { PrivateRoute } from './privateRoute';
+import { App } from './App';
+import { PrivateRoute } from './PrivateRoute';
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.AUTH,
         lazy: async () => {
-          const { AuthPage } = await import('./auth.page');
+          const { AuthPage } = await import('./auth/Auth.page');
           return { Component: AuthPage };
         },
       },
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
           {
             path: ROUTES.HOME,
             lazy: async () => {
-              const { HomePage } = await import('@/pages/home');
+              const { HomePage } = await import('./home/Home.page');
               return { Component: HomePage };
             },
           },

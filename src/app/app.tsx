@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { useAuthStore } from '@/features/auth/store';
+import { useAuth } from '@/app/auth';
 
 export const App = () => {
-  const { initializeSession } = useAuthStore();
+  const { initializeSession } = useAuth();
 
   useEffect(() => {
     initializeSession();

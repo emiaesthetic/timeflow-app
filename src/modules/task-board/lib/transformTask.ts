@@ -1,4 +1,4 @@
-import { ITask, ITaskFormData } from '../model/types';
+import { ITask, ITaskFormData } from '../types';
 
 export const transformTaskToFormDate = (task: ITask): ITaskFormData => {
   return {

@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button';
-import { Checkbox } from '@/shared/ui/checkbox';
-import { DropdownMenu } from '@/shared/ui/dropdown-menu';
+import { Button } from '@/shared/ui/Button';
+import { Checkbox } from '@/shared/ui/Checkbox';
+import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 import { CrossIcon, DottedIcon, EditIcon, PlayIcon } from '@/shared/ui/icons';
 
-import { formatDateParts } from '../lib/format-date';
-import { ITask } from '../model/types';
+import { formatDateParts } from '../lib/formatDate';
+import { Task } from '../types';
 
-interface ITaskItemProps extends ITask {
+interface TaskItemProps extends Task {
   onStart: () => void;
   onEdit: () => void;
   onRemove: () => void;
@@ -25,7 +25,7 @@ export const TaskItem = ({
   onStart,
   onEdit,
   onRemove,
-}: ITaskItemProps) => {
+}: TaskItemProps) => {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const { displayDate, displayTime, dateAttr, timeAttr } = formatDateParts(
     date,

@@ -1,15 +1,15 @@
-import { Button } from '@/shared/ui/button';
-import { Dialog } from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/Button';
+import { Dialog } from '@/shared/ui/Dialog';
 
-import { transformTaskToFormDate } from '../lib/transform-task';
-import { ITask, ITaskFormData } from '../model/types';
+import { transformTaskToFormDate } from '../lib/transformTask';
+import { Task, TaskFormData } from '../types';
 
-import { TaskForm } from './task-form';
+import { TaskForm } from './TaskForm';
 
-interface ITaskEditorProps {
-  task?: ITask;
+interface TaskEditorProps {
+  task?: Task;
   isOpen: boolean;
-  onSubmit: (data: ITaskFormData) => void;
+  onSubmit: (data: TaskFormData) => void;
   onClose: () => void;
 }
 
@@ -18,7 +18,7 @@ export const TaskEditor = ({
   isOpen,
   onSubmit,
   onClose,
-}: ITaskEditorProps) => {
+}: TaskEditorProps) => {
   return (
     <Dialog
       header={

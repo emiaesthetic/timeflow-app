@@ -1,8 +1,8 @@
-import { Button } from '@/shared/ui/button';
-import { Dialog } from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/Button';
+import { Dialog } from '@/shared/ui/Dialog';
 
-import { formatTimer } from '../lib/format-timer';
-import { ITask } from '../model/types';
+import { formatTimer } from '../lib/formatTimer';
+import { Task } from '../types';
 
 export const TaskTimer = ({
   task,
@@ -12,7 +12,7 @@ export const TaskTimer = ({
   onToggle,
   onClose,
 }: {
-  task: ITask | undefined;
+  task: Task | undefined;
   isOpen: boolean;
   isEnabled: boolean;
   remainingTime: number;

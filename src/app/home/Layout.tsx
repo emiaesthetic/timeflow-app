@@ -1,7 +1,7 @@
-import { Header } from './header';
-import { TaskBoard } from './task-board';
+import { Header } from './Header';
+import { TaskBoard } from '@/modules/task-board';
 
-export const PageLayout = () => {
+export const HomePageLayout = () => {
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr]">
       <Header />

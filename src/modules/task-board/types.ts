@@ -1,4 +1,4 @@
-export interface ITaskFormData {
+export interface TaskFormData {
   id?: string;
   title: string;
   description: string;
@@ -8,7 +8,7 @@ export interface ITaskFormData {
   priority: 'low' | 'medium' | 'high';
 }
 
-export interface ITask {
+export interface Task {
   id: string;
   title: string;
   description: string;

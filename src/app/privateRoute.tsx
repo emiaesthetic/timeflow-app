@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { useAuthStore } from '@/features/auth/store';
+import { useAuth } from '@/app/auth';
 
 import { ROUTES } from '@/shared/model/routes';
 
 export const PrivateRoute = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.AUTH} replace />;

@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAuthStore } from '@/features/auth/store';
+import { useAuth } from '@/app/auth';
 
-import { Button } from '@/shared/ui/button';
-import { Logo } from '@/shared/ui/logo';
+import { Button } from '@/shared/ui/Button';
+import { Logo } from '@/shared/ui/Logo';
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout } = useAuth();
 
   return (
     <header className="py-4">

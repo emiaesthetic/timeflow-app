@@ -1,10 +1,11 @@
-import { Button } from '@/shared/ui/button';
+import { Button } from '@/shared/ui/Button';
 import { GitHubIcon } from '@/shared/ui/icons';
 
-import { Preloader } from './preloader';
-import { useAuth } from './useAuth';
+import { useAuth } from '../lib/useAuth';
 
-export const AuthLayout = () => {
+import { Preloader } from './Preloader';
+
+export const AuthPageLayout = () => {
   const { loading, redirectToAuth } = useAuth();
 
   if (loading) return <Preloader />;

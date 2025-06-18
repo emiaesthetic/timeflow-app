@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { UserProfile } from './types';
+import { UserProfile } from '../types';
 
 export const fetchToken = async (code: string): Promise<string | undefined> => {
   if (!code) return;
