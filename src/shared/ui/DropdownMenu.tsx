@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { useOutsideClick } from '@/shared/lib/useOutsideClick';
 import { cn } from '@/shared/lib/utils';
-import { useOutsideClick } from '@/shared/model/useOutsideClick';
 
 interface IDropdownItem {
   label: string;

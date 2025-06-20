@@ -1,6 +1,6 @@
-import { ITask, ITaskFormData } from '../types';
+import { Task, TaskFormData } from '@/shared/types/task';
 
-export const transformTaskToFormDate = (task: ITask): ITaskFormData => {
+export const transformTaskToFormDate = (task: Task): TaskFormData => {
   return {
     title: task.title,
     description: task.description,
@@ -12,8 +12,8 @@ export const transformTaskToFormDate = (task: ITask): ITaskFormData => {
 };
 
 export const transformFormDateToTask = (
-  formData: ITaskFormData,
-): Omit<ITask, 'id'> => {
+  formData: TaskFormData,
+): Omit<Task, 'id'> => {
   return {
     ...formData,
     duration: Number(formData.duration) * 60_000,

@@ -1,4 +1,4 @@
-import { AuthPage } from './Auth.page';
+import { AuthPage } from './Auth';
 
 export { useAuth } from './lib/useAuth';
 

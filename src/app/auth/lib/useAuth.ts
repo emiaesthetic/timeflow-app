@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '@/shared/model/routes';
 
 import { GITHUB_AUTH_URL } from '../config';
-import { useAuthStore } from '../model/store';
+import { useAuthStore } from '../model/useAuthStore';
 
 export const useAuth = () => {
   const { isAuthenticated, loading, error, login, logout, initializeSession } =

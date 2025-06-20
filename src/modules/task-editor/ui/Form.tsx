@@ -12,7 +12,7 @@ import { CalendarIcon, ClockIcon, TimerIcon } from '@/shared/ui/icons';
 
 import { formatDate } from '../lib/formatDate';
 
-export const TaskForm = ({
+export const Form = ({
   defaultValues,
   onSubmit,
 }: {

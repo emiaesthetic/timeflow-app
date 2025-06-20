@@ -1,4 +1,4 @@
-import { Task } from '../types';
+import { Task } from '@/shared/types/task';
 
 import emptyImg from './img/empty.svg';
 

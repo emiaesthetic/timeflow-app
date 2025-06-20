@@ -3,6 +3,9 @@ import { Outlet } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth';
 
+import { EditorProvider } from '@/modules/task-editor';
+import { TimerProvider } from '@/modules/task-timer';
+
 export const App = () => {
   const { initializeSession } = useAuth();
 
@@ -11,8 +14,10 @@ export const App = () => {
   }, [initializeSession]);
 
   return (
-    <>
-      <Outlet />
-    </>
+    <EditorProvider>
+      <TimerProvider>
+        <Outlet />
+      </TimerProvider>
+    </EditorProvider>
   );
 };

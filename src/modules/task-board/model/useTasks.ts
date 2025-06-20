@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { ITask } from './types';
+import { Task } from '@/shared/types/task';
 
 const STORAGE_KEY = 'tasks';
 
-export const useLocalStorage = () => {
-  const [storageValue, setStorageValue] = useState<ITask[]>(() => {
+export const useTasks = () => {
+  const [storageValue, setStorageValue] = useState<Task[]>(() => {
     const storageValue = localStorage.getItem(STORAGE_KEY);
     if (!storageValue) return [];
 
@@ -16,7 +16,7 @@ export const useLocalStorage = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(storageValue));
   }, [storageValue]);
 
-  const addTask = (task: ITask): void => {
+  const addTask = (task: Task): void => {
     if (!task) return;
     setStorageValue(prevTasks => [...prevTasks, task]);
   };
@@ -26,7 +26,7 @@ export const useLocalStorage = () => {
     setStorageValue(prevTasks => prevTasks.filter(task => task.id !== taskID));
   };
 
-  const editTask = (updatedTask: ITask): void => {
+  const editTask = (updatedTask: Task): void => {
     if (!updatedTask) return;
     setStorageValue(prevTasks =>
       prevTasks.map(task =>

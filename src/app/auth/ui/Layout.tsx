@@ -5,7 +5,7 @@ import { useAuth } from '../lib/useAuth';
 
 import { Preloader } from './Preloader';
 
-export const AuthPageLayout = () => {
+export const Layout = () => {
   const { loading, redirectToAuth } = useAuth();
 
   if (loading) return <Preloader />;

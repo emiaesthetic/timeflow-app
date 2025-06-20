@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/utils';
+import { Task } from '@/shared/types/task';
 import { Button } from '@/shared/ui/Button';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 import { CrossIcon, DottedIcon, EditIcon, PlayIcon } from '@/shared/ui/icons';
 
 import { formatDateParts } from '../lib/formatDate';
-import { Task } from '../types';
 
 interface TaskItemProps extends Task {
   onStart: () => void;
@@ -35,7 +35,7 @@ export const TaskItem = ({
   return (
     <article
       className={cn(
-        'bg-card text-card-foreground relative grid grid-cols-[1fr_auto] grid-rows-[repeat(2,auto)] place-items-center gap-6 rounded-2xl p-8 shadow-md shadow-neutral-200 transition-[scale] hover:scale-[1.005] md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10',
+        'bg-card text-card-foreground relative grid grid-cols-[1fr_auto] grid-rows-1 place-items-center gap-6 rounded-2xl p-8 shadow-md shadow-neutral-200 transition-[scale] hover:scale-[1.005] md:grid-cols-[auto_1fr_auto] md:gap-y-0 md:p-6 lg:gap-x-10',
         priority === 'high' && 'bg-card-high',
         priority === 'medium' && 'bg-card-medium',
         priority === 'low' && 'bg-card-low',

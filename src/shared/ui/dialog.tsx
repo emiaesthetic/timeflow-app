@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useOutsideClick } from '@/shared/lib/useOutsideClick';
 import { cn } from '@/shared/lib/utils';
-import { useOutsideClick } from '@/shared/model/useOutsideClick';
 
 import { Button } from './Button';
 import { CrossIcon } from './icons';
