@@ -1,41 +1,40 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/model/routes';
 
 import { GITHUB_AUTH_URL } from '../config';
-import { useAuthStore } from '../model/useAuthStore';
+import { useStore } from '../model/useStore';
 
 export const useAuth = () => {
   const { isAuthenticated, loading, error, login, logout, initializeSession } =
-    useAuthStore();
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+    useStore();
 
-  useEffect(() => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const handleAuthCallback = useCallback(async () => {
     const code = searchParams.get('code');
+
+    if (!code) return;
 
     searchParams.delete('code');
     setSearchParams(searchParams);
 
-    const handleAuthCallback = async () => {
-      if (isAuthenticated) {
-        return navigate(ROUTES.HOME, { replace: true });
-      }
+    await login(code);
 
-      if (!code) return;
+    return;
+  }, [searchParams, setSearchParams, login]);
 
-      const isLogin = await login(code);
-
-      if (isLogin) {
-        return navigate(ROUTES.HOME);
-      } else {
-        return navigate(ROUTES.AUTH);
-      }
-    };
+  useEffect(() => {
+    if (loading) return;
 
     handleAuthCallback();
-  }, [isAuthenticated, searchParams, setSearchParams, login, navigate]);
+
+    if (isAuthenticated && window.location.pathname === ROUTES.AUTH) {
+      navigate(ROUTES.HOME, { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate, handleAuthCallback]);
 
   const redirectToAuth = () => {
     window.location.href = GITHUB_AUTH_URL;

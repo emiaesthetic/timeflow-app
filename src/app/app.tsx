@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth';
 
@@ -7,11 +7,17 @@ import { EditorProvider } from '@/modules/task-editor';
 import { TimerProvider } from '@/modules/task-timer';
 
 export const App = () => {
-  const { initializeSession } = useAuth();
+  const { loading, initializeSession } = useAuth();
+
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    initializeSession();
-  }, [initializeSession]);
+    const code = searchParams.get('code');
+
+    if (!loading && !code) {
+      initializeSession();
+    }
+  }, [loading, searchParams, initializeSession]);
 
   return (
     <EditorProvider>

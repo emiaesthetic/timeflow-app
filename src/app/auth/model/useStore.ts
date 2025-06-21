@@ -6,7 +6,7 @@ import { SessionState } from '../types';
 
 import { fetchToken, fetchUserProfile } from './api';
 
-export const useAuthStore = create(
+export const useStore = create(
   persist<SessionState>(
     (set, get) => ({
       isAuthenticated: false,
@@ -20,8 +20,7 @@ export const useAuthStore = create(
       setUser: user => set({ user }),
 
       login: async code => {
-        if (!code) return false;
-
+        if (!code || get().loading || get().isAuthenticated) return;
         set({ loading: true, error: null });
 
         try {
@@ -39,28 +38,22 @@ export const useAuthStore = create(
                   isAuthenticated: true,
                   user: userProfile,
                 });
-                return true;
               } else {
                 get().logout();
                 set({ error: 'Failed to load user profile.', loading: false });
-                return false;
               }
             } catch (error) {
               const message =
                 error instanceof AxiosError
                   ? error.message
                   : 'Failed to load user profile.';
-
               set({ error: message, loading: false });
-              return false;
             }
           }
         } catch (error) {
           const message =
             error instanceof AxiosError ? error.message : 'Log in failed.';
-
           set({ error: message, loading: false });
-          return false;
         }
       },
 
@@ -71,10 +64,10 @@ export const useAuthStore = create(
       initializeSession: async () => {
         if (get().loading || get().isAuthenticated) return;
 
+        set({ loading: true, error: null });
+
         const token = get().token;
         if (!token) return;
-
-        set({ loading: true, error: null });
 
         try {
           const userProfile = await fetchUserProfile(token);
@@ -90,7 +83,6 @@ export const useAuthStore = create(
             error instanceof AxiosError
               ? error.message
               : 'Error initializing session.';
-
           set({ loading: false, error: message });
         }
       },

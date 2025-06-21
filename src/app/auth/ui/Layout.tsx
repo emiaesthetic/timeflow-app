@@ -1,14 +1,22 @@
+import { useNavigation } from 'react-router-dom';
+
 import { Button } from '@/shared/ui/Button';
 import { GitHubIcon } from '@/shared/ui/icons';
 
 import { useAuth } from '../lib/useAuth';
 
-import { Preloader } from './Preloader';
+import { AuthPreloader } from './AuthPreloader';
 
 export const Layout = () => {
   const { loading, redirectToAuth } = useAuth();
 
-  if (loading) return <Preloader />;
+  const navigation = useNavigation();
+  const isAuthLoading =
+    loading ||
+    navigation.state === 'loading' ||
+    navigation.state === 'submitting';
+
+  if (isAuthLoading) return <AuthPreloader />;
 
   return (
     <div className="bg-background text-foreground grid min-h-screen w-full grid-rows-1">
