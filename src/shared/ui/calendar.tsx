@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
 import { createPortal } from 'react-dom';
 
-import { useOutsideClick } from '@/shared/model/use-outside-click';
+import { useOutsideClick } from '@/shared/lib/useOutsideClick';
 
 import { ChevronIcon } from './icons';
 

@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import { cn } from '@/shared/lib/utils';
 
-import { Button } from './button';
+import { Button } from './Button';
 import { CrossIcon, ErrorIcon, SuccessIcon } from './icons';
 
 interface INotificationProps {

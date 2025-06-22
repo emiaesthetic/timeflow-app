@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useOutsideClick } from '@/shared/lib/useOutsideClick';
 import { cn } from '@/shared/lib/utils';
-import { useOutsideClick } from '@/shared/model/use-outside-click';
 
-import { Button } from './button';
+import { Button } from './Button';
 import { CrossIcon } from './icons';
 
 interface ICommonDialogProps
