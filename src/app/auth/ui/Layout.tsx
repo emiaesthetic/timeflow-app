@@ -1,7 +1,7 @@
 import { useNavigation } from 'react-router-dom';
 
 import { Button } from '@/shared/ui/Button';
-import { GitHubIcon } from '@/shared/ui/icons';
+import { GitHubIcon } from '@/shared/ui/icons/GitHub';
 
 import { useAuth } from '../lib/useAuth';
 
@@ -23,7 +23,7 @@ export const Layout = () => {
       <main className="flex h-full items-center-safe justify-center p-4">
         <div className="text-center">
           <h1 className="mb-4 text-xl font-medium">Welcome to TimeFlow app</h1>
-          <Button className="gap-4" onClick={redirectToAuth}>
+          <Button size="lg" onClick={redirectToAuth}>
             <GitHubIcon className="size-5" />
             <span>Continue with GitHub</span>
           </Button>

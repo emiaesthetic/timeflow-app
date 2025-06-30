@@ -3,10 +3,7 @@ import { Outlet, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '@/app/auth';
 
-import { EditorProvider } from '@/modules/task-editor';
-import { TimerProvider } from '@/modules/task-timer';
-
-export const App = () => {
+export function App() {
   const { loading, initializeSession } = useAuth();
 
   const [searchParams] = useSearchParams();
@@ -19,11 +16,5 @@ export const App = () => {
     }
   }, [loading, searchParams, initializeSession]);
 
-  return (
-    <EditorProvider>
-      <TimerProvider>
-        <Outlet />
-      </TimerProvider>
-    </EditorProvider>
-  );
-};
+  return <Outlet />;
+}

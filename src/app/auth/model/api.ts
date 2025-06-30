@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import { UserProfile } from '../types';
 
-export const fetchToken = async (code: string): Promise<string | undefined> => {
+export async function fetchToken(code: string): Promise<string | undefined> {
   if (!code) return;
 
   try {
@@ -21,11 +21,11 @@ export const fetchToken = async (code: string): Promise<string | undefined> => {
     console.error('error: ', error);
     return;
   }
-};
+}
 
-export const fetchUserProfile = async (
+export async function fetchUserProfile(
   token: string,
-): Promise<UserProfile | undefined> => {
+): Promise<UserProfile | undefined> {
   if (!token) return;
 
   try {
@@ -45,4 +45,4 @@ export const fetchUserProfile = async (
     console.error('error: ', error);
     return;
   }
-};
+}

@@ -1,5 +1,5 @@
 import { Layout } from './ui/Layout';
 
-export const AuthPage = () => {
+export function AuthPage() {
   return <Layout />;
-};
+}

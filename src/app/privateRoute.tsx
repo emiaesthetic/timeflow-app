@@ -4,7 +4,7 @@ import { useAuth } from '@/app/auth';
 
 import { ROUTES } from '@/shared/model/routes';
 
-export const PrivateRoute = () => {
+export function PrivateRoute() {
   const location = useLocation();
 
   const { isAuthenticated } = useAuth();
@@ -16,4 +16,4 @@ export const PrivateRoute = () => {
   }
 
   return <Outlet />;
-};
+}

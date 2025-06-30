@@ -1,4 +1,4 @@
-import { LogoIcon } from '@/shared/ui/icons';
+import { LogoIcon } from '@/shared/ui/icons/Logo';
 
 export const AuthPreloader = () => {
   return (

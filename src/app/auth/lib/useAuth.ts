@@ -6,7 +6,7 @@ import { ROUTES } from '@/shared/model/routes';
 import { GITHUB_AUTH_URL } from '../config';
 import { useStore } from '../model/useStore';
 
-export const useAuth = () => {
+export function useAuth() {
   const { isAuthenticated, loading, error, login, logout, initializeSession } =
     useStore();
 
@@ -49,4 +49,4 @@ export const useAuth = () => {
     redirectToAuth,
     initializeSession,
   };
-};
+}
