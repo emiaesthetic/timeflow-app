@@ -1,4 +1,4 @@
-export const LogoIcon = ({ className }: { className?: string }) => {
+export function LogoIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
@@ -15,4 +15,4 @@ export const LogoIcon = ({ className }: { className?: string }) => {
       />
     </svg>
   );
-};
+}
