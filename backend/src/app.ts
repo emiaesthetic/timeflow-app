@@ -1,12 +1,24 @@
 import Fastify from 'fastify';
+import {
+  ZodTypeProvider,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod';
 
-const server = Fastify({
-  logger: true,
-});
+import { prismaPlugin } from './common/plugins/dbPlugin';
+import { userRoutes } from './modules/users/user.route';
 
-server.listen({ port: 3000 }, (errorMessage: Error | null) => {
-  if (errorMessage) {
-    server.log.error(errorMessage);
-    process.exit(1);
-  }
-});
+export async function buildApp() {
+  const app = Fastify({
+    logger: true,
+  }).withTypeProvider<ZodTypeProvider>();
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  await app.register(prismaPlugin);
+
+  await app.register(userRoutes, { prefix: '/api/v1/user' });
+
+  return app;
+}

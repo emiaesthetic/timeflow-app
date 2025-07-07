@@ -13,13 +13,8 @@
   "htmlWhitespaceSensitivity": "ignore",
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
-    "^@/app/(.*)$",
-    "^@/api/(.*)$",
-    "^@/config/(.*)$",
-    "^@/constants/(.*)$",
+    "^@/common/(.*)$",
     "^@/modules/(.*)$",
-    "^@/services/(.*)$",
-    "^@/utils/(.*)$",
     "^../(.*)$",
     "^./(.*)$"
   ],

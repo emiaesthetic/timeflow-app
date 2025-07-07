@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
@@ -16,6 +16,6 @@
       "@/*": ["src/*"]
     },
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

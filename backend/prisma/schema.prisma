@@ -6,3 +6,46 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email    String  @unique
+  name     String  @default("Unknown")
+  password String?
+  picture  String  @default("/uploads/no-user-image.png")
+  tasks    Task[]
+
+  @@map("user")
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title       String
+  description String?
+  date        DateTime
+  duration    Int
+  priority    Priority @default(LOW)
+  status      Status   @default(PROCESS)
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
+  @@map("task")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Status {
+  PROCESS
+  DONE
+}
