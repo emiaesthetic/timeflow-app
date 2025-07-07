@@ -5,6 +5,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 
+import { errorHandler } from './common/errors/errorHandler';
 import { prismaPlugin } from './common/plugins/dbPlugin';
 import { userRoutes } from './modules/users/user.route';
 
@@ -15,6 +16,8 @@ export async function buildApp() {
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
+
+  app.setErrorHandler(errorHandler);
 
   await app.register(prismaPlugin);
 
