@@ -1,3 +1,4 @@
+import fastifyJwt from '@fastify/jwt';
 import Fastify from 'fastify';
 import {
   ZodTypeProvider,
@@ -5,9 +6,11 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 
+import { CONFIG } from './common/config';
 import { errorHandler } from './common/errors/errorHandler';
 import { prismaPlugin } from './common/plugins/dbPlugin';
-import { userRoutes } from './modules/users/user.route';
+import { authRoutes } from './modules/auth/auth.route';
+import { userRoutes } from './modules/users/users.route';
 
 export async function buildApp() {
   const app = Fastify({
@@ -16,12 +19,13 @@ export async function buildApp() {
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
-
   app.setErrorHandler(errorHandler);
 
+  await app.register(fastifyJwt, { secret: CONFIG.JWT_SECRET });
   await app.register(prismaPlugin);
 
-  await app.register(userRoutes, { prefix: '/api/v1/user' });
+  await app.register(authRoutes, { prefix: '/api/v1/auth' });
+  await app.register(userRoutes, { prefix: '/api/v1/users' });
 
   return app;
 }

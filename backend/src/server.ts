@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import 'dotenv/config';
+
 import { buildApp } from './app';
 
 async function startServer() {
