@@ -20,12 +20,7 @@ export const errorHandler = (
     reply
       .status((error as ApiError).statusCode)
       .send({ message: error.message, errors: (error as ApiError).errors });
-  } else if (
-    error.code === 'FST_JWT_NO_AUTHORIZATION_TOKEN' ||
-    error.code === 'FST_JWT_BAD_AUTH_SCHEME' ||
-    error.code === 'FST_JWT_AUTHORIZATION_TOKEN_INVALID' ||
-    error.code === 'FST_JWT_SIGN_IN_FAILED'
-  ) {
+  } else if (error.code.startsWith('FST_JWT')) {
     reply.status(401).send({
       statusCode: 401,
       error: 'Unauthorized',

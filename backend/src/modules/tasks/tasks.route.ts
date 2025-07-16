@@ -14,12 +14,11 @@ import {
 } from './tasks.schema';
 
 export const taskRoute = async (fastify: FastifyInstance) => {
+  fastify.addHook('onRequest', fastify.authenticate);
+
   fastify.post(
     '/',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         body: createTaskSchema,
         response: {
@@ -33,9 +32,6 @@ export const taskRoute = async (fastify: FastifyInstance) => {
   fastify.put(
     '/:id',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         params: taskIdSchema,
         body: updateTaskSchema,
@@ -50,9 +46,6 @@ export const taskRoute = async (fastify: FastifyInstance) => {
   fastify.delete(
     '/:id',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         params: taskIdSchema,
         response: {

@@ -9,12 +9,11 @@ import {
 import { updateUserSchema, userResponseSchema } from './users.schema';
 
 export async function userRoutes(fastify: FastifyInstance) {
+  fastify.addHook('onRequest', fastify.authenticate);
+
   fastify.get(
     '/me',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         response: {
           200: userResponseSchema,
@@ -27,9 +26,6 @@ export async function userRoutes(fastify: FastifyInstance) {
   fastify.put(
     '/me',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         body: updateUserSchema,
         response: {
@@ -43,9 +39,6 @@ export async function userRoutes(fastify: FastifyInstance) {
   fastify.delete(
     '/me',
     {
-      preHandler: async request => {
-        await request.jwtVerify();
-      },
       schema: {
         response: {
           204: z.null(),

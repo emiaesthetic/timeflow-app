@@ -8,6 +8,7 @@ import {
 
 import { CONFIG } from './common/config';
 import { errorHandler } from './common/errors/errorHandler';
+import { authPlugin } from './common/plugins/authPlugin';
 import { prismaPlugin } from './common/plugins/dbPlugin';
 import { authRoutes } from './modules/auth/auth.route';
 import { taskRoute } from './modules/tasks/tasks.route';
@@ -23,6 +24,7 @@ export async function buildApp() {
   app.setErrorHandler(errorHandler);
 
   await app.register(fastifyJwt, { secret: CONFIG.JWT_SECRET });
+  await app.register(authPlugin);
   await app.register(prismaPlugin);
 
   await app.register(authRoutes, { prefix: '/api/v1/auth' });
