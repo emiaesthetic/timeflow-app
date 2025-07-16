@@ -12,10 +12,10 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String  @unique
-  name     String  @default("Unknown")
+  email    String @unique
+  name     String @default("Unknown")
   password String
-  picture  String  @default("/uploads/no-user-image.png")
+  picture  String @default("/uploads/no-user-image.png")
   tasks    Task[]
 
   @@map("users")
@@ -33,8 +33,8 @@ model Task {
   priority    Priority @default(LOW)
   status      Status   @default(PROCESS)
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
   @@map("tasks")
 }

@@ -10,6 +10,7 @@ import { CONFIG } from './common/config';
 import { errorHandler } from './common/errors/errorHandler';
 import { prismaPlugin } from './common/plugins/dbPlugin';
 import { authRoutes } from './modules/auth/auth.route';
+import { taskRoute } from './modules/tasks/tasks.route';
 import { userRoutes } from './modules/users/users.route';
 
 export async function buildApp() {
@@ -26,6 +27,7 @@ export async function buildApp() {
 
   await app.register(authRoutes, { prefix: '/api/v1/auth' });
   await app.register(userRoutes, { prefix: '/api/v1/users' });
+  await app.register(taskRoute, { prefix: '/api/v1/tasks' });
 
   return app;
 }
