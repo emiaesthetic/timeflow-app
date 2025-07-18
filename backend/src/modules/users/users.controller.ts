@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { UsersRepository } from './users.repository';
-import { UpdateUserDto } from './users.schema';
+import { UpdateUserPayload } from './users.schema';
 import { UserService } from './users.service';
 
 export async function getCurrentUserHandler(
@@ -15,7 +15,6 @@ export async function getCurrentUserHandler(
   const userData = await userService.getUserById(id);
 
   reply.status(200).send({
-    id: userData.id,
     email: userData.email,
     name: userData.name,
     picture: userData.picture,
@@ -23,7 +22,7 @@ export async function getCurrentUserHandler(
 }
 
 export async function updateCurrentUserHandler(
-  request: FastifyRequest<{ Body: UpdateUserDto }>,
+  request: FastifyRequest<{ Body: UpdateUserPayload }>,
   reply: FastifyReply,
 ) {
   const usersRepository = new UsersRepository(request.prisma);

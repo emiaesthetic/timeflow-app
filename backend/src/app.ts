@@ -1,3 +1,4 @@
+import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import Fastify from 'fastify';
 import {
@@ -23,6 +24,10 @@ export async function buildApp() {
   app.setSerializerCompiler(serializerCompiler);
   app.setErrorHandler(errorHandler);
 
+  await app.register(cors, {
+    origin: 'http://localhost:5173',
+    credentials: true,
+  });
   await app.register(fastifyJwt, { secret: CONFIG.JWT_SECRET });
   await app.register(authPlugin);
   await app.register(prismaPlugin);

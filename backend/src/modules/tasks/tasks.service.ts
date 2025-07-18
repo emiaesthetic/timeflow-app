@@ -3,7 +3,7 @@ import { Task } from '@prisma/client';
 import { ApiError } from '@/common/errors/apiError';
 
 import { TasksRepository } from './tasks.repository';
-import { CreateTaskDto, UpdateTaskDto } from './tasks.schema';
+import { CreateTaskPayload, UpdateTaskPayload } from './tasks.schema';
 
 export class TaskService {
   private tasksRepository: TasksRepository;
@@ -20,13 +20,13 @@ export class TaskService {
     return task;
   }
 
-  async createTask(userId: string, dto: CreateTaskDto): Promise<Task> {
-    return await this.tasksRepository.create(userId, dto);
+  async createTask(userId: string, payload: CreateTaskPayload): Promise<Task> {
+    return await this.tasksRepository.create(userId, payload);
   }
 
-  async updateTask(id: string, dto: UpdateTaskDto): Promise<Task> {
+  async updateTask(id: string, payload: UpdateTaskPayload): Promise<Task> {
     await this.getTaskById(id);
-    return await this.tasksRepository.update(id, dto);
+    return await this.tasksRepository.update(id, payload);
   }
 
   async deleteTask(id: string): Promise<void> {

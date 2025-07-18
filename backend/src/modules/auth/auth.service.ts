@@ -4,7 +4,7 @@ import { ApiError } from '@/common/errors/apiError';
 
 import { UserService } from '../users/users.service';
 
-import { LoginDto, RegisterDto } from './auth.schema';
+import { LoginPayload, RegisterPayload } from './auth.schema';
 
 export class AuthService {
   private userService: UserService;
@@ -13,19 +13,19 @@ export class AuthService {
     this.userService = userService;
   }
 
-  async register(dto: RegisterDto) {
+  async register(payload: RegisterPayload) {
     const newUser = await this.userService.createUser({
-      email: dto.email,
-      password: await hash(dto.password),
+      ...payload,
+      password: await hash(payload.password),
     });
 
     return newUser;
   }
 
-  async login(dto: LoginDto) {
+  async login(payload: LoginPayload) {
     try {
-      const user = await this.userService.getUserByEmail(dto.email);
-      const isPasswordValid = await verify(user.password, dto.password);
+      const user = await this.userService.getUserByEmail(payload.email);
+      const isPasswordValid = await verify(user.password, payload.password);
 
       if (!isPasswordValid) {
         throw ApiError.unauthorized('Invalid credentials');

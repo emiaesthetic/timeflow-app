@@ -1,8 +1,8 @@
 import { PrismaClient, User } from '@prisma/client';
 
-import { RegisterDto } from '../auth/auth.schema';
+import { RegisterPayload } from '../auth/auth.schema';
 
-import { UpdateUserDto } from './users.schema';
+import { UpdateUserPayload } from './users.schema';
 
 export class UsersRepository {
   private prisma: PrismaClient;
@@ -11,11 +11,12 @@ export class UsersRepository {
     this.prisma = prisma;
   }
 
-  async create(data: RegisterDto): Promise<User> {
+  async create(data: RegisterPayload): Promise<User> {
+    console.log(data);
     return this.prisma.user.create({ data });
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<User> {
+  async update(id: string, data: UpdateUserPayload): Promise<User> {
     return this.prisma.user.update({ where: { id }, data });
   }
 

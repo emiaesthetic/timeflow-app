@@ -39,5 +39,5 @@ export const taskResponseSchema = z.object({
 });
 
 export type TaskId = z.infer<typeof taskIdSchema>;
-export type CreateTaskDto = z.infer<typeof createTaskSchema>;
-export type UpdateTaskDto = z.infer<typeof updateTaskSchema>;
+export type CreateTaskPayload = z.infer<typeof createTaskSchema>;
+export type UpdateTaskPayload = z.infer<typeof updateTaskSchema>;

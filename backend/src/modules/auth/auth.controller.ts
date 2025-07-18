@@ -3,11 +3,11 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { UsersRepository } from '../users/users.repository';
 import { UserService } from '../users/users.service';
 
-import { LoginDto, RegisterDto } from './auth.schema';
+import { LoginPayload, RegisterPayload } from './auth.schema';
 import { AuthService } from './auth.service';
 
 export async function registerHandler(
-  request: FastifyRequest<{ Body: RegisterDto }>,
+  request: FastifyRequest<{ Body: RegisterPayload }>,
   reply: FastifyReply,
 ) {
   const usersRepository = new UsersRepository(request.prisma);
@@ -28,7 +28,7 @@ export async function registerHandler(
 }
 
 export async function loginHandler(
-  request: FastifyRequest<{ Body: LoginDto }>,
+  request: FastifyRequest<{ Body: LoginPayload }>,
   reply: FastifyReply,
 ) {
   const usersRepository = new UsersRepository(request.prisma);

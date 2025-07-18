@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { TasksRepository } from './tasks.repository';
-import { CreateTaskDto, TaskId, UpdateTaskDto } from './tasks.schema';
+import { CreateTaskPayload, TaskId, UpdateTaskPayload } from './tasks.schema';
 import { TaskService } from './tasks.service';
 
 export const createTaskHandler = async (
-  request: FastifyRequest<{ Body: CreateTaskDto }>,
+  request: FastifyRequest<{ Body: CreateTaskPayload }>,
   reply: FastifyReply,
 ) => {
   const tasksRepository = new TasksRepository(request.prisma);
@@ -19,7 +19,7 @@ export const createTaskHandler = async (
 };
 
 export const updateTaskHandler = async (
-  request: FastifyRequest<{ Params: TaskId; Body: UpdateTaskDto }>,
+  request: FastifyRequest<{ Params: TaskId; Body: UpdateTaskPayload }>,
   reply: FastifyReply,
 ) => {
   const tasksRepository = new TasksRepository(request.prisma);

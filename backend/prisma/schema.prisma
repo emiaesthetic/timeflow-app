@@ -13,7 +13,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   email    String @unique
-  name     String @default("Unknown")
+  name     String
   password String
   picture  String @default("/uploads/no-user-image.png")
   tasks    Task[]

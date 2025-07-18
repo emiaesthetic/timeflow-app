@@ -1,6 +1,6 @@
 import { PrismaClient, Task } from '@prisma/client';
 
-import { CreateTaskDto, UpdateTaskDto } from './tasks.schema';
+import { CreateTaskPayload, UpdateTaskPayload } from './tasks.schema';
 
 export class TasksRepository {
   private prisma: PrismaClient;
@@ -9,13 +9,13 @@ export class TasksRepository {
     this.prisma = prisma;
   }
 
-  async create(userId: string, data: CreateTaskDto): Promise<Task> {
+  async create(userId: string, data: CreateTaskPayload): Promise<Task> {
     return this.prisma.task.create({
       data: { ...data, user: { connect: { id: userId } } },
     });
   }
 
-  async update(id: string, data: UpdateTaskDto): Promise<Task> {
+  async update(id: string, data: UpdateTaskPayload): Promise<Task> {
     return this.prisma.task.update({ where: { id }, data });
   }
 
