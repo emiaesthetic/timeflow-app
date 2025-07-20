@@ -1,11 +1,15 @@
 import { FastifyInstance } from 'fastify';
 
-import { loginHandler, registerHandler } from './auth.controller';
 import {
-  loginResponseSchema,
-  loginSchema,
-  registerResponseSchema,
-  registerSchema,
+  loginHandler,
+  loginWithGithubHandler,
+  registerHandler,
+} from './auth.controller';
+import {
+  AuthResponseSchema,
+  GithubOAuthSchema,
+  LoginSchema,
+  RegisterSchema,
 } from './auth.schema';
 
 export async function authRoutes(fastify: FastifyInstance) {
@@ -13,9 +17,9 @@ export async function authRoutes(fastify: FastifyInstance) {
     '/signup',
     {
       schema: {
-        body: registerSchema,
+        body: RegisterSchema,
         response: {
-          201: registerResponseSchema,
+          201: AuthResponseSchema,
         },
       },
     },
@@ -26,12 +30,25 @@ export async function authRoutes(fastify: FastifyInstance) {
     '/signin',
     {
       schema: {
-        body: loginSchema,
+        body: LoginSchema,
         response: {
-          200: loginResponseSchema,
+          200: AuthResponseSchema,
         },
       },
     },
     loginHandler,
+  );
+
+  fastify.post(
+    '/github',
+    {
+      schema: {
+        body: GithubOAuthSchema,
+        response: {
+          200: AuthResponseSchema,
+        },
+      },
+    },
+    loginWithGithubHandler,
   );
 }

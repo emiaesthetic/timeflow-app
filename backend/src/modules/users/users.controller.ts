@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { UsersRepository } from './users.repository';
@@ -12,7 +13,7 @@ export async function getCurrentUserHandler(
   const userService = new UserService(usersRepository);
 
   const { id } = request.user;
-  const userData = await userService.getUserById(id);
+  const userData = (await userService.getUserById(id)) as User;
 
   reply.status(200).send({
     email: userData.email,

@@ -1,3 +1,6 @@
 export { AuthButton } from './ui/AuthButton';
-export { AuthForm } from './ui/AuthForm';
-export { SocialAuthButtons } from './ui/SocialAuthButtons';
+export { OAuth } from './ui/OAuth';
+export { LoginForm } from './ui/LoginForm';
+export { RegisterForm } from './ui/RegisterForm';
+export { useAuth } from './model/useAuth';
+export { UserProfile } from './ui/UserProfile';

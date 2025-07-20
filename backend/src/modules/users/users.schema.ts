@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
-export const updateUserSchema = z.object({
+export const UpdateUserSchema = z.object({
   email: z.string().optional(),
   name: z.string().optional(),
   password: z.string().optional(),
   picture: z.string().optional(),
 });
 
-export const userResponseSchema = z.object({
-  email: z.string(),
+export const UserResponseSchema = z.object({
+  email: z.string().nullable(),
   name: z.string(),
   picture: z.string(),
 });
 
-export type UpdateUserPayload = z.infer<typeof updateUserSchema>;
+export type UpdateUserPayload = z.infer<typeof UpdateUserSchema>;

@@ -1,6 +1,7 @@
+import { createId } from '@paralleldrive/cuid2';
 import { PrismaClient, User } from '@prisma/client';
 
-import { RegisterPayload } from '../auth/auth.schema';
+import { RegisterPayload, RegisterWithOAuthPayload } from '../auth/auth.schema';
 
 import { UpdateUserPayload } from './users.schema';
 
@@ -11,9 +12,19 @@ export class UsersRepository {
     this.prisma = prisma;
   }
 
-  async create(data: RegisterPayload): Promise<User> {
-    console.log(data);
-    return this.prisma.user.create({ data });
+  async create(
+    data: RegisterPayload | RegisterWithOAuthPayload,
+  ): Promise<User> {
+    const generateId = createId();
+    return this.prisma.user.create({
+      data: {
+        ...data,
+        id: generateId,
+        ...('providerAccountId' in data
+          ? { providerAccountId: data.providerAccountId }
+          : { providerAccountId: generateId }),
+      },
+    });
   }
 
   async update(id: string, data: UpdateUserPayload): Promise<User> {
@@ -28,7 +39,17 @@ export class UsersRepository {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string | null): Promise<User | null> {
+    if (!email) return null;
     return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async findByProvider(
+    provider: string,
+    providerAccountId: string,
+  ): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: { provider, providerAccountId },
+    });
   }
 }

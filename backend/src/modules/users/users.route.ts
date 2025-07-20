@@ -6,7 +6,7 @@ import {
   getCurrentUserHandler,
   updateCurrentUserHandler,
 } from './users.controller';
-import { updateUserSchema, userResponseSchema } from './users.schema';
+import { UpdateUserSchema, UserResponseSchema } from './users.schema';
 
 export async function userRoutes(fastify: FastifyInstance) {
   fastify.addHook('onRequest', fastify.authenticate);
@@ -16,7 +16,7 @@ export async function userRoutes(fastify: FastifyInstance) {
     {
       schema: {
         response: {
-          200: userResponseSchema,
+          200: UserResponseSchema,
         },
       },
     },
@@ -27,9 +27,9 @@ export async function userRoutes(fastify: FastifyInstance) {
     '/me',
     {
       schema: {
-        body: updateUserSchema,
+        body: UpdateUserSchema,
         response: {
-          200: userResponseSchema,
+          200: UserResponseSchema,
         },
       },
     },

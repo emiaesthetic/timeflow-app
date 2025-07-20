@@ -15,11 +15,8 @@ export class ApiError extends Error {
     Object.setPrototypeOf(this, ApiError);
   }
 
-  static badRequest(
-    message: string,
-    errors: string[] | object | null = null,
-  ): ApiError {
-    return new ApiError(400, message, errors);
+  static badRequest(message: string): ApiError {
+    return new ApiError(400, message);
   }
 
   static unauthorized(message: string = 'Unauthorized'): ApiError {
