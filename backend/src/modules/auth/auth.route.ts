@@ -3,12 +3,13 @@ import { FastifyInstance } from 'fastify';
 import {
   loginHandler,
   loginWithGithubHandler,
+  loginWithGoogleHandler,
   registerHandler,
 } from './auth.controller';
 import {
   AuthResponseSchema,
-  GithubOAuthSchema,
   LoginSchema,
+  OAuthSchema,
   RegisterSchema,
 } from './auth.schema';
 
@@ -43,12 +44,25 @@ export async function authRoutes(fastify: FastifyInstance) {
     '/github',
     {
       schema: {
-        body: GithubOAuthSchema,
+        body: OAuthSchema,
         response: {
           200: AuthResponseSchema,
         },
       },
     },
     loginWithGithubHandler,
+  );
+
+  fastify.post(
+    '/google',
+    {
+      schema: {
+        body: OAuthSchema,
+        response: {
+          200: AuthResponseSchema,
+        },
+      },
+    },
+    loginWithGoogleHandler,
   );
 }

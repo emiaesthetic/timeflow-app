@@ -1,7 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { TasksRepository } from './tasks.repository';
-import { CreateTaskPayload, TaskId, UpdateTaskPayload } from './tasks.schema';
+import {
+  CreateTaskPayload,
+  TaskParams,
+  UpdateTaskPayload,
+} from './tasks.schema';
 import { TaskService } from './tasks.service';
 
 export const createTaskHandler = async (
@@ -19,7 +23,7 @@ export const createTaskHandler = async (
 };
 
 export const updateTaskHandler = async (
-  request: FastifyRequest<{ Params: TaskId; Body: UpdateTaskPayload }>,
+  request: FastifyRequest<{ Params: TaskParams; Body: UpdateTaskPayload }>,
   reply: FastifyReply,
 ) => {
   const tasksRepository = new TasksRepository(request.prisma);
@@ -33,7 +37,7 @@ export const updateTaskHandler = async (
 };
 
 export const deleteTaskHandler = async (
-  request: FastifyRequest<{ Params: TaskId }>,
+  request: FastifyRequest<{ Params: TaskParams }>,
   reply: FastifyReply,
 ) => {
   const tasksRepository = new TasksRepository(request.prisma);

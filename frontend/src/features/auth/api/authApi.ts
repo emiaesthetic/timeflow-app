@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { API_URL } from '../config';
+import { API } from '@/shared/config';
+
 import {
   AuthResponse,
   LoginFormData,
@@ -11,7 +12,7 @@ import {
 export const authApi = {
   getCurrentUser: async (token: string) => {
     const response: AxiosResponse<User> = await axios.get(
-      `${API_URL.users('me')}`,
+      `${API.users('me')}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -24,7 +25,7 @@ export const authApi = {
 
   register: async (payload: RegisterFormData) => {
     const response: AxiosResponse<AuthResponse> = await axios.post(
-      `${API_URL.auth('signup')}`,
+      `${API.auth('signup')}`,
       { ...payload },
     );
     return response.data;
@@ -32,7 +33,7 @@ export const authApi = {
 
   login: async (payload: LoginFormData) => {
     const response: AxiosResponse<AuthResponse> = await axios.post(
-      `${API_URL.auth('signin')}`,
+      `${API.auth('signin')}`,
       { ...payload },
     );
     return response.data;
@@ -40,7 +41,16 @@ export const authApi = {
 
   loginWithGithub: async (code: string) => {
     const response: AxiosResponse<AuthResponse> = await axios.post(
-      `${API_URL.auth('github')}`,
+      `${API.auth('github')}`,
+      { code },
+    );
+
+    return response.data;
+  },
+
+  loginWithGoogle: async (code: string) => {
+    const response: AxiosResponse<AuthResponse> = await axios.post(
+      `${API.auth('google')}`,
       { code },
     );
 

@@ -7,10 +7,10 @@ import {
   updateTaskHandler,
 } from './tasks.controller';
 import {
-  createTaskSchema,
-  taskIdSchema,
-  taskResponseSchema,
-  updateTaskSchema,
+  CreateTaskSchema,
+  TaskParamsSchema,
+  TaskResponseSchema,
+  UpdateTaskSchema,
 } from './tasks.schema';
 
 export const taskRoute = async (fastify: FastifyInstance) => {
@@ -20,9 +20,9 @@ export const taskRoute = async (fastify: FastifyInstance) => {
     '/',
     {
       schema: {
-        body: createTaskSchema,
+        body: CreateTaskSchema,
         response: {
-          201: taskResponseSchema,
+          201: TaskResponseSchema,
         },
       },
     },
@@ -33,10 +33,10 @@ export const taskRoute = async (fastify: FastifyInstance) => {
     '/:id',
     {
       schema: {
-        params: taskIdSchema,
-        body: updateTaskSchema,
+        params: TaskParamsSchema,
+        body: UpdateTaskSchema,
         response: {
-          200: taskResponseSchema,
+          200: TaskResponseSchema,
         },
       },
     },
@@ -47,7 +47,7 @@ export const taskRoute = async (fastify: FastifyInstance) => {
     '/:id',
     {
       schema: {
-        params: taskIdSchema,
+        params: TaskParamsSchema,
         response: {
           204: z.null(),
         },

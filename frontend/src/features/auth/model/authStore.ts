@@ -14,13 +14,10 @@ export type AuthStore = {
   error: string | null;
 
   initializeSession: () => Promise<void>;
-
   register: (data: RegisterFormData) => Promise<void>;
-
   login: (data: LoginFormData) => Promise<void>;
-
   loginWithGithub: (code: string) => Promise<void>;
-
+  loginWithGoogle: (code: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -94,6 +91,23 @@ export const authStore = create<AuthStore>()(
           const message =
             error instanceof AxiosError ? error.message : 'Github auth error';
           set({ error: message, isAuthenticated: false });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      loginWithGoogle: async (code: string) => {
+        set({ isLoading: true, error: null });
+
+        try {
+          const { token, user } = await authApi.loginWithGoogle(code);
+          set({ token, user, isAuthenticated: true });
+        } catch (error) {
+          const message =
+            error instanceof AxiosError ? error.message : 'Google auth error';
+          set({ error: message, isAuthenticated: false });
+        } finally {
+          set({ isLoading: false });
         }
       },
 

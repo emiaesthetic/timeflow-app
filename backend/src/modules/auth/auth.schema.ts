@@ -30,11 +30,11 @@ export const AuthResponseSchema = z.object({
   user: UserSchema,
 });
 
-export const GithubOAuthSchema = z.object({
+export const OAuthSchema = z.object({
   code: z.string().min(1, 'Code is required'),
 });
 
-export const GithubTokenResponseSchema = z.object({
+export const TokenResponseSchema = z.object({
   access_token: z.string(),
 });
 
@@ -45,10 +45,18 @@ export const GithubUserResponseSchema = z.object({
   avatar_url: z.string(),
 });
 
+export const GoogleUserResponseSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string(),
+  picture: z.string(),
+});
+
 export type RegisterPayload = z.infer<typeof RegisterSchema>;
 export type RegisterWithOAuthPayload = z.infer<typeof RegisterWithOAuthSchema>;
 export type LoginPayload = z.infer<typeof LoginSchema>;
 
-export type GithubOAuthPayload = z.infer<typeof GithubOAuthSchema>;
-export type GithubTokenResponse = z.infer<typeof GithubTokenResponseSchema>;
+export type OAuthPayload = z.infer<typeof OAuthSchema>;
+export type TokenResponse = z.infer<typeof TokenResponseSchema>;
 export type GithubUserResponse = z.infer<typeof GithubUserResponseSchema>;
+export type GoogleUserResponse = z.infer<typeof GoogleUserResponseSchema>;

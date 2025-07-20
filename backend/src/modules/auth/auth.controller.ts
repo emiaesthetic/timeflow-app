@@ -3,11 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { UsersRepository } from '../users/users.repository';
 import { UserService } from '../users/users.service';
 
-import {
-  GithubOAuthPayload,
-  LoginPayload,
-  RegisterPayload,
-} from './auth.schema';
+import { LoginPayload, OAuthPayload, RegisterPayload } from './auth.schema';
 import { AuthService } from './auth.service';
 
 export async function registerHandler(
@@ -61,14 +57,39 @@ export async function loginHandler(
 }
 
 export async function loginWithGithubHandler(
-  request: FastifyRequest<{ Body: GithubOAuthPayload }>,
+  request: FastifyRequest<{ Body: OAuthPayload }>,
   reply: FastifyReply,
 ) {
   const usersRepository = new UsersRepository(request.prisma);
   const userService = new UserService(usersRepository);
   const authService = new AuthService(userService);
 
-  const userData = await authService.registerWithGithub(request.body.code);
+  const userData = await authService.loginWithGithub(request.body.code);
+  const token = await reply.jwtSign({
+    id: userData.id,
+    provider: userData.provider,
+    providerAccountId: userData.providerAccountId,
+  });
+
+  reply.status(200).send({
+    token,
+    user: {
+      email: userData.email,
+      name: userData.name,
+      picture: userData.picture,
+    },
+  });
+}
+
+export async function loginWithGoogleHandler(
+  request: FastifyRequest<{ Body: OAuthPayload }>,
+  reply: FastifyReply,
+) {
+  const usersRepository = new UsersRepository(request.prisma);
+  const userService = new UserService(usersRepository);
+  const authService = new AuthService(userService);
+
+  const userData = await authService.loginWithGoogle(request.body.code);
   const token = await reply.jwtSign({
     id: userData.id,
     provider: userData.provider,

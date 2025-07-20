@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import { ROUTES } from '@/shared/model/routes';
+import { CONFIG } from '@/shared/config';
 import { Button } from '@/shared/ui/Button';
 import {
   Card,
@@ -21,17 +21,17 @@ import {
 import { Input } from '@/shared/ui/Input';
 import { Separator } from '@/shared/ui/Separator';
 
-import { authStore } from '../model/authStore';
-import { RegisterFormData, registerFormSchema } from '../model/types';
+import { RegisterFormData, RegisterFormSchema } from '../model/types';
+import { useAuth } from '../model/useAuth';
 
 import { Layout } from './Layout';
 
 export function RegisterForm() {
   const form = useForm<RegisterFormData>({
-    resolver: zodResolver(registerFormSchema),
+    resolver: zodResolver(RegisterFormSchema),
   });
 
-  const registerAccount = authStore(state => state.register);
+  const { isLoading, registerAccount } = useAuth();
 
   return (
     <Layout>
@@ -61,7 +61,12 @@ export function RegisterForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor="email">Email</FormLabel>
-                      <Input type="email" id="email" {...field} />
+                      <Input
+                        type="email"
+                        id="email"
+                        {...field}
+                        disabled={isLoading}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
@@ -72,7 +77,12 @@ export function RegisterForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor="name">Name</FormLabel>
-                      <Input type="name" id="name" {...field} />
+                      <Input
+                        type="name"
+                        id="name"
+                        {...field}
+                        disabled={isLoading}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
@@ -90,7 +100,7 @@ export function RegisterForm() {
                 />
               </div>
 
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" disabled={isLoading}>
                 Create account
               </Button>
             </form>
@@ -101,7 +111,7 @@ export function RegisterForm() {
           <span className="text-muted-foreground mr-2 block">
             Don't have an account?
           </span>
-          <Link className="text-foreground underline" to={ROUTES.LOGIN}>
+          <Link className="text-foreground underline" to={CONFIG.ROUTES.LOGIN}>
             Login
           </Link>
         </CardFooter>

@@ -1,35 +1,46 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { ROUTES } from '@/shared/model/routes';
+import { CONFIG } from '@/shared/config';
 
 import { useAuth } from '../model/useAuth';
 
 export function OAuth() {
-  const { isLoading, isAuthenticated, error, loginWithGithub } = useAuth();
+  const { isAuthenticated, error, loginWithGithub, loginWithGoogle } =
+    useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const code = searchParams.get('code');
+    const state = searchParams.get('state');
 
     if (code) {
-      loginWithGithub(code);
+      if (state === 'github') {
+        loginWithGithub(code);
+      } else {
+        loginWithGoogle(code);
+      }
 
       searchParams.delete('code');
+      searchParams.delete('provider');
       setSearchParams(searchParams);
     }
-  }, [searchParams, setSearchParams, loginWithGithub]);
+  }, [searchParams, setSearchParams, loginWithGithub, loginWithGoogle]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(ROUTES.HOME, { replace: true });
+      navigate(CONFIG.ROUTES.HOME, { replace: true });
     }
 
     if (error) {
-      navigate(ROUTES.LOGIN, { replace: true });
+      navigate(CONFIG.ROUTES.LOGIN, { replace: true });
     }
   }, [isAuthenticated, error, navigate]);
 
-  return <div>{isLoading && 'Authorization processing'}</div>;
+  return (
+    <div className="flex h-full items-center justify-center">
+      <h2 className="m-0 text-xl font-bold">Authorization processing...</h2>
+    </div>
+  );
 }

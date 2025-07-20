@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import { ROUTES } from '@/shared/model/routes';
+import { AUTH, CONFIG } from '@/shared/config';
 import { Button } from '@/shared/ui/Button';
 import {
   Card,
@@ -21,8 +21,7 @@ import {
 import { Input } from '@/shared/ui/Input';
 import { Separator } from '@/shared/ui/Separator';
 
-import { GITHUB_AUTH_URL } from '../config';
-import { LoginFormData, loginFormSchema } from '../model/types';
+import { LoginFormData, LoginFormSchema } from '../model/types';
 import { useAuth } from '../model/useAuth';
 
 import { Layout } from './Layout';
@@ -30,10 +29,10 @@ import { SocialAuthButtons } from './SocialAuthButtons';
 
 export function LoginForm() {
   const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema),
+    resolver: zodResolver(LoginFormSchema),
   });
 
-  const { loginAccount } = useAuth();
+  const { isLoading, loginAccount } = useAuth();
 
   return (
     <Layout>
@@ -43,10 +42,13 @@ export function LoginForm() {
         </CardHeader>
         <CardContent>
           <SocialAuthButtons
+            isLoading={isLoading}
             onGitHub={() => {
-              window.location.href = GITHUB_AUTH_URL.auth();
+              window.location.href = AUTH.getGithubRedirectUrl();
             }}
-            onGoogle={() => {}}
+            onGoogle={() => {
+              window.location.href = AUTH.getGoogleRedirectUrl();
+            }}
           />
 
           <div className="mb-6 flex items-center gap-x-2">
@@ -70,7 +72,12 @@ export function LoginForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor="email">Email</FormLabel>
-                      <Input type="email" id="email" {...field} />
+                      <Input
+                        type="email"
+                        id="email"
+                        {...field}
+                        disabled={isLoading}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
@@ -81,14 +88,19 @@ export function LoginForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor="password">Password</FormLabel>
-                      <Input type="password" id="password" {...field} />
+                      <Input
+                        type="password"
+                        id="password"
+                        {...field}
+                        disabled={isLoading}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
 
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" disabled={isLoading}>
                 Login
               </Button>
             </form>
@@ -99,7 +111,10 @@ export function LoginForm() {
           <span className="text-muted-foreground mr-2 block">
             Don't have an account?
           </span>
-          <Link className="text-foreground underline" to={ROUTES.REGISTER}>
+          <Link
+            className="text-foreground underline"
+            to={CONFIG.ROUTES.REGISTER}
+          >
             Create account
           </Link>
         </CardFooter>

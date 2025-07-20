@@ -1,16 +1,17 @@
 import { hash, verify } from 'argon2';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { CONFIG } from '@/common/config';
+import { AUTH } from '@/common/config';
 import { ApiError } from '@/common/errors/apiError';
 
 import { UserService } from '../users/users.service';
 
 import {
-  GithubTokenResponse,
   GithubUserResponse,
+  GoogleUserResponse,
   LoginPayload,
   RegisterPayload,
+  TokenResponse,
 } from './auth.schema';
 
 export class AuthService {
@@ -53,24 +54,28 @@ export class AuthService {
     }
   }
 
-  async registerWithGithub(code: string) {
+  async loginWithGithub(code: string) {
     try {
-      const tokenResponse: AxiosResponse<GithubTokenResponse> =
-        await axios.post(CONFIG.GITHUB_AUTH_TOKEN, null, {
+      const tokenResponse: AxiosResponse<TokenResponse> = await axios.post(
+        AUTH.GITHUB.TOKEN_URL,
+        null,
+        {
           headers: {
             Accept: 'application/json',
           },
           params: {
-            client_id: CONFIG.GITHUB_CLIENT_ID,
-            client_secret: CONFIG.GITHUB_CLIENT_SECRET,
+            client_id: AUTH.GITHUB.CLIENT_ID,
+            client_secret: AUTH.GITHUB.CLIENT_SECRET,
+            redirect_uri: AUTH.REDIRECT_URI,
             code,
           },
-        });
+        },
+      );
 
       const token = tokenResponse.data.access_token;
 
       const userResponse: AxiosResponse<GithubUserResponse> = await axios.get(
-        CONFIG.GITHUB_API_USER,
+        AUTH.GITHUB.USER_API,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -96,9 +101,60 @@ export class AuthService {
       return user;
     } catch (error) {
       const message =
-        error instanceof AxiosError
-          ? error.message
-          : 'GitHub token exchange failed';
+        error instanceof AxiosError ? error.message : 'GitHub auth error';
+      throw ApiError.unauthorized(message);
+    }
+  }
+
+  async loginWithGoogle(code: string) {
+    try {
+      const tokenResponse: AxiosResponse<TokenResponse> = await axios.post(
+        AUTH.GOOGLE.TOKEN_URL,
+        null,
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+          params: {
+            client_id: AUTH.GOOGLE.CLIENT_ID,
+            client_secret: AUTH.GOOGLE.CLIENT_SECRET,
+            redirect_uri: AUTH.REDIRECT_URI,
+            grant_type: 'authorization_code',
+            code,
+          },
+        },
+      );
+
+      const token = tokenResponse.data.access_token;
+
+      const userResponse: AxiosResponse<GoogleUserResponse> = await axios.get(
+        AUTH.GOOGLE.USER_API,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const userProfile = userResponse.data;
+
+      let user = await this.userService.getUserByProvider({
+        provider: 'google',
+        providerAccountId: userProfile.id.toString(),
+      });
+
+      if (!user) {
+        user = await this.userService.createUser({
+          provider: 'google',
+          providerAccountId: userProfile.id,
+          email: userProfile.email,
+          name: userProfile.name,
+          picture: userProfile.picture,
+        });
+      }
+
+      return user;
+    } catch (error) {
+      const message =
+        error instanceof AxiosError ? error.message : 'Google auth error';
       throw ApiError.unauthorized(message);
     }
   }

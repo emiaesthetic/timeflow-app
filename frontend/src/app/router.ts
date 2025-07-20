@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { ROUTES } from '@/shared/model/routes';
+import { CONFIG } from '@/shared/config';
 
 import { App } from './App';
 import { AuthLayout } from './ui/AuthLayout';
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
         Component: Layout,
         children: [
           {
-            path: ROUTES.HOME,
+            path: CONFIG.ROUTES.HOME,
             lazy: async () => {
               const { TaskBoard } = await import('@/features/task-board');
               return { Component: TaskBoard };
@@ -26,21 +26,21 @@ export const router = createBrowserRouter([
         Component: AuthLayout,
         children: [
           {
-            path: ROUTES.REGISTER,
+            path: CONFIG.ROUTES.REGISTER,
             lazy: async () => {
               const { RegisterForm } = await import('@/features/auth');
               return { Component: RegisterForm };
             },
           },
           {
-            path: ROUTES.LOGIN,
+            path: CONFIG.ROUTES.LOGIN,
             lazy: async () => {
               const { LoginForm } = await import('@/features/auth');
               return { Component: LoginForm };
             },
           },
           {
-            path: ROUTES.OAUTH,
+            path: CONFIG.ROUTES.OAUTH,
             lazy: async () => {
               const { OAuth } = await import('@/features/auth');
               return { Component: OAuth };

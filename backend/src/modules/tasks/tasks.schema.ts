@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-export const taskIdSchema = z.object({
+export const TaskParamsSchema = z.object({
   id: z.string(),
 });
 
-export const createTaskSchema = z.object({
+export const CreateTaskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
   date: z.string().transform(val => new Date(val)),
@@ -13,7 +13,7 @@ export const createTaskSchema = z.object({
   status: z.enum(['PROCESS', 'DONE']),
 });
 
-export const updateTaskSchema = z.object({
+export const UpdateTaskSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   date: z
@@ -25,7 +25,7 @@ export const updateTaskSchema = z.object({
   status: z.enum(['PROCESS', 'DONE']).optional(),
 });
 
-export const taskResponseSchema = z.object({
+export const TaskResponseSchema = z.object({
   id: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -38,6 +38,6 @@ export const taskResponseSchema = z.object({
   userId: z.string(),
 });
 
-export type TaskId = z.infer<typeof taskIdSchema>;
-export type CreateTaskPayload = z.infer<typeof createTaskSchema>;
-export type UpdateTaskPayload = z.infer<typeof updateTaskSchema>;
+export type CreateTaskPayload = z.infer<typeof CreateTaskSchema>;
+export type UpdateTaskPayload = z.infer<typeof UpdateTaskSchema>;
+export type TaskParams = z.infer<typeof TaskParamsSchema>;

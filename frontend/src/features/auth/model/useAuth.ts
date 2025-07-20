@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '@/shared/model/routes';
+import { CONFIG } from '@/shared/config';
 
 import { authStore } from './authStore';
 
@@ -15,14 +15,9 @@ export const useAuth = () => {
       !store.isLoading &&
       window.location.pathname.includes('auth')
     ) {
-      navigate(ROUTES.HOME, { replace: true });
+      navigate(CONFIG.ROUTES.HOME, { replace: true });
     }
   }, [store.isAuthenticated, store.isLoading, navigate]);
-
-  const logoutAccount = () => {
-    store.logout();
-    navigate(ROUTES.LOGIN, { replace: true });
-  };
 
   return {
     user: store.user,
@@ -33,6 +28,7 @@ export const useAuth = () => {
     registerAccount: store.register,
     loginAccount: store.login,
     loginWithGithub: store.loginWithGithub,
-    logoutAccount,
+    loginWithGoogle: store.loginWithGoogle,
+    logoutAccount: store.logout,
   };
 };
