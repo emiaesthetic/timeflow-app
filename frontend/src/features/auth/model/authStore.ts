@@ -1,6 +1,8 @@
-import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
 import { authApi } from '../api/authApi';
 
@@ -40,11 +42,9 @@ export const authStore = create<AuthStore>()(
             const user = await authApi.getCurrentUser(currentToken);
             set({ user, isAuthenticated: true });
           } catch (error) {
-            const message =
-              error instanceof AxiosError
-                ? error.message
-                : 'Error during session verification';
+            const message = getAxiosErrorMessage(error);
             set({ error: message, isAuthenticated: false });
+            toast.error(message);
           } finally {
             set({ isLoading: false });
           }
@@ -57,10 +57,11 @@ export const authStore = create<AuthStore>()(
         try {
           const { token, user } = await authApi.register(payload);
           set({ token, user, isAuthenticated: true });
+          toast.success('Successfully registered!');
         } catch (error) {
-          const message =
-            error instanceof AxiosError ? error.message : 'Registration error';
+          const message = getAxiosErrorMessage(error);
           set({ error: message, isAuthenticated: false });
+          toast.error(message);
         } finally {
           set({ isLoading: false });
         }
@@ -72,10 +73,11 @@ export const authStore = create<AuthStore>()(
         try {
           const { token, user } = await authApi.login(payload);
           set({ token, user, isAuthenticated: true });
+          toast.success('Successfully authorized!');
         } catch (error) {
-          const message =
-            error instanceof AxiosError ? error.message : 'Login error';
+          const message = getAxiosErrorMessage(error);
           set({ error: message, isAuthenticated: false });
+          toast.error(message);
         } finally {
           set({ isLoading: false });
         }
@@ -87,9 +89,10 @@ export const authStore = create<AuthStore>()(
         try {
           const { token, user } = await authApi.loginWithGithub(code);
           set({ token, user, isAuthenticated: true });
+          toast.success('Successfully authorized!');
         } catch (error) {
-          const message =
-            error instanceof AxiosError ? error.message : 'Github auth error';
+          const message = getAxiosErrorMessage(error);
+          toast.error(message);
           set({ error: message, isAuthenticated: false });
         } finally {
           set({ isLoading: false });
@@ -102,10 +105,11 @@ export const authStore = create<AuthStore>()(
         try {
           const { token, user } = await authApi.loginWithGoogle(code);
           set({ token, user, isAuthenticated: true });
+          toast.success('Successfully authorized!');
         } catch (error) {
-          const message =
-            error instanceof AxiosError ? error.message : 'Google auth error';
+          const message = getAxiosErrorMessage(error);
           set({ error: message, isAuthenticated: false });
+          toast.error(message);
         } finally {
           set({ isLoading: false });
         }

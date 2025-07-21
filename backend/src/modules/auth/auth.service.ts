@@ -31,27 +31,19 @@ export class AuthService {
   }
 
   async login(payload: LoginPayload) {
-    try {
-      const user = await this.userService.getUserByEmail(payload.email);
+    const user = await this.userService.getUserByEmail(payload.email);
 
-      if (!user) {
-        throw ApiError.notFound('User not found');
-      }
-
-      const isPasswordValid = await verify(user.password, payload.password);
-
-      if (!isPasswordValid) {
-        throw ApiError.unauthorized('Invalid credentials');
-      }
-
-      return user;
-    } catch (error) {
-      if (error instanceof ApiError && error.statusCode === 404) {
-        throw ApiError.unauthorized('Invalid credentials');
-      }
-
-      throw error;
+    if (!user) {
+      throw ApiError.unauthorized('Invalid credentials');
     }
+
+    const isPasswordValid = await verify(user.password, payload.password);
+
+    if (!isPasswordValid) {
+      throw ApiError.unauthorized('Invalid credentials');
+    }
+
+    return user;
   }
 
   async loginWithGithub(code: string) {
