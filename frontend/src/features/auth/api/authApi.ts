@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import { API } from '@/shared/config';
 
+import { httpClient } from '../lib/httpClient';
 import {
   AuthResponse,
   LoginFormData,
@@ -10,14 +11,9 @@ import {
 } from '../model/types';
 
 export const authApi = {
-  getCurrentUser: async (token: string) => {
-    const response: AxiosResponse<User> = await axios.get(
+  getCurrentUser: async () => {
+    const response: AxiosResponse<User> = await httpClient.get(
       `${API.users('me')}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
     );
 
     return response.data;

@@ -1,43 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { transformStorageItemToTask } from '../lib/transformTask';
+import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
-import { Task, TaskStorageItem } from './types';
-
-const STORAGE_KEY = 'tasks';
+import { useTasksApi } from './TasksApiContext';
+import { Task, TaskFormData } from './types';
 
 export function useTasks() {
-  const [storageValue, setStorageValue] = useState<Task[]>(() => {
-    const storageValue = localStorage.getItem(STORAGE_KEY);
-    if (!storageValue) return [];
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const api = useTasksApi();
 
-    return JSON.parse(storageValue).map((item: TaskStorageItem) =>
-      transformStorageItemToTask(item),
-    );
-  });
+  const refetch = useCallback(async () => {
+    try {
+      const fetchedTasks = await api.fetchTasks();
+      setTasks(fetchedTasks);
+    } catch (error) {
+      const message = getAxiosErrorMessage(error);
+      toast.error(message);
+    }
+  }, [api]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(storageValue));
-  }, [storageValue]);
+    refetch();
+  }, [refetch]);
 
-  const createTask = (task: Task): void => {
-    if (!task) return;
-    setStorageValue(prevTasks => [...prevTasks, task]);
+  const createTask = async (formData: TaskFormData) => {
+    try {
+      await api.createTask(formData);
+      refetch();
+    } catch (error) {
+      const message = getAxiosErrorMessage(error);
+      toast.error(message);
+    }
   };
 
-  const updateTask = (updatedTask: Task): void => {
-    if (!updatedTask) return;
-    setStorageValue(prevTasks =>
-      prevTasks.map(task =>
-        task.id === updatedTask.id ? { ...task, ...updatedTask } : task,
-      ),
-    );
+  const updateTask = async (taskId: string, formData: TaskFormData) => {
+    try {
+      await api.updateTask(taskId, formData);
+      refetch();
+    } catch (error) {
+      const message = getAxiosErrorMessage(error);
+      toast.error(message);
+    }
   };
 
-  const deleteTask = (taskID: string): void => {
-    if (!taskID) return;
-    setStorageValue(prevTasks => prevTasks.filter(task => task.id !== taskID));
+  const deleteTask = async (taskId: string) => {
+    try {
+      await api.deleteTask(taskId);
+      refetch();
+    } catch (error) {
+      const message = getAxiosErrorMessage(error);
+      toast.error(message);
+    }
   };
 
-  return { tasks: storageValue, createTask, updateTask, deleteTask };
+  return { tasks, createTask, updateTask, deleteTask };
 }

@@ -4,17 +4,31 @@ import z from 'zod';
 import {
   createTaskHandler,
   deleteTaskHandler,
+  getUserTasksHandler,
   updateTaskHandler,
 } from './tasks.controller';
 import {
   CreateTaskSchema,
   TaskParamsSchema,
   TaskResponseSchema,
+  TasksResponseSchema,
   UpdateTaskSchema,
 } from './tasks.schema';
 
 export const taskRoute = async (fastify: FastifyInstance) => {
   fastify.addHook('onRequest', fastify.authenticate);
+
+  fastify.get(
+    '/',
+    {
+      schema: {
+        response: {
+          201: TasksResponseSchema,
+        },
+      },
+    },
+    getUserTasksHandler,
+  );
 
   fastify.post(
     '/',

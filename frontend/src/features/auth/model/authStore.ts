@@ -39,7 +39,7 @@ export const authStore = create<AuthStore>()(
           set({ isLoading: true, error: null });
 
           try {
-            const user = await authApi.getCurrentUser(currentToken);
+            const user = await authApi.getCurrentUser();
             set({ user, isAuthenticated: true });
           } catch (error) {
             const message = getAxiosErrorMessage(error);

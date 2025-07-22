@@ -26,4 +26,8 @@ export class TasksRepository {
   async getById(id: string): Promise<Task | null> {
     return this.prisma.task.findUnique({ where: { id } });
   }
+
+  async getUserTasks(userId: string): Promise<Task[]> {
+    return this.prisma.task.findMany({ where: { userId } });
+  }
 }

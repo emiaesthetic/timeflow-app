@@ -1,4 +1,4 @@
-import { Task, TaskFormData, TaskStorageItem } from '../model/types';
+import { Task, TaskFormData, TaskResponse } from '../model/types';
 
 import { dateApi } from './dateApi';
 
@@ -10,19 +10,17 @@ export function transformTaskToFormDate(task: Task): TaskFormData {
   };
 }
 
-export function transformFormDateToTask(
+export function transformFormDateToPayload(
   formData: TaskFormData,
 ): Omit<Task, 'id'> {
   return {
-    title: formData.title,
-    description: formData.description,
+    ...formData,
     date: dateApi.getLocalDate(formData.date, formData.time),
     duration: Number(formData.duration) * 60_000,
-    priority: formData.priority,
   };
 }
 
-export function transformStorageItemToTask(item: TaskStorageItem): Task {
+export function transformResponseToTask(item: TaskResponse): Task {
   return {
     ...item,
     date: new Date(item.date),

@@ -8,10 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/Dialog';
 
-import {
-  transformFormDateToTask,
-  transformTaskToFormDate,
-} from '../lib/transformTask';
+import { transformTaskToFormDate } from '../lib/transformTask';
 import { Task, TaskFormData } from '../model/types';
 
 import { TaskForm } from './TaskForm';
@@ -25,7 +22,7 @@ export function TaskEditor({
   isOpen: boolean;
   task: Task | null;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (task: Task) => void;
+  onSubmit: (taskId: string, formData: TaskFormData) => void;
 }) {
   if (!task) return;
 
@@ -42,8 +39,8 @@ export function TaskEditor({
         <TaskForm
           key={task.id}
           currentTask={transformTaskToFormDate(task)}
-          onSubmit={(data: TaskFormData) => {
-            onSubmit({ ...task, ...transformFormDateToTask(data) });
+          onSubmit={formData => {
+            onSubmit(task.id, formData);
           }}
         />
 

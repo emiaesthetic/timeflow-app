@@ -27,7 +27,7 @@ import {
 import { Textarea } from '@/shared/ui/Textarea';
 
 import { dateApi } from '../lib/dateApi';
-import { TaskFormData, taskFormSchema } from '../model/types';
+import { TaskFormData, TaskFormSchema } from '../model/types';
 
 const defaultValues: TaskFormData = {
   title: '',
@@ -35,7 +35,8 @@ const defaultValues: TaskFormData = {
   date: new Date(),
   time: '10:00',
   duration: '60',
-  priority: 'low',
+  priority: 'LOW',
+  status: 'PROCESS',
 };
 
 export function TaskForm({
@@ -46,7 +47,7 @@ export function TaskForm({
   onSubmit: (data: TaskFormData) => void;
 }) {
   const form = useForm<TaskFormData>({
-    resolver: zodResolver(taskFormSchema),
+    resolver: zodResolver(TaskFormSchema),
     defaultValues: currentTask || defaultValues,
   });
 
@@ -190,9 +191,9 @@ export function TaskForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="low">Low</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="LOW">Low</SelectItem>
+                      <SelectItem value="MEDIUM">Medium</SelectItem>
+                      <SelectItem value="HIGH">High</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

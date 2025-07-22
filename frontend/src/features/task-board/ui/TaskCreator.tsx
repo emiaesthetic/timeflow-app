@@ -8,8 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/Dialog';
 
-import { transformFormDateToTask } from '../lib/transformTask';
-import { Task, TaskFormData } from '../model/types';
+import { TaskFormData } from '../model/types';
 
 import { TaskForm } from './TaskForm';
 
@@ -20,7 +19,7 @@ export function TaskCreator({
 }: {
   isOpen: boolean;
   toggleOpen: () => void;
-  onSubmit: (task: Task) => void;
+  onSubmit: (formData: TaskFormData) => void;
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={toggleOpen}>
@@ -33,11 +32,8 @@ export function TaskCreator({
         </DialogHeader>
 
         <TaskForm
-          onSubmit={(data: TaskFormData) => {
-            onSubmit({
-              id: crypto.randomUUID(),
-              ...transformFormDateToTask(data),
-            });
+          onSubmit={formData => {
+            onSubmit(formData);
           }}
         />
 

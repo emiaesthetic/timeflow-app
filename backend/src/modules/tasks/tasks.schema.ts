@@ -8,7 +8,7 @@ export const CreateTaskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
   date: z.string().transform(val => new Date(val)),
-  duration: z.number().min(1).max(1440),
+  duration: z.number().min(1),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   status: z.enum(['PROCESS', 'DONE']),
 });
@@ -37,6 +37,8 @@ export const TaskResponseSchema = z.object({
   status: z.enum(['PROCESS', 'DONE']),
   userId: z.string(),
 });
+
+export const TasksResponseSchema = z.array(TaskResponseSchema);
 
 export type CreateTaskPayload = z.infer<typeof CreateTaskSchema>;
 export type UpdateTaskPayload = z.infer<typeof UpdateTaskSchema>;

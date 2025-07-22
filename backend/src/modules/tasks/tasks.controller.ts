@@ -8,6 +8,20 @@ import {
 } from './tasks.schema';
 import { TaskService } from './tasks.service';
 
+export const getUserTasksHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  const tasksRepository = new TasksRepository(request.prisma);
+  const taskService = new TaskService(tasksRepository);
+
+  const { id: userId } = request.user;
+
+  const tasks = await taskService.getUserTasks(userId);
+
+  reply.status(201).send(tasks);
+};
+
 export const createTaskHandler = async (
   request: FastifyRequest<{ Body: CreateTaskPayload }>,
   reply: FastifyReply,

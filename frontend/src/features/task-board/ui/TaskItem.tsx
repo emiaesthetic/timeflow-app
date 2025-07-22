@@ -40,9 +40,9 @@ export function TaskItem({
       <div
         className={cn(
           'w-6 rounded-l-2xl',
-          task.priority === 'high' && 'bg-primary',
-          task.priority === 'medium' && 'bg-primary/50',
-          task.priority === 'low' && 'bg-primary/20',
+          task.priority === 'HIGH' && 'bg-primary',
+          task.priority === 'MEDIUM' && 'bg-primary/50',
+          task.priority === 'LOW' && 'bg-primary/20',
         )}
         aria-label={`Task priority: ${task.priority}`}
       ></div>

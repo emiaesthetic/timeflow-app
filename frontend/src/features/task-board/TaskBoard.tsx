@@ -1,5 +1,5 @@
 import { useDialog } from './lib/useDialog';
-import { Task } from './model/types';
+import { Task, TaskFormData } from './model/types';
 import { useCurrentTask } from './model/useCurrentTask';
 import { useTasks } from './model/useTasks';
 import { useTimer } from './model/useTimer';
@@ -28,8 +28,8 @@ export function TaskBoard() {
     if (!open) resetCurrentTask();
   };
 
-  const handleCreatorSubmit = (task: Task) => {
-    createTask(task);
+  const handleCreatorSubmit = (formData: TaskFormData) => {
+    createTask(formData);
     creator.close();
   };
 
@@ -43,8 +43,8 @@ export function TaskBoard() {
     if (!open) resetCurrentTask();
   };
 
-  const handleEditorSubmit = (task: Task) => {
-    updateTask(task);
+  const handleEditorSubmit = (taskId: string, formData: TaskFormData) => {
+    updateTask(taskId, formData);
     editor.close();
   };
 

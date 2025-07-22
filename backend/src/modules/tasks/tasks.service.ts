@@ -12,25 +12,35 @@ export class TaskService {
     this.tasksRepository = tasksRepository;
   }
 
-  async getTaskById(id: string): Promise<Task | null> {
-    const task = await this.tasksRepository.getById(id);
-    if (!task) {
-      throw ApiError.notFound('Task not found');
-    }
-    return task;
-  }
-
   async createTask(userId: string, payload: CreateTaskPayload): Promise<Task> {
     return await this.tasksRepository.create(userId, payload);
   }
 
   async updateTask(id: string, payload: UpdateTaskPayload): Promise<Task> {
-    await this.getTaskById(id);
+    const existingTask = await this.getTaskById(id);
+
+    if (!existingTask) {
+      throw ApiError.notFound('Task not found');
+    }
+
     return await this.tasksRepository.update(id, payload);
   }
 
   async deleteTask(id: string): Promise<void> {
-    await this.getTaskById(id);
+    const existingTask = await this.getTaskById(id);
+
+    if (!existingTask) {
+      throw ApiError.notFound('Task not found');
+    }
+
     await this.tasksRepository.delete(id);
+  }
+
+  async getTaskById(id: string): Promise<Task | null> {
+    return await this.tasksRepository.getById(id);
+  }
+
+  async getUserTasks(userId: string): Promise<Task[]> {
+    return await this.tasksRepository.getUserTasks(userId);
   }
 }
