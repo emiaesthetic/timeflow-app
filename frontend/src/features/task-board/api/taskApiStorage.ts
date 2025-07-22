@@ -12,7 +12,7 @@ import {
   TasksApi,
 } from '../model/types';
 
-const STORAGE_KEY = 'timeflow-tasks';
+export const STORAGE_KEY = 'timeflow-tasks';
 
 export const tasksApiStorage: TasksApi = {
   fetchTasks: async function () {

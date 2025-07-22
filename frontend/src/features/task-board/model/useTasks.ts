@@ -54,5 +54,5 @@ export function useTasks() {
     }
   };
 
-  return { tasks, createTask, updateTask, deleteTask };
+  return { tasks, refetch, createTask, updateTask, deleteTask };
 }

@@ -2,6 +2,7 @@ import { useDialog } from './lib/useDialog';
 import { Task, TaskFormData } from './model/types';
 import { useCurrentTask } from './model/useCurrentTask';
 import { useTasks } from './model/useTasks';
+import { useTasksMigration } from './model/useTasksMigration';
 import { useTimer } from './model/useTimer';
 import { Header } from './ui/Header';
 import { Layout } from './ui/Layout';
@@ -12,11 +13,13 @@ import { TaskList } from './ui/TaskList';
 import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
-  const { tasks, createTask, updateTask, deleteTask } = useTasks();
+  const { tasks, refetch, createTask, updateTask, deleteTask } = useTasks();
   const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
   const creator = useDialog();
   const editor = useDialog();
   const timer = useTimer(currentTask?.duration);
+
+  useTasksMigration(refetch);
 
   const handleOpenTimer = (task: Task) => {
     selectCurrentTask(task);
