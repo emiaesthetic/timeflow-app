@@ -33,7 +33,6 @@ export async function updateCurrentUserHandler(
   const updatedUserData = await userService.updateUser(id, request.body);
 
   reply.status(200).send({
-    id: updatedUserData.id,
     email: updatedUserData.email,
     name: updatedUserData.name,
     picture: updatedUserData.picture,

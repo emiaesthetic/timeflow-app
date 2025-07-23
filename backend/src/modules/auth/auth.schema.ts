@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-export const UserSchema = z.object({
-  email: z.string().nullable(),
-  name: z.string(),
-  picture: z.string(),
-});
-
 export const RegisterSchema = z.object({
   email: z.string().min(1, 'Email is required').email(),
   name: z.string().min(1, 'Name is required'),
@@ -26,8 +20,9 @@ export const LoginSchema = z.object({
 });
 
 export const AuthResponseSchema = z.object({
-  token: z.string(),
-  user: UserSchema,
+  email: z.string().nullable(),
+  name: z.string(),
+  picture: z.string(),
 });
 
 export const OAuthSchema = z.object({

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-function getEnv(key: string, required = true) {
+export const getEnv = (key: string, required = true) => {
   const value = process.env[key];
 
   if (!value && required) {
@@ -10,11 +10,12 @@ function getEnv(key: string, required = true) {
   }
 
   return value || '';
-}
+};
 
 export const CONFIG = {
   SERVER_PORT: Number(getEnv('SERVER_PORT', false)) || 5000,
   JWT_SECRET: getEnv('JWT_SECRET'),
+  NODE_ENV: getEnv('NODE_END', false),
 };
 
 export const AUTH = {

@@ -9,10 +9,9 @@ import { authApi } from '../api/authApi';
 import { LoginFormData, RegisterFormData, User } from './types';
 
 export type AuthStore = {
-  token: string | null;
-  user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  user: User | null;
   error: string | null;
 
   initializeSession: () => Promise<void>;
@@ -33,9 +32,7 @@ export const authStore = create<AuthStore>()(
       error: null,
 
       initializeSession: async () => {
-        const currentToken = get().token;
-
-        if (currentToken) {
+        if (get().isAuthenticated) {
           set({ isLoading: true, error: null });
 
           try {
@@ -55,12 +52,12 @@ export const authStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const { token, user } = await authApi.register(payload);
-          set({ token, user, isAuthenticated: true });
+          const user = await authApi.register(payload);
+          set({ isAuthenticated: true, user });
           toast.success('Successfully registered!');
         } catch (error) {
           const message = getAxiosErrorMessage(error);
-          set({ error: message, isAuthenticated: false });
+          set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
           set({ isLoading: false });
@@ -71,12 +68,12 @@ export const authStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const { token, user } = await authApi.login(payload);
-          set({ token, user, isAuthenticated: true });
+          const user = await authApi.login(payload);
+          set({ isAuthenticated: true, user });
           toast.success('Successfully authorized!');
         } catch (error) {
           const message = getAxiosErrorMessage(error);
-          set({ error: message, isAuthenticated: false });
+          set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
           set({ isLoading: false });
@@ -87,13 +84,13 @@ export const authStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const { token, user } = await authApi.loginWithGithub(code);
-          set({ token, user, isAuthenticated: true });
+          const user = await authApi.loginWithGithub(code);
+          set({ isAuthenticated: true, user });
           toast.success('Successfully authorized!');
         } catch (error) {
           const message = getAxiosErrorMessage(error);
           toast.error(message);
-          set({ error: message, isAuthenticated: false });
+          set({ isAuthenticated: false, error: message });
         } finally {
           set({ isLoading: false });
         }
@@ -103,12 +100,12 @@ export const authStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const { token, user } = await authApi.loginWithGoogle(code);
-          set({ token, user, isAuthenticated: true });
+          const user = await authApi.loginWithGoogle(code);
+          set({ isAuthenticated: true, user });
           toast.success('Successfully authorized!');
         } catch (error) {
           const message = getAxiosErrorMessage(error);
-          set({ error: message, isAuthenticated: false });
+          set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
           set({ isLoading: false });
@@ -117,10 +114,9 @@ export const authStore = create<AuthStore>()(
 
       logout: () => {
         set({
-          token: null,
-          user: null,
           isLoading: false,
           isAuthenticated: false,
+          user: null,
           error: null,
         });
       },
@@ -129,7 +125,7 @@ export const authStore = create<AuthStore>()(
       name: 'auth',
       storage: createJSONStorage(() => localStorage),
       partialize: state => ({
-        token: state.token,
+        isAuthenticated: state.isAuthenticated,
       }),
     },
   ),

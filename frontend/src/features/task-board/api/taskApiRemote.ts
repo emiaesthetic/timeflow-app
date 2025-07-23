@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { httpClient } from '@/features/auth';
-
+import { client } from '@/shared/api';
 import { API } from '@/shared/config';
 
 import {
@@ -17,7 +16,7 @@ import {
 
 export const tasksApiRemote: TasksApi = {
   fetchTasks: async function () {
-    const response: AxiosResponse<TaskResponse[]> = await httpClient.get(
+    const response: AxiosResponse<TaskResponse[]> = await client.get(
       `${API.tasks()}`,
     );
 
@@ -26,15 +25,15 @@ export const tasksApiRemote: TasksApi = {
 
   createTask: async function (formData: TaskFormData) {
     const payload: TaskPayload = transformFormDateToPayload(formData);
-    await httpClient.post(`${API.tasks()}`, payload);
+    await client.post(`${API.tasks()}`, payload);
   },
 
   updateTask: async function (taskId: string, formData: TaskFormData) {
     const payload: TaskPayload = transformFormDateToPayload(formData);
-    await httpClient.put(`${API.tasks(taskId)}`, payload);
+    await client.put(`${API.tasks(taskId)}`, payload);
   },
 
   deleteTask: async function (taskId: string) {
-    await httpClient.delete(`${API.tasks(taskId)}`);
+    await client.delete(`${API.tasks(taskId)}`);
   },
 };

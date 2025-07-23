@@ -1,5 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { setAuthCookie } from '@/common/utils/cookies';
+
 import { UsersRepository } from '../users/users.repository';
 import { UserService } from '../users/users.service';
 
@@ -21,13 +23,12 @@ export async function registerHandler(
     providerAccountId: userData.providerAccountId,
   });
 
+  setAuthCookie(reply, token);
+
   reply.status(201).send({
-    token,
-    user: {
-      email: userData.email,
-      name: userData.name,
-      picture: userData.picture,
-    },
+    email: userData.email,
+    name: userData.name,
+    picture: userData.picture,
   });
 }
 
@@ -46,13 +47,12 @@ export async function loginHandler(
     providerAccountId: userData.providerAccountId,
   });
 
+  setAuthCookie(reply, token);
+
   reply.status(200).send({
-    token,
-    user: {
-      email: userData.email,
-      name: userData.name,
-      picture: userData.picture,
-    },
+    email: userData.email,
+    name: userData.name,
+    picture: userData.picture,
   });
 }
 
@@ -71,13 +71,12 @@ export async function loginWithGithubHandler(
     providerAccountId: userData.providerAccountId,
   });
 
+  setAuthCookie(reply, token);
+
   reply.status(200).send({
-    token,
-    user: {
-      email: userData.email,
-      name: userData.name,
-      picture: userData.picture,
-    },
+    email: userData.email,
+    name: userData.name,
+    picture: userData.picture,
   });
 }
 
@@ -96,12 +95,11 @@ export async function loginWithGoogleHandler(
     providerAccountId: userData.providerAccountId,
   });
 
+  setAuthCookie(reply, token);
+
   reply.status(200).send({
-    token,
-    user: {
-      email: userData.email,
-      name: userData.name,
-      picture: userData.picture,
-    },
+    email: userData.email,
+    name: userData.name,
+    picture: userData.picture,
   });
 }

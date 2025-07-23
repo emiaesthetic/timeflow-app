@@ -1,3 +1,4 @@
+import fastifyCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import Fastify from 'fastify';
@@ -29,7 +30,11 @@ export async function buildApp() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
-  await app.register(fastifyJwt, { secret: CONFIG.JWT_SECRET });
+  await app.register(fastifyCookie);
+  await app.register(fastifyJwt, {
+    secret: CONFIG.JWT_SECRET,
+    cookie: { cookieName: 'token', signed: false },
+  });
   await app.register(authPlugin);
   await app.register(prismaPlugin);
 
