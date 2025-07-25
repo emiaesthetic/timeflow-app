@@ -13,8 +13,8 @@ import { errorHandler } from './common/errors/errorHandler';
 import { authPlugin } from './common/plugins/authPlugin';
 import { prismaPlugin } from './common/plugins/dbPlugin';
 import { authRoutes } from './modules/auth/auth.route';
-import { taskRoute } from './modules/tasks/tasks.route';
-import { userRoutes } from './modules/users/users.route';
+import { tasksRoutes } from './modules/tasks/tasks.route';
+import { usersRoutes } from './modules/users/users.route';
 
 export async function buildApp() {
   const app = Fastify({
@@ -30,17 +30,25 @@ export async function buildApp() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
   });
+
   await app.register(fastifyCookie);
   await app.register(fastifyJwt, {
     secret: CONFIG.JWT_SECRET,
-    cookie: { cookieName: 'token', signed: false },
+    sign: { expiresIn: '15m' },
   });
+  await app.register(fastifyJwt, {
+    secret: CONFIG.JWT_REFRESH_SECRET,
+    cookie: { cookieName: 'refreshToken', signed: false },
+    namespace: 'refresh',
+    sign: { expiresIn: '7d' },
+  });
+
   await app.register(authPlugin);
   await app.register(prismaPlugin);
 
   await app.register(authRoutes, { prefix: '/api/v1/auth' });
-  await app.register(userRoutes, { prefix: '/api/v1/users' });
-  await app.register(taskRoute, { prefix: '/api/v1/tasks' });
+  await app.register(usersRoutes, { prefix: '/api/v1/users' });
+  await app.register(tasksRoutes, { prefix: '/api/v1/tasks' });
 
   return app;
 }

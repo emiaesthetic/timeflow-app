@@ -2,8 +2,11 @@ import { FastifyReply } from 'fastify';
 
 import { CONFIG } from '../config';
 
-export const setAuthCookie = (reply: FastifyReply, token: string) => {
-  reply.setCookie('token', token, {
+export const setRefreshTokenCookie = (
+  reply: FastifyReply,
+  refreshToken: string,
+) => {
+  reply.setCookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: CONFIG.NODE_ENV === 'production',
     sameSite: 'strict',

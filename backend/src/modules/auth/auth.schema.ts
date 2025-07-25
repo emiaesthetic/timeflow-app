@@ -19,10 +19,16 @@ export const LoginSchema = z.object({
   password: z.string().min(6, 'Min length 6 characters'),
 });
 
-export const AuthResponseSchema = z.object({
+export const PublicUserSchema = z.object({
+  id: z.string(),
   email: z.string().nullable(),
   name: z.string(),
   picture: z.string(),
+});
+
+export const AuthResponseSchema = z.object({
+  token: z.string(),
+  user: PublicUserSchema,
 });
 
 export const OAuthSchema = z.object({
@@ -47,6 +53,20 @@ export const GoogleUserResponseSchema = z.object({
   picture: z.string(),
 });
 
+export const AuthCookieSchema = z.object({
+  id: z.string(),
+  provider: z.string(),
+  providerAccountId: z.string(),
+});
+
+export const RefreshTokenPayloadSchema = z.object({
+  token: z.string(),
+  expiryDate: z.date(),
+  userId: z.string(),
+  issuedAt: z.date().optional(),
+  revoked: z.boolean().optional(),
+});
+
 export type RegisterPayload = z.infer<typeof RegisterSchema>;
 export type RegisterWithOAuthPayload = z.infer<typeof RegisterWithOAuthSchema>;
 export type LoginPayload = z.infer<typeof LoginSchema>;
@@ -55,3 +75,7 @@ export type OAuthPayload = z.infer<typeof OAuthSchema>;
 export type TokenResponse = z.infer<typeof TokenResponseSchema>;
 export type GithubUserResponse = z.infer<typeof GithubUserResponseSchema>;
 export type GoogleUserResponse = z.infer<typeof GoogleUserResponseSchema>;
+
+export type AuthCookiePayload = z.infer<typeof AuthCookieSchema>;
+
+export type RefreshTokenPayload = z.infer<typeof RefreshTokenPayloadSchema>;

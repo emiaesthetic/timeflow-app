@@ -46,6 +46,16 @@ export class UserService {
     await this.usersRepository.delete(id);
   }
 
+  async getCurrentUser(id: string): Promise<User> {
+    const user = await this.getUserById(id);
+
+    if (!user) {
+      throw ApiError.notFound('User not found');
+    }
+
+    return user;
+  }
+
   async getUserById(id: string): Promise<User | null> {
     return this.usersRepository.findById(id);
   }

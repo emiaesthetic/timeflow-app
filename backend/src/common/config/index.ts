@@ -15,6 +15,7 @@ export const getEnv = (key: string, required = true) => {
 export const CONFIG = {
   SERVER_PORT: Number(getEnv('SERVER_PORT', false)) || 5000,
   JWT_SECRET: getEnv('JWT_SECRET'),
+  JWT_REFRESH_SECRET: getEnv('JWT_REFRESH_SECRET'),
   NODE_ENV: getEnv('NODE_END', false),
 };
 

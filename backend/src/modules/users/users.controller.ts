@@ -1,53 +1,45 @@
-import { User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { UsersRepository } from './users.repository';
 import { UpdateUserPayload } from './users.schema';
 import { UserService } from './users.service';
 
-export async function getCurrentUserHandler(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
-  const usersRepository = new UsersRepository(request.prisma);
-  const userService = new UserService(usersRepository);
+export class UsersController {
+  private userService: UserService;
 
-  const { id } = request.user;
-  const userData = (await userService.getUserById(id)) as User;
+  constructor(prisma: PrismaClient) {
+    const usersRepository = new UsersRepository(prisma);
+    this.userService = new UserService(usersRepository);
+  }
 
-  reply.status(200).send({
-    email: userData.email,
-    name: userData.name,
-    picture: userData.picture,
-  });
-}
+  private toPublicUser(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      picture: user.picture,
+    };
+  }
 
-export async function updateCurrentUserHandler(
-  request: FastifyRequest<{ Body: UpdateUserPayload }>,
-  reply: FastifyReply,
-) {
-  const usersRepository = new UsersRepository(request.prisma);
-  const userService = new UserService(usersRepository);
+  async getCurrentUserHandler(request: FastifyRequest, reply: FastifyReply) {
+    const user = await this.userService.getCurrentUser(request.user.id);
+    reply.status(200).send(this.toPublicUser(user));
+  }
 
-  const { id } = request.user;
-  const updatedUserData = await userService.updateUser(id, request.body);
+  async updateCurrentUserHandler(
+    request: FastifyRequest<{ Body: UpdateUserPayload }>,
+    reply: FastifyReply,
+  ) {
+    const updatedUser = await this.userService.updateUser(
+      request.user.id,
+      request.body,
+    );
+    reply.status(200).send(this.toPublicUser(updatedUser));
+  }
 
-  reply.status(200).send({
-    email: updatedUserData.email,
-    name: updatedUserData.name,
-    picture: updatedUserData.picture,
-  });
-}
-
-export async function deleteCurrentUserHandler(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
-  const usersRepository = new UsersRepository(request.prisma);
-  const userService = new UserService(usersRepository);
-
-  const { id } = request.user;
-  await userService.deleteUser(id);
-
-  reply.status(204).send();
+  async deleteCurrentUserHandler(request: FastifyRequest, reply: FastifyReply) {
+    await this.userService.deleteUser(request.user.id);
+    reply.status(204).send(null);
+  }
 }

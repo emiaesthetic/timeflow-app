@@ -1,14 +1,12 @@
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
 
-import {
-  deleteCurrentUserHandler,
-  getCurrentUserHandler,
-  updateCurrentUserHandler,
-} from './users.controller';
+import { UsersController } from './users.controller';
 import { UpdateUserSchema, UserResponseSchema } from './users.schema';
 
-export async function userRoutes(fastify: FastifyInstance) {
+export async function usersRoutes(fastify: FastifyInstance) {
+  const controller = new UsersController(fastify.prisma);
+
   fastify.addHook('onRequest', fastify.authenticate);
 
   fastify.get(
@@ -20,7 +18,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    getCurrentUserHandler,
+    controller.getCurrentUserHandler.bind(controller),
   );
 
   fastify.put(
@@ -33,7 +31,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    updateCurrentUserHandler,
+    controller.updateCurrentUserHandler.bind(controller),
   );
 
   fastify.delete(
@@ -45,6 +43,6 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    deleteCurrentUserHandler,
+    controller.deleteCurrentUserHandler.bind(controller),
   );
 }

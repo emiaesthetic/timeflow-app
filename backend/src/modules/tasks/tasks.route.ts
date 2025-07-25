@@ -1,12 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
 
-import {
-  createTaskHandler,
-  deleteTaskHandler,
-  getUserTasksHandler,
-  updateTaskHandler,
-} from './tasks.controller';
+import { TasksController } from './tasks.controller';
 import {
   CreateTaskSchema,
   TaskParamsSchema,
@@ -15,7 +10,9 @@ import {
   UpdateTaskSchema,
 } from './tasks.schema';
 
-export const taskRoute = async (fastify: FastifyInstance) => {
+export const tasksRoutes = async (fastify: FastifyInstance) => {
+  const controller = new TasksController(fastify.prisma);
+
   fastify.addHook('onRequest', fastify.authenticate);
 
   fastify.get(
@@ -27,7 +24,7 @@ export const taskRoute = async (fastify: FastifyInstance) => {
         },
       },
     },
-    getUserTasksHandler,
+    controller.getUserTasksHandler.bind(controller),
   );
 
   fastify.post(
@@ -40,7 +37,7 @@ export const taskRoute = async (fastify: FastifyInstance) => {
         },
       },
     },
-    createTaskHandler,
+    controller.createTaskHandler.bind(controller),
   );
 
   fastify.put(
@@ -54,7 +51,7 @@ export const taskRoute = async (fastify: FastifyInstance) => {
         },
       },
     },
-    updateTaskHandler,
+    controller.updateTaskHandler.bind(controller),
   );
 
   fastify.delete(
@@ -67,6 +64,6 @@ export const taskRoute = async (fastify: FastifyInstance) => {
         },
       },
     },
-    deleteTaskHandler,
+    controller.deleteTaskHandler.bind(controller),
   );
 };

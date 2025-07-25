@@ -6,18 +6,22 @@ import { ApiError } from '@/common/errors/apiError';
 
 import { UserService } from '../users/users.service';
 
+import { AuthRepository } from './auth.repository';
 import {
   GithubUserResponse,
   GoogleUserResponse,
   LoginPayload,
+  RefreshTokenPayload,
   RegisterPayload,
   TokenResponse,
 } from './auth.schema';
 
 export class AuthService {
+  private authRepository: AuthRepository;
   private userService: UserService;
 
-  constructor(userService: UserService) {
+  constructor(authRepository: AuthRepository, userService: UserService) {
+    this.authRepository = authRepository;
     this.userService = userService;
   }
 
@@ -149,5 +153,30 @@ export class AuthService {
         error instanceof AxiosError ? error.message : 'Google auth error';
       throw ApiError.unauthorized(message);
     }
+  }
+
+  async upsertRefreshToken(payload: Omit<RefreshTokenPayload, 'expiryDate'>) {
+    const oldRefreshToken = await this.authRepository.findByUserId(
+      payload.userId,
+    );
+
+    const newRefreshToken = {
+      token: payload.token,
+      userId: payload.userId,
+      issuedAt: new Date(),
+      expiryDate: this.computeExpiryDate(),
+    };
+
+    if (oldRefreshToken) {
+      this.authRepository.update(newRefreshToken);
+    } else {
+      this.authRepository.create(newRefreshToken);
+    }
+  }
+
+  computeExpiryDate() {
+    const now = new Date();
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+    return new Date(now.getTime() + sevenDaysInMs);
   }
 }
