@@ -10,7 +10,7 @@ import { STORAGE_KEY, tasksApiStorage } from '../api/taskApiStorage';
 import { transformTaskToFormDate } from '../lib/transformTask';
 
 export const useTasksMigration = (onMigrationComplete: () => void) => {
-  const { isAuthenticated } = useAuth();
+  const { token: isAuthenticated } = useAuth();
   const isMigrated = useRef(false);
 
   const performMigration = useCallback(async () => {

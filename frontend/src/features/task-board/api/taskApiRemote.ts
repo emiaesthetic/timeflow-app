@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { client } from '@/shared/api';
+import { authenticatedHttpClient } from '@/shared/api/httpClient';
 import { API } from '@/shared/config';
 
 import {
@@ -16,24 +16,39 @@ import {
 
 export const tasksApiRemote: TasksApi = {
   fetchTasks: async function () {
-    const response: AxiosResponse<TaskResponse[]> = await client.get(
-      `${API.tasks()}`,
-    );
+    if (!authenticatedHttpClient) {
+      throw new Error('HTTP client not initialized.');
+    }
+
+    const response: AxiosResponse<TaskResponse[]> =
+      await authenticatedHttpClient.get(`${API.tasks()}`);
 
     return response.data.map(task => transformResponseToTask(task));
   },
 
   createTask: async function (formData: TaskFormData) {
+    if (!authenticatedHttpClient) {
+      throw new Error('HTTP client not initialized.');
+    }
+
     const payload: TaskPayload = transformFormDateToPayload(formData);
-    await client.post(`${API.tasks()}`, payload);
+    await authenticatedHttpClient.post(`${API.tasks()}`, payload);
   },
 
   updateTask: async function (taskId: string, formData: TaskFormData) {
+    if (!authenticatedHttpClient) {
+      throw new Error('HTTP client not initialized.');
+    }
+
     const payload: TaskPayload = transformFormDateToPayload(formData);
-    await client.put(`${API.tasks(taskId)}`, payload);
+    await authenticatedHttpClient.put(`${API.tasks(taskId)}`, payload);
   },
 
   deleteTask: async function (taskId: string) {
-    await client.delete(`${API.tasks(taskId)}`);
+    if (!authenticatedHttpClient) {
+      throw new Error('HTTP client not initialized.');
+    }
+
+    await authenticatedHttpClient.delete(`${API.tasks(taskId)}`);
   },
 };

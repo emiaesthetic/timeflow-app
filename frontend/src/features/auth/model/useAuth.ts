@@ -20,12 +20,12 @@ export const useAuth = () => {
   }, [store.isAuthenticated, store.isLoading, navigate]);
 
   return {
-    user: store.user,
     isLoading: store.isLoading,
     isAuthenticated: store.isAuthenticated,
-    hasMigrated: store.hasMigrated,
+    token: store.token,
+    user: store.user,
     error: store.error,
-    setHasMigrated: store.setHasMigrated,
+    refreshAccessToken: store.refreshToken,
     initializeSession: store.initializeSession,
     registerAccount: store.register,
     loginAccount: store.login,

@@ -19,3 +19,8 @@ export type User = {
   name: string;
   picture: string;
 };
+
+export type AuthResponse = {
+  token: string;
+  user: User;
+};
