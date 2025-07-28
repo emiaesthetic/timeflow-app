@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios';
 
-import { publicHttpClient } from '@/shared/api/httpClient';
+import { axiosClassic } from '@/shared/api';
 import { API } from '@/shared/config';
 
 import { AuthResponse, LoginFormData, RegisterFormData } from '../model/types';
 
 export const authApi = {
   register: async (payload: RegisterFormData) => {
-    const response: AxiosResponse<AuthResponse> = await publicHttpClient.post(
+    const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('signup')}`,
       { ...payload },
     );
@@ -15,7 +15,7 @@ export const authApi = {
   },
 
   login: async (payload: LoginFormData) => {
-    const response: AxiosResponse<AuthResponse> = await publicHttpClient.post(
+    const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('signin')}`,
       { ...payload },
     );
@@ -23,7 +23,7 @@ export const authApi = {
   },
 
   loginWithGithub: async (code: string) => {
-    const response: AxiosResponse<AuthResponse> = await publicHttpClient.post(
+    const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('github')}`,
       { code },
     );
@@ -32,7 +32,7 @@ export const authApi = {
   },
 
   loginWithGoogle: async (code: string) => {
-    const response: AxiosResponse<AuthResponse> = await publicHttpClient.post(
+    const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('google')}`,
       { code },
     );
@@ -40,8 +40,8 @@ export const authApi = {
     return response.data;
   },
 
-  refreshToken: async () => {
-    const response: AxiosResponse<AuthResponse> = await publicHttpClient.post(
+  refresh: async () => {
+    const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('refresh')}`,
     );
 

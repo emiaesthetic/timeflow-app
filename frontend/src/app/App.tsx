@@ -4,26 +4,23 @@ import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { TasksApiProvider } from '@/features/task-board';
 
-import {
-  createAuthenticatedHttpClient,
-  setAuthenticatedHttpClient,
-} from '@/shared/api/httpClient';
+import { initAxiosWithAuth } from '@/shared/api';
 import { Toaster } from '@/shared/ui/Sonner';
 
 export function App() {
-  const auth = useAuth();
+  const { isInitialized, isAuthenticated, token, refresh, initializeSession } =
+    useAuth();
 
   useEffect(() => {
-    const clientInstance = createAuthenticatedHttpClient({
-      getAccessToken: () => auth.token,
-      refreshToken: auth.refreshAccessToken,
-    });
-    setAuthenticatedHttpClient(clientInstance);
-  }, [auth]);
+    initializeSession();
+    initAxiosWithAuth({ token, refresh });
+  }, [token, initializeSession, refresh]);
+
+  if (!isInitialized) return null;
 
   return (
     <>
-      <TasksApiProvider isAuthenticated={auth.isAuthenticated}>
+      <TasksApiProvider isAuthenticated={isAuthenticated}>
         <Outlet />
       </TasksApiProvider>
       <Toaster />

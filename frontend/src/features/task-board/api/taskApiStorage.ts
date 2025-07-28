@@ -1,5 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 
+import { CONFIG } from '@/shared/config';
+
 import {
   transformFormDateToPayload,
   transformResponseToTask,
@@ -12,11 +14,9 @@ import {
   TasksApi,
 } from '../model/types';
 
-export const STORAGE_KEY = 'timeflow-tasks';
-
 export const tasksApiStorage: TasksApi = {
   fetchTasks: async function () {
-    const tasks = localStorage.getItem(STORAGE_KEY);
+    const tasks = localStorage.getItem(CONFIG.STORAGE_KEYS.TASKS);
     if (!tasks) return [];
 
     return JSON.parse(tasks).map((task: TaskResponse) =>
@@ -34,7 +34,11 @@ export const tasksApiStorage: TasksApi = {
 
     const tasks = await this.fetchTasks();
     const updatedTasks = [...tasks, newTask];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTasks));
+
+    localStorage.setItem(
+      CONFIG.STORAGE_KEYS.TASKS,
+      JSON.stringify(updatedTasks),
+    );
   },
 
   updateTask: async function (taskId: string, formData: TaskFormData) {
@@ -47,12 +51,20 @@ export const tasksApiStorage: TasksApi = {
       }
       return task;
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTasks));
+
+    localStorage.setItem(
+      CONFIG.STORAGE_KEYS.TASKS,
+      JSON.stringify(updatedTasks),
+    );
   },
 
   deleteTask: async function (taskId: string) {
     const tasks = await this.fetchTasks();
     const filteredTasks = tasks.filter(task => task.id !== taskId);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredTasks));
+
+    localStorage.setItem(
+      CONFIG.STORAGE_KEYS.TASKS,
+      JSON.stringify(filteredTasks),
+    );
   },
 };

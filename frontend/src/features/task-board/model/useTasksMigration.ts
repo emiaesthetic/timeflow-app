@@ -3,14 +3,15 @@ import { toast } from 'sonner';
 
 import { useAuth } from '@/features/auth';
 
+import { CONFIG } from '@/shared/config';
 import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
 import { tasksApiRemote } from '../api/taskApiRemote';
-import { STORAGE_KEY, tasksApiStorage } from '../api/taskApiStorage';
+import { tasksApiStorage } from '../api/taskApiStorage';
 import { transformTaskToFormDate } from '../lib/transformTask';
 
 export const useTasksMigration = (onMigrationComplete: () => void) => {
-  const { token: isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const isMigrated = useRef(false);
 
   const performMigration = useCallback(async () => {
@@ -35,7 +36,7 @@ export const useTasksMigration = (onMigrationComplete: () => void) => {
       }
 
       onMigrationComplete();
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(CONFIG.STORAGE_KEYS.TASKS);
     } catch (error) {
       const message = getAxiosErrorMessage(error);
       toast.error(message);

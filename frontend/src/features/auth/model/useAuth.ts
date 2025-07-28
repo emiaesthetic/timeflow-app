@@ -20,17 +20,6 @@ export const useAuth = () => {
   }, [store.isAuthenticated, store.isLoading, navigate]);
 
   return {
-    isLoading: store.isLoading,
-    isAuthenticated: store.isAuthenticated,
-    token: store.token,
-    user: store.user,
-    error: store.error,
-    refreshAccessToken: store.refreshToken,
-    initializeSession: store.initializeSession,
-    registerAccount: store.register,
-    loginAccount: store.login,
-    loginWithGithub: store.loginWithGithub,
-    loginWithGoogle: store.loginWithGoogle,
-    logoutAccount: store.logout,
+    ...store,
   };
 };

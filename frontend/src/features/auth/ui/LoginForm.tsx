@@ -32,7 +32,7 @@ export function LoginForm() {
     resolver: zodResolver(LoginFormSchema),
   });
 
-  const { isLoading, loginAccount } = useAuth();
+  const { isLoading, login } = useAuth();
 
   return (
     <Layout>
@@ -63,7 +63,7 @@ export function LoginForm() {
             <form
               id="authForm"
               onSubmit={form.handleSubmit(data => {
-                loginAccount(data);
+                login(data);
               })}
             >
               <div className="mb-6 flex flex-col gap-y-4">

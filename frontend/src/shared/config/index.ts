@@ -20,6 +20,11 @@ export const CONFIG = {
   GOOGLE_CLIENT_ID: getEnvVar('VITE_GOOGLE_CLIENT_ID'),
   GITHUB_CLIENT_ID: getEnvVar('VITE_GITHUB_CLIENT_ID'),
 
+  STORAGE_KEYS: {
+    AUTH: 'timeflow-auth',
+    TASKS: 'timeflow-tasks',
+  },
+
   ROUTES: {
     HOME: '/',
     REGISTER: '/auth/sign-up',

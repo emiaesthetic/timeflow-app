@@ -14,7 +14,7 @@ import {
 import { useAuth } from '../model/useAuth';
 
 export function UserProfile() {
-  const { user, logoutAccount } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) return null;
 
@@ -50,7 +50,7 @@ export function UserProfile() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Button variant="ghost" size="sm" onClick={logoutAccount}>
+            <Button variant="ghost" size="sm" onClick={logout}>
               Logout
             </Button>
           </DropdownMenuItem>

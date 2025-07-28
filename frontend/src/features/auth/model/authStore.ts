@@ -2,6 +2,7 @@ import { toast } from 'sonner';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { CONFIG } from '@/shared/config';
 import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
 import { authApi } from '../api/authApi';
@@ -9,28 +10,39 @@ import { authApi } from '../api/authApi';
 import { LoginFormData, RegisterFormData, User } from './types';
 
 export type AuthStore = {
+  isInitialized: boolean;
   isLoading: boolean;
   isAuthenticated: boolean;
   token: string | null;
   user: User | null;
   error: string | null;
 
+  initializeSession: () => Promise<void>;
   register: (data: RegisterFormData) => Promise<void>;
   login: (data: LoginFormData) => Promise<void>;
   loginWithGithub: (code: string) => Promise<void>;
   loginWithGoogle: (code: string) => Promise<void>;
-  refreshToken: () => Promise<string>;
+  refresh: () => Promise<string>;
   logout: () => void;
 };
 
 export const authStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      token: null,
-      user: null,
+      isInitialized: false,
       isLoading: false,
       isAuthenticated: false,
+      token: null,
+      user: null,
       error: null,
+
+      initializeSession: async () => {
+        try {
+          await get().refresh();
+        } finally {
+          set({ isInitialized: true });
+        }
+      },
 
       register: async (payload: RegisterFormData) => {
         set({ isLoading: true, error: null });
@@ -96,6 +108,21 @@ export const authStore = create<AuthStore>()(
         }
       },
 
+      refresh: async () => {
+        set({ isLoading: true, error: null });
+
+        try {
+          const { token, user } = await authApi.refresh();
+          set({ token, user });
+          return token;
+        } catch {
+          get().logout();
+          throw new Error('User is not authenticated');
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
       logout: () => {
         set({
           isLoading: false,
@@ -105,31 +132,18 @@ export const authStore = create<AuthStore>()(
           error: null,
         });
       },
-
-      refreshToken: async () => {
-        if (get().isAuthenticated) {
-          set({ isLoading: true, error: null });
-
-          try {
-            const { token, user } = await authApi.refreshToken();
-            set({ token, user });
-            return token;
-          } catch (error) {
-            get().logout();
-            throw error;
-          } finally {
-            set({ isLoading: false });
-          }
-        }
-        throw new Error('User is not authenticated');
-      },
     }),
     {
-      name: 'auth',
+      name: CONFIG.STORAGE_KEYS.AUTH,
       storage: createJSONStorage(() => localStorage),
       partialize: state => ({
-        isAuthenticated: state.isAuthenticated,
+        token: state.token,
       }),
+      onRehydrateStorage: () => state => {
+        if (state) {
+          state.isAuthenticated = !!state.token;
+        }
+      },
     },
   ),
 );

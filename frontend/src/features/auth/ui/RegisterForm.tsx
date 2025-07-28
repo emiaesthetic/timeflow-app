@@ -31,7 +31,7 @@ export function RegisterForm() {
     resolver: zodResolver(RegisterFormSchema),
   });
 
-  const { isLoading, registerAccount } = useAuth();
+  const { isLoading, register } = useAuth();
 
   return (
     <Layout>
@@ -52,7 +52,7 @@ export function RegisterForm() {
             <form
               id="authForm"
               onSubmit={form.handleSubmit((data: RegisterFormData) => {
-                registerAccount(data);
+                register(data);
               })}
             >
               <div className="mb-6 flex flex-col gap-y-4">
