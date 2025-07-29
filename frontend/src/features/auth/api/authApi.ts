@@ -47,4 +47,8 @@ export const authApi = {
 
     return response.data;
   },
+
+  logout: async () => {
+    await axiosClassic.post(`${API.auth('logout')}`);
+  },
 };

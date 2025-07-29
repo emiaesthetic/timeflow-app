@@ -34,7 +34,7 @@ export async function buildApp() {
   await app.register(fastifyCookie);
   await app.register(fastifyJwt, {
     secret: CONFIG.JWT_SECRET,
-    sign: { expiresIn: 10 },
+    sign: { expiresIn: '15m' },
   });
   await app.register(fastifyJwt, {
     secret: CONFIG.JWT_REFRESH_SECRET,

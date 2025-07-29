@@ -2,7 +2,10 @@ import { User } from '@prisma/client';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 import { ApiError } from '@/common/errors/apiError';
-import { setRefreshTokenCookie } from '@/common/utils/cookies';
+import {
+  clearRefreshTokenCookie,
+  setRefreshTokenCookie,
+} from '@/common/utils/cookies';
 
 import { UsersRepository } from '../users/users.repository';
 import { UserService } from '../users/users.service';
@@ -61,19 +64,42 @@ export class AuthController {
   }
 
   async refreshTokenHandler(request: FastifyRequest, reply: FastifyReply) {
-    if (!request.cookies.refreshToken) {
+    const refreshToken = request.cookies.refreshToken;
+    if (!refreshToken) {
       throw ApiError.unauthorized('Refresh token not found');
     }
 
     try {
       await request.refreshJwtVerify();
+      await this.authService.matchingTokens(refreshToken);
+
       const userId = request.user.id;
       const user = await this.userService.getCurrentUser(userId);
       await this.handleAuthResponse({ reply, user });
     } catch {
+      clearRefreshTokenCookie(reply);
       throw ApiError.unauthorized(
         'Invalid or expired refresh token. Please login again.',
       );
+    }
+  }
+
+  async logoutHandler(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const refreshToken = request.cookies.refreshToken;
+
+      if (!refreshToken) {
+        clearRefreshTokenCookie(reply);
+        return reply.status(200);
+      }
+
+      await request.refreshJwtVerify();
+
+      await this.authService.deleteRefreshToken(refreshToken);
+      clearRefreshTokenCookie(reply);
+      reply.status(200);
+    } catch {
+      throw ApiError.unauthorized('Invalid or expired refresh token.');
     }
   }
 

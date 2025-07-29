@@ -23,7 +23,7 @@ export type AuthStore = {
   loginWithGithub: (code: string) => Promise<void>;
   loginWithGoogle: (code: string) => Promise<void>;
   refresh: () => Promise<string>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 export const authStore = create<AuthStore>()(
@@ -37,11 +37,10 @@ export const authStore = create<AuthStore>()(
       error: null,
 
       initializeSession: async () => {
-        try {
+        if (get().isAuthenticated) {
           await get().refresh();
-        } finally {
-          set({ isInitialized: true });
         }
+        set({ isInitialized: true });
       },
 
       register: async (payload: RegisterFormData) => {
@@ -116,14 +115,15 @@ export const authStore = create<AuthStore>()(
           set({ token, user });
           return token;
         } catch {
-          get().logout();
+          await get().logout();
           throw new Error('User is not authenticated');
         } finally {
           set({ isLoading: false });
         }
       },
 
-      logout: () => {
+      logout: async () => {
+        await authApi.logout();
         set({
           isLoading: false,
           isAuthenticated: false,

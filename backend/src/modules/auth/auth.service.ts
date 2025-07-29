@@ -174,6 +174,20 @@ export class AuthService {
     }
   }
 
+  async deleteRefreshToken(token: string) {
+    await this.authRepository.delete(token);
+  }
+
+  async matchingTokens(token: string) {
+    const existingToken = await this.authRepository.findByToken(token);
+
+    if (!existingToken) {
+      throw ApiError.unauthorized('Invalid or expired refresh token');
+    }
+
+    return true;
+  }
+
   computeExpiryDate() {
     const now = new Date();
     const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;

@@ -20,8 +20,8 @@ export class AuthRepository {
     });
   }
 
-  async delete(token: string): Promise<RefreshToken> {
-    return this.prisma.refreshToken.delete({ where: { token } });
+  async delete(token: string): Promise<void> {
+    await this.prisma.refreshToken.deleteMany({ where: { token } });
   }
 
   async findByUserId(userId: string): Promise<RefreshToken | null> {

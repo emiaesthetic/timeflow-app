@@ -74,4 +74,6 @@ export async function authRoutes(fastify: FastifyInstance) {
     },
     controller.refreshTokenHandler.bind(controller),
   );
+
+  fastify.post('/logout', controller.logoutHandler.bind(controller));
 }

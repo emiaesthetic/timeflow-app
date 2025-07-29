@@ -12,9 +12,12 @@ export function App() {
     useAuth();
 
   useEffect(() => {
-    initializeSession();
     initAxiosWithAuth({ token, refresh });
-  }, [token, initializeSession, refresh]);
+  }, [token, refresh]);
+
+  useEffect(() => {
+    initializeSession();
+  }, [initializeSession]);
 
   if (!isInitialized) return null;
 
