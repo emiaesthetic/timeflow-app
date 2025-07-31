@@ -90,15 +90,16 @@ export class AuthController {
 
       if (!refreshToken) {
         clearRefreshTokenCookie(reply);
-        return reply.status(200);
+        return reply.status(200).send();
       }
 
       await request.refreshJwtVerify();
-
       await this.authService.deleteRefreshToken(refreshToken);
+
       clearRefreshTokenCookie(reply);
-      reply.status(200);
+      reply.status(200).send();
     } catch {
+      clearRefreshTokenCookie(reply);
       throw ApiError.unauthorized('Invalid or expired refresh token.');
     }
   }

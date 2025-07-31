@@ -38,13 +38,13 @@ export class AuthService {
     const user = await this.userService.getUserByEmail(payload.email);
 
     if (!user) {
-      throw ApiError.unauthorized('Invalid credentials');
+      throw ApiError.invalidCredentials();
     }
 
     const isPasswordValid = await verify(user.password, payload.password);
 
     if (!isPasswordValid) {
-      throw ApiError.unauthorized('Invalid credentials');
+      throw ApiError.invalidCredentials();
     }
 
     return user;
@@ -97,8 +97,8 @@ export class AuthService {
       return user;
     } catch (error) {
       const message =
-        error instanceof AxiosError ? error.message : 'GitHub auth error';
-      throw ApiError.unauthorized(message);
+        error instanceof AxiosError ? error.message : 'GitHub OAuth failed';
+      throw ApiError.githubAuthFailed(message, error);
     }
   }
 
@@ -150,8 +150,8 @@ export class AuthService {
       return user;
     } catch (error) {
       const message =
-        error instanceof AxiosError ? error.message : 'Google auth error';
-      throw ApiError.unauthorized(message);
+        error instanceof AxiosError ? error.message : 'Google OAuth failed';
+      throw ApiError.googleAuthFailed(message, error);
     }
   }
 
@@ -182,7 +182,7 @@ export class AuthService {
     const existingToken = await this.authRepository.findByToken(token);
 
     if (!existingToken) {
-      throw ApiError.unauthorized('Invalid or expired refresh token');
+      throw ApiError.unauthorized('Invalid refresh token');
     }
 
     return true;
