@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
+import { getErrorMessage } from '@/shared/api';
 
 import { useTasksApi } from './TasksApiContext';
 import { Task, TaskFormData } from './types';
@@ -15,7 +15,7 @@ export function useTasks() {
       const fetchedTasks = await api.fetchTasks();
       setTasks(fetchedTasks);
     } catch (error) {
-      const message = getAxiosErrorMessage(error);
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   }, [api]);
@@ -29,7 +29,7 @@ export function useTasks() {
       await api.createTask(formData);
       refetch();
     } catch (error) {
-      const message = getAxiosErrorMessage(error);
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };
@@ -39,7 +39,7 @@ export function useTasks() {
       await api.updateTask(taskId, formData);
       refetch();
     } catch (error) {
-      const message = getAxiosErrorMessage(error);
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };
@@ -49,7 +49,7 @@ export function useTasks() {
       await api.deleteTask(taskId);
       refetch();
     } catch (error) {
-      const message = getAxiosErrorMessage(error);
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

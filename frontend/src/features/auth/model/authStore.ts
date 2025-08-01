@@ -2,8 +2,8 @@ import { toast } from 'sonner';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { getErrorMessage } from '@/shared/api';
 import { CONFIG } from '@/shared/config';
-import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
 import { authApi } from '../api/authApi';
 
@@ -38,8 +38,13 @@ export const authStore = create<AuthStore>()(
 
       initializeSession: async () => {
         if (get().isAuthenticated) {
-          await get().refresh();
+          try {
+            await get().refresh();
+          } catch {
+            return;
+          }
         }
+
         set({ isInitialized: true });
       },
 
@@ -51,7 +56,7 @@ export const authStore = create<AuthStore>()(
           set({ isAuthenticated: true, token, user });
           toast.success('Successfully registered!');
         } catch (error) {
-          const message = getAxiosErrorMessage(error);
+          const message = getErrorMessage(error);
           set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
@@ -67,7 +72,7 @@ export const authStore = create<AuthStore>()(
           set({ isAuthenticated: true, token, user });
           toast.success('Successfully authorized!');
         } catch (error) {
-          const message = getAxiosErrorMessage(error);
+          const message = getErrorMessage(error);
           set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
@@ -83,7 +88,7 @@ export const authStore = create<AuthStore>()(
           set({ isAuthenticated: true, token, user });
           toast.success('Successfully authorized!');
         } catch (error) {
-          const message = getAxiosErrorMessage(error);
+          const message = getErrorMessage(error);
           toast.error(message);
           set({ isAuthenticated: false, error: message });
         } finally {
@@ -99,7 +104,7 @@ export const authStore = create<AuthStore>()(
           set({ isAuthenticated: true, token, user });
           toast.success('Successfully authorized!');
         } catch (error) {
-          const message = getAxiosErrorMessage(error);
+          const message = getErrorMessage(error);
           set({ isAuthenticated: false, error: message });
           toast.error(message);
         } finally {
@@ -114,23 +119,28 @@ export const authStore = create<AuthStore>()(
           const { token, user } = await authApi.refresh();
           set({ token, user });
           return token;
-        } catch {
+        } catch (error) {
           await get().logout();
-          throw new Error('User is not authenticated');
+          throw error;
         } finally {
           set({ isLoading: false });
         }
       },
 
       logout: async () => {
-        await authApi.logout();
-        set({
-          isLoading: false,
-          isAuthenticated: false,
-          token: null,
-          user: null,
-          error: null,
-        });
+        try {
+          await authApi.logout();
+        } catch {
+          return;
+        } finally {
+          set({
+            isLoading: false,
+            isAuthenticated: false,
+            token: null,
+            user: null,
+            error: null,
+          });
+        }
       },
     }),
     {

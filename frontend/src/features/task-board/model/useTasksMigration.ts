@@ -3,8 +3,8 @@ import { toast } from 'sonner';
 
 import { useAuth } from '@/features/auth';
 
+import { getErrorMessage } from '@/shared/api';
 import { CONFIG } from '@/shared/config';
-import { getAxiosErrorMessage } from '@/shared/lib/getAxiosErrorMessage';
 
 import { tasksApiRemote } from '../api/taskApiRemote';
 import { tasksApiStorage } from '../api/taskApiStorage';
@@ -38,7 +38,7 @@ export const useTasksMigration = (onMigrationComplete: () => void) => {
       onMigrationComplete();
       localStorage.removeItem(CONFIG.STORAGE_KEYS.TASKS);
     } catch (error) {
-      const message = getAxiosErrorMessage(error);
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   }, [onMigrationComplete]);
