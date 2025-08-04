@@ -1,14 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { getErrorMessage } from '@/shared/api';
+import { CONFIG } from '@/shared/config';
+
+import { tasksApiRemote } from '../api/taskApiRemote';
+import { tasksApiStorage } from '../api/taskApiStorage';
+import { transformTaskToFormDate } from '../lib/transformTask';
 
 import { useTasksApi } from './TasksApiContext';
 import { Task, TaskFormData } from './types';
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const api = useTasksApi();
+  const { isAuthenticated, api } = useTasksApi();
+
+  const isMigrated = useRef(false);
 
   const refetch = useCallback(async () => {
     try {
@@ -21,8 +28,31 @@ export function useTasks() {
   }, [api]);
 
   useEffect(() => {
+    const migrateTasks = async () => {
+      if (isMigrated.current) return;
+
+      isMigrated.current = true;
+
+      try {
+        const localTasks = await tasksApiStorage.fetchTasks();
+
+        for (const task of localTasks) {
+          const formData = transformTaskToFormDate(task);
+          await tasksApiRemote.createTask(formData);
+          localStorage.removeItem(CONFIG.STORAGE_KEYS.TASKS);
+        }
+      } catch (error) {
+        const message = getErrorMessage(error);
+        toast.error(message);
+      }
+    };
+
+    if (isAuthenticated) {
+      migrateTasks();
+    }
+
     refetch();
-  }, [refetch]);
+  }, [isAuthenticated, refetch]);
 
   const createTask = async (formData: TaskFormData) => {
     try {

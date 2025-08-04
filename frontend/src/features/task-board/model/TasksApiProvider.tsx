@@ -13,6 +13,8 @@ export const TasksApiProvider = ({
   const api = isAuthenticated ? tasksApiRemote : tasksApiStorage;
 
   return (
-    <TasksApiContext.Provider value={api}>{children}</TasksApiContext.Provider>
+    <TasksApiContext.Provider value={{ isAuthenticated, api }}>
+      {children}
+    </TasksApiContext.Provider>
   );
 };

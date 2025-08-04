@@ -2,7 +2,12 @@ import { createContext, useContext } from 'react';
 
 import { TasksApi } from './types';
 
-export const TasksApiContext = createContext<TasksApi | null>(null);
+type TasksApiContext = {
+  isAuthenticated: boolean;
+  api: TasksApi;
+};
+
+export const TasksApiContext = createContext<TasksApiContext | null>(null);
 
 export const useTasksApi = () => {
   const context = useContext(TasksApiContext);

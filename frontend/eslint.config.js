@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import boundaries from 'eslint-plugin-boundaries';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import eslintReact from 'eslint-plugin-react';
@@ -25,6 +26,7 @@ export default tseslint.config(
       react: eslintReact,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      boundaries,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -44,6 +46,121 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
       'no-console': 'warn',
+      'boundaries/entry-point': [
+        'error',
+        {
+          default: 'disallow',
+          rules: [
+            {
+              target: ['app', 'pages', 'features', 'entities'],
+              allow: 'index.ts',
+            },
+            {
+              target: ['kernel', 'shared'],
+              allow: '**/*.*',
+            },
+          ],
+        },
+      ],
+      'boundaries/element-types': [
+        'error',
+        {
+          default: 'allow',
+          rules: [
+            {
+              from: ['pages'],
+              disallow: ['app'],
+              message: 'Page must not import upper layers (${dependency.type})',
+            },
+            {
+              from: ['features'],
+              disallow: ['app', 'pages'],
+              message:
+                'Feature must not import upper layers (${dependency.type})',
+            },
+            {
+              from: ['entities'],
+              disallow: ['app', 'pages', 'features'],
+              message:
+                'Entity must not import upper layers (${dependency.type})',
+            },
+            {
+              from: ['kernel'],
+              disallow: ['app', 'pages', 'features', 'entities'],
+              message:
+                'Kernel must not import upper layers (${dependency.type})',
+            },
+            {
+              from: ['shared'],
+              disallow: ['app', 'pages', 'features', 'entities', 'kernel'],
+              message:
+                'Shared must not import upper layers (${dependency.type})',
+            },
+
+            {
+              from: ['pages'],
+              disallow: [
+                [
+                  'pages',
+                  {
+                    page: '!${page}',
+                  },
+                ],
+              ],
+              message: 'Page must not import other page',
+            },
+            {
+              from: ['features'],
+              disallow: [
+                [
+                  'features',
+                  {
+                    feature: '!${feature}',
+                  },
+                ],
+              ],
+              message: 'Feature must not import other feature',
+            },
+          ],
+        },
+      ],
+    },
+    settings: {
+      'boundaries/include': ['src/**/*'],
+      'boundaries/elements': [
+        {
+          type: 'app',
+          pattern: 'app/*',
+        },
+        {
+          type: 'pages',
+          pattern: 'pages/*',
+          capture: ['page'],
+        },
+        {
+          type: 'features',
+          pattern: 'features/*',
+          capture: ['feature'],
+        },
+        {
+          type: 'entities',
+          pattern: 'entities/*',
+          capture: ['entity'],
+        },
+        {
+          type: 'kernel',
+          pattern: 'kernel/*',
+        },
+        {
+          type: 'shared',
+          pattern: 'shared/*',
+        },
+      ],
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
     },
   },
 );
