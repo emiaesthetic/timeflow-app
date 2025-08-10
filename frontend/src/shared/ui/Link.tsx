@@ -1,10 +1,10 @@
-import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
+import { type LinkProps, Link as RouterLink } from 'react-router-dom';
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '../lib/utils';
 
-const buttonVariants = cva(
-  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-sm text-base font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+const linkVariants = cva(
+  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-base font-medium whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-10 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-9 gap-1.5 px-3 has-[>svg]:px-2.5',
+        sm: 'h-9 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5',
         lg: 'h-11 rounded-md px-6 has-[>svg]:px-4',
         icon: 'size-9',
       },
@@ -34,27 +34,18 @@ const buttonVariants = cva(
   },
 );
 
-function Button({
+function Link({
   className,
   variant,
   size,
-  asChild = false,
-  type = 'button',
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : 'button';
-
+}: LinkProps & VariantProps<typeof linkVariants>) {
   return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size }), className)}
-      type={type}
+    <RouterLink
+      className={cn(linkVariants({ variant, size }), className)}
       {...props}
     />
   );
 }
 
-export { Button };
+export { Link };

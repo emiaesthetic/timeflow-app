@@ -4,7 +4,7 @@ import { useCurrentTask } from './model/useCurrentTask';
 import { useTasks } from './model/useTasks';
 import { useTimer } from './model/useTimer';
 import { Header } from './ui/Header';
-import { Layout } from './ui/Layout';
+import { TaskBoardLayout } from './ui/TaskBoardLayout';
 import { TaskCreator } from './ui/TaskCreator';
 import { TaskEditor } from './ui/TaskEditor';
 import { TaskItem } from './ui/TaskItem';
@@ -49,8 +49,8 @@ export function TaskBoard() {
   };
 
   return (
-    <Layout>
-      <Header onOpenCreator={creator.open} />
+    <TaskBoardLayout>
+      <Header isEmpty={tasks.length === 0} onOpenCreator={creator.open} />
 
       <TaskList
         tasks={tasks}
@@ -88,6 +88,6 @@ export function TaskBoard() {
         onOpenChange={handleTimerOpenChange}
         onStopTimer={timer.close}
       />
-    </Layout>
+    </TaskBoardLayout>
   );
 }

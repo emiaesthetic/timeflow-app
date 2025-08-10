@@ -13,12 +13,18 @@ export function TaskList({
     <>
       {tasks.length === 0 ? (
         <div className="flex w-full items-center justify-center">
-          <img className="w-1/2" src={emptyImg} alt="To-do list is empty" />
+          <img
+            className="w-[80%] max-w-[576px]"
+            src={emptyImg}
+            alt="To-do list is empty"
+          />
         </div>
       ) : (
-        <ul className="space-y-4">
+        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {tasks.map(task => (
-            <li key={task.id}>{renderTask(task)}</li>
+            <li className="h-full" key={task.id}>
+              {renderTask(task)}
+            </li>
           ))}
         </ul>
       )}

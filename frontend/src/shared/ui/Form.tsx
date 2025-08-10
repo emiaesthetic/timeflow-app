@@ -7,6 +7,7 @@ import {
   type FieldPath,
   type FieldValues,
   FormProvider,
+  type UseFormReturn,
   useFormContext,
   useFormState,
 } from 'react-hook-form';
@@ -15,7 +16,12 @@ import { cn } from '@/shared/lib/utils';
 
 import { Label } from './Label';
 
-const Form = FormProvider;
+function Form<TFieldValues extends FieldValues>({
+  children,
+  ...props
+}: React.PropsWithChildren & UseFormReturn<TFieldValues>) {
+  return <FormProvider {...props}>{children}</FormProvider>;
+}
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -155,13 +161,12 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
-export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-};
+Form.Item = FormItem;
+Form.Label = FormLabel;
+Form.Control = FormControl;
+Form.Description = FormDescription;
+Form.Message = FormMessage;
+Form.Field = FormField;
+Form.useFormField = useFormField;
+
+export { Form };

@@ -1,15 +1,6 @@
-import { Link } from 'react-router-dom';
-
 import { Button } from '@/shared/ui/Button';
-import { buttonVariants } from '@/shared/ui/Button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/shared/ui/DropdownMenu';
+import { DropdownMenu } from '@/shared/ui/DropdownMenu';
+import { Link } from '@/shared/ui/Link';
 
 import { useAuth } from '../model/useAuth';
 
@@ -20,7 +11,7 @@ export function UserProfile() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenu.Trigger asChild>
         <Button className="size-10 rounded-md p-0">
           <img
             className="h-full w-full rounded-md object-cover"
@@ -28,34 +19,43 @@ export function UserProfile() {
             alt="Profile avatar"
           />
         </Button>
-      </DropdownMenuTrigger>
+      </DropdownMenu.Trigger>
 
-      <DropdownMenuContent>
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          <DropdownMenu.Item>
             <Link
-              className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+              className="bg-transparent hover:bg-transparent"
+              variant="ghost"
+              size="sm"
               to="/profile"
             >
               Profile
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item>
             <Link
-              className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+              className="bg-transparent hover:bg-transparent"
+              variant="ghost"
+              size="sm"
               to="/settings"
             >
               Settings
             </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Button variant="ghost" size="sm" onClick={logout}>
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator />
+          <DropdownMenu.Item>
+            <Button
+              className="bg-transparent hover:bg-transparent"
+              variant="ghost"
+              size="sm"
+              onClick={logout}
+            >
               Logout
             </Button>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
+          </DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
     </DropdownMenu>
   );
 }

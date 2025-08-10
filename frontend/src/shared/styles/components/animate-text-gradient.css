@@ -1,0 +1,11 @@
+@layer components {
+  .animate-text-gradient {
+    animation: text-gradient 3s linear infinite;
+  }
+
+  @keyframes text-gradient {
+    to {
+      background-position: -200%;
+    }
+  }
+}

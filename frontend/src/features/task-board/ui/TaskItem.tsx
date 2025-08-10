@@ -8,14 +8,7 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/Button';
 import { Checkbox } from '@/shared/ui/Checkbox';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/shared/ui/DropdownMenu';
+import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 
 import { dateApi } from '../lib/dateApi';
 import { Task } from '../model/types';
@@ -34,33 +27,32 @@ export function TaskItem({
   return (
     <article
       className={cn(
-        'bg-card text-card-foreground relative grid grid-cols-[auto_1fr] gap-x-4 rounded-2xl shadow-lg shadow-neutral-200',
+        'bg-card/15 text-card-foreground overflow-hidden; relative h-full rounded-lg shadow-lg',
       )}
     >
       <div
         className={cn(
-          'w-6 rounded-l-2xl',
-          task.priority === 'HIGH' && 'bg-primary',
-          task.priority === 'MEDIUM' && 'bg-primary/50',
-          task.priority === 'LOW' && 'bg-primary/20',
+          'absolute top-[5%] left-[3%] -z-10 h-[90%] w-[94%] opacity-50 blur-md',
+          task.priority === 'HIGH' && 'bg-accent-3',
+          task.priority === 'MEDIUM' && 'bg-accent-2',
+          task.priority === 'LOW' && 'bg-accent-1',
         )}
-        aria-label={`Task priority: ${task.priority}`}
-      ></div>
-      <div className="grid w-full grid-cols-[1fr_auto] grid-rows-1 place-items-center gap-6 p-6 pl-0 md:grid-cols-[auto_1fr_auto] md:gap-y-0 lg:gap-x-10">
-        <Checkbox
-          className="border-primary hidden border-2 md:block"
-          name="complete"
-          aria-label="Mark task as complete"
-        />
+        aria-hidden="true"
+      />
 
-        <div className="row-span-2 w-full grid-cols-[2fr_1fr] items-center justify-start gap-x-8 md:grid">
-          <div className="mb-2 md:mb-0">
-            <h3 className="mb-2 text-2xl font-semibold">{task.title}</h3>
-            <p className="font-normal">{task.description}</p>
+      <div className="grid h-full w-full grid-cols-[1fr_auto] grid-rows-1 place-items-center gap-6 p-6">
+        <div className="row-span-2 flex h-full w-full min-w-0 grid-cols-[2fr_1fr] flex-col justify-between gap-x-8">
+          <div className="mb-4">
+            <h3 className="mb-2 overflow-x-hidden text-2xl font-semibold text-ellipsis">
+              {task.title}
+            </h3>
+            <p className="overflow-x-hidden font-normal text-ellipsis">
+              {task.description}
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-2 text-center md:block">
-            <div className="flex-wrap justify-center gap-x-2 gap-y-1 text-lg font-medium md:mb-1 md:flex">
+          <div className="flex flex-wrap items-center gap-x-2 text-center">
+            <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 text-lg font-medium">
               <time dateTime={dateApi.formatDateForHtmlAttr(task.date)}>
                 {dateApi.formatDateForDisplay(task.date)},
               </time>
@@ -75,70 +67,40 @@ export function TaskItem({
           </div>
         </div>
 
-        <div className="relative bg-inherit">
-          <ul className="hidden gap-x-2 lg:inline-flex">
-            <li>
-              {' '}
-              <Button size="icon" onClick={onOpenTimer} aria-label="Start task">
-                <CirclePlayIcon />
-              </Button>
-            </li>
-            <li>
-              <Button
-                size="icon"
-                type="button"
-                aria-label="Edit task"
-                onClick={onOpenEditor}
-              >
-                <SquarePenIcon />
-              </Button>
-            </li>
-            <li>
-              <Button
-                size="icon"
-                onClick={() => deleteTask(task.id)}
-                aria-label="Delete task"
-              >
-                <TrashIcon />
-              </Button>
-            </li>
-          </ul>
-
+        <div className="relative self-start bg-inherit">
           <DropdownMenu>
-            <DropdownMenuTrigger className="lg:hidden" asChild>
+            <DropdownMenu.Trigger asChild>
               <Button size="icon" aria-label="Open menu">
                 <EllipsisIcon />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40" align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content className="w-40" align="end">
+              <DropdownMenu.Group>
+                <DropdownMenu.Item>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start bg-transparent hover:bg-transparent"
                     variant="ghost"
-                    size="sm"
                     onClick={onOpenTimer}
                   >
                     <CirclePlayIcon />
                     Start
                   </Button>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start bg-transparent hover:bg-transparent"
                     variant="ghost"
                     size="sm"
-                    type="button"
                     onClick={onOpenEditor}
                   >
                     <SquarePenIcon />
                     Edit
                   </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                </DropdownMenu.Item>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item>
                   <Button
-                    className="w-full justify-start"
+                    className="w-full justify-start bg-transparent hover:bg-transparent"
                     variant="ghost"
                     size="sm"
                     onClick={() => deleteTask(task.id)}
@@ -146,14 +108,14 @@ export function TaskItem({
                     <TrashIcon />
                     Delete
                   </Button>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu.Content>
           </DropdownMenu>
         </div>
 
         <Checkbox
-          className="border-primary [grid-column:2] [grid-row:2] border-2 md:hidden"
+          className="border-primary [grid-column:2] [grid-row:2] border-2"
           name="complete"
           aria-label="Mark task as complete"
         />

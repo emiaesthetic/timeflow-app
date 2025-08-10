@@ -2,14 +2,21 @@ import { PlusIcon } from 'lucide-react';
 
 import { Button } from '@/shared/ui/Button';
 
-export function Header({ onOpenCreator }: { onOpenCreator: () => void }) {
+export function Header({
+  isEmpty,
+  onOpenCreator,
+}: {
+  isEmpty: boolean;
+  onOpenCreator: () => void;
+}) {
   return (
-    <header className="mb-8 flex items-center justify-between gap-x-8">
-      <h2 className="text-4xl font-bold">Task List</h2>
+    <header className="mb-8 flex items-start justify-between gap-x-8">
+      <h2 className="text-3xl font-bold">
+        {isEmpty ? "You don't have any tasks yet." : 'Task List'}
+      </h2>
 
       <Button
         className="size-10 sm:size-auto"
-        type="button"
         onClick={onOpenCreator}
         aria-label="Add new task"
       >

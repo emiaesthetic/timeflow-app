@@ -1,12 +1,6 @@
 import { Button } from '@/shared/ui/Button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/ui/Dialog';
+import { Dialog } from '@/shared/ui/Dialog';
+import { MorphingBorder } from '@/shared/ui/MorphingBorder';
 
 import { formatTimer } from '../lib/formatTimer';
 import { Task } from '../model/types';
@@ -34,45 +28,48 @@ export function TaskTimer({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-center text-2xl">
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title className="text-center text-2xl">
             {task.title}
-          </DialogTitle>
-          <DialogDescription
+          </Dialog.Title>
+          <Dialog.Description
             aria-describedby={`${task.title} timer`}
-          ></DialogDescription>
-        </DialogHeader>
+          ></Dialog.Description>
+        </Dialog.Header>
 
-        <div
-          className="mx-auto flex items-center justify-center gap-x-1 rounded-xl p-4 text-center text-5xl font-medium"
-          role="timer"
-          aria-live="polite"
-          aria-label={`Timer: ${hours} hours, ${minutes} minutes, ${seconds} seconds`}
-        >
-          <span className="bg-primary text-primary-foreground inline-flex size-18 items-center justify-center rounded-lg">
-            {hours}
-          </span>
-          <span>:</span>
-          <span className="bg-primary text-primary-foreground inline-flex size-18 items-center justify-center rounded-lg">
-            {minutes}
-          </span>
-          <span>:</span>
-          <span className="bg-primary text-primary-foreground inline-flex size-18 items-center justify-center rounded-lg">
-            {seconds}
-          </span>
-        </div>
+        <MorphingBorder className="mx-auto mb-5 max-w-[320px] sm:max-w-[70%]">
+          <div
+            className="flex items-center justify-center gap-x-1 rounded-xl text-5xl font-medium sm:text-6xl"
+            role="timer"
+            aria-live="polite"
+            aria-label={`Timer: ${hours} hours, ${minutes} minutes, ${seconds} seconds`}
+          >
+            <span className="inline-flex size-18 items-center justify-center">
+              {hours}
+            </span>
+            <span>:</span>
+            <span className="inline-flex size-18 items-center justify-center">
+              {minutes}
+            </span>
+            <span>:</span>
+            <span className="inline-flex size-18 items-center justify-center">
+              {seconds}
+            </span>
+          </div>
+        </MorphingBorder>
 
-        <DialogFooter className="justify-center gap-4">
-          <Button className="w-20" type="button" onClick={toggleRunning}>
-            {isRunning ? 'Pause' : 'Start'}
-          </Button>
-
-          <Button className="w-20" type="button" onClick={onStopTimer}>
-            Stop
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+        <Dialog.Footer className="justify-center">
+          {isRunning ? (
+            <Button onClick={toggleRunning}>Pause</Button>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              <Button onClick={toggleRunning}>Continue</Button>
+              <Button onClick={onStopTimer}>Stop</Button>
+            </div>
+          )}
+        </Dialog.Footer>
+      </Dialog.Content>
     </Dialog>
   );
 }

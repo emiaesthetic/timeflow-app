@@ -1,12 +1,5 @@
 import { Button } from '@/shared/ui/Button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/ui/Dialog';
+import { Dialog } from '@/shared/ui/Dialog';
 
 import { TaskFormData } from '../model/types';
 
@@ -23,13 +16,13 @@ export function TaskCreator({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={toggleOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Create New Task</DialogTitle>
-          <DialogDescription className="text-base">
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title className="text-2xl">Create New Task</Dialog.Title>
+          <Dialog.Description className="text-base">
             Fill in the details for your new task.
-          </DialogDescription>
-        </DialogHeader>
+          </Dialog.Description>
+        </Dialog.Header>
 
         <TaskForm
           onSubmit={formData => {
@@ -37,12 +30,12 @@ export function TaskCreator({
           }}
         />
 
-        <DialogFooter>
+        <Dialog.Footer>
           <Button className="w-full" type="submit" form="taskForm">
             Create Task
           </Button>
-        </DialogFooter>
-      </DialogContent>
+        </Dialog.Footer>
+      </Dialog.Content>
     </Dialog>
   );
 }

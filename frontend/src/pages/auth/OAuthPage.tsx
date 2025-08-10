@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { useAuth } from '@/features/auth';
+
 import { CONFIG } from '@/shared/config';
 
-import { useAuth } from '../model/useAuth';
+import { AuthLayout } from './ui/AuthLayout';
 
-export function OAuth() {
+function OAuthPage() {
   const { isAuthenticated, error, loginWithGithub, loginWithGoogle } =
     useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,8 +41,12 @@ export function OAuth() {
   }, [isAuthenticated, error, navigate]);
 
   return (
-    <div className="flex h-full items-center justify-center">
-      <h2 className="m-0 text-xl font-bold">Authorization processing...</h2>
-    </div>
+    <AuthLayout withCard={false}>
+      <h1 className="text-center text-xl font-bold">
+        Authorization processing...
+      </h1>
+    </AuthLayout>
   );
 }
+
+export { OAuthPage };

@@ -1,12 +1,5 @@
 import { Button } from '@/shared/ui/Button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/ui/Dialog';
+import { Dialog } from '@/shared/ui/Dialog';
 
 import { transformTaskToFormDate } from '../lib/transformTask';
 import { Task, TaskFormData } from '../model/types';
@@ -28,13 +21,13 @@ export function TaskEditor({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Edit task</DialogTitle>
-          <DialogDescription className="text-base">
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title className="text-2xl">Edit task</Dialog.Title>
+          <Dialog.Description className="text-base">
             Edit details of your task.
-          </DialogDescription>
-        </DialogHeader>
+          </Dialog.Description>
+        </Dialog.Header>
 
         <TaskForm
           key={task.id}
@@ -44,12 +37,12 @@ export function TaskEditor({
           }}
         />
 
-        <DialogFooter>
+        <Dialog.Footer>
           <Button className="w-full" type="submit" form="taskForm">
             Update task
           </Button>
-        </DialogFooter>
-      </DialogContent>
+        </Dialog.Footer>
+      </Dialog.Content>
     </Dialog>
   );
 }

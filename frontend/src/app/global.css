@@ -2,6 +2,28 @@
 @plugin 'tailwindcss-animate';
 
 @import '@/shared/styles/fonts.css';
-@import '@/shared/styles/variables.css';
-@import '@/shared/styles/base.css';
-@import '@/shared/styles/theme.css';
+@import '@/shared/styles/tokens.css';
+@import '@/shared/styles/theme-light.css';
+@import '@/shared/styles/theme-dark.css';
+@import '@/shared/styles/components/animate-text-gradient.css';
+@import '@/shared/styles/components/morphing-border.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply relative box-border scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground relative h-full min-h-screen min-w-[375px] overflow-x-hidden font-sans font-normal;
+  }
+
+  ::backdrop {
+    @apply backdrop-blur-md;
+  }
+}

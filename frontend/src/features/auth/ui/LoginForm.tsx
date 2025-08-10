@@ -2,30 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import { AUTH, CONFIG } from '@/shared/config';
+import { CONFIG } from '@/shared/config';
 import { Button } from '@/shared/ui/Button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/shared/ui/Card';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/shared/ui/Form';
+import { Card } from '@/shared/ui/Card';
+import { Form } from '@/shared/ui/Form';
 import { Input } from '@/shared/ui/Input';
-import { Separator } from '@/shared/ui/Separator';
 
 import { LoginFormData, LoginFormSchema } from '../model/types';
 import { useAuth } from '../model/useAuth';
 
-import { Layout } from './Layout';
-import { SocialAuthButtons } from './SocialAuthButtons';
+import { OAuthProviders } from './OAuthProviders';
 
 export function LoginForm() {
   const form = useForm<LoginFormData>({
@@ -35,90 +21,75 @@ export function LoginForm() {
   const { isLoading, login } = useAuth();
 
   return (
-    <Layout>
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login to your account</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <SocialAuthButtons
-            isLoading={isLoading}
-            onGitHub={() => {
-              window.location.href = AUTH.getGithubRedirectUrl();
-            }}
-            onGoogle={() => {
-              window.location.href = AUTH.getGoogleRedirectUrl();
-            }}
-          />
-
-          <div className="mb-6 flex items-center gap-x-2">
-            <Separator className="flex-1/2" />
-            <span className="text-muted-foreground text-base text-nowrap">
-              or continue with
-            </span>
-            <Separator className="flex-1/2" />
-          </div>
-
-          <Form {...form}>
-            <form
-              id="authForm"
-              onSubmit={form.handleSubmit(data => {
-                login(data);
-              })}
-            >
-              <div className="mb-6 flex flex-col gap-y-4">
-                <FormField
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <Input
-                        type="email"
-                        id="email"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                      <Input
-                        type="password"
-                        id="password"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <Button className="w-full" type="submit" disabled={isLoading}>
-                Login
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-
-        <CardFooter className="justify-center">
-          <span className="text-muted-foreground mr-2 block">
-            Don't have an account?
-          </span>
+    <Card className="flex-1 bg-transparent">
+      <Card.Header>
+        <Card.Title className="mb-2 text-2xl">Login to your account</Card.Title>
+        <Card.Description className="flex gap-x-2">
+          <span className="text-muted-foreground">Don't have an account?</span>
           <Link
             className="text-foreground underline"
             to={CONFIG.ROUTES.REGISTER}
           >
-            Create account
+            Create an account
           </Link>
-        </CardFooter>
-      </Card>
-    </Layout>
+        </Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <Form {...form}>
+          <form
+            id="authForm"
+            onSubmit={form.handleSubmit(data => {
+              login(data);
+            })}
+          >
+            <div className="mb-6 flex flex-col gap-y-4">
+              <Form.Field
+                name="email"
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Label className="pl-2 text-sm" htmlFor="email">
+                      Email
+                    </Form.Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                    <Form.Message />
+                  </Form.Item>
+                )}
+              />
+
+              <Form.Field
+                name="password"
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Label className="pl-2 text-sm" htmlFor="password">
+                      Password
+                    </Form.Label>
+                    <Input
+                      type="password"
+                      id="password"
+                      {...field}
+                      disabled={isLoading}
+                    />
+                    <Form.Message />
+                  </Form.Item>
+                )}
+              />
+            </div>
+
+            <Button className="w-full" type="submit" disabled={isLoading}>
+              Login
+            </Button>
+          </form>
+        </Form>
+      </Card.Content>
+
+      <Card.Footer>
+        <OAuthProviders isLoading={isLoading} />
+      </Card.Footer>
+    </Card>
   );
 }

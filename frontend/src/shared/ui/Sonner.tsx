@@ -7,20 +7,25 @@ function Toaster({ ...props }: ToasterProps) {
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
-      className="toaster group"
       style={
         {
-          '--normal-bg': 'var(--popover)',
-          '--normal-text': 'var(--popover-foreground)',
-          '--normal-border': 'var(--border)',
+          '--normal-bg': 'var(--toaster-normal-bg)',
+          '--normal-text': 'var(--toaster-normal-text)',
+          '--normal-border': 'var(--toaster-normal-border)',
+          '--success-bg': 'var(--toaster-success-bg)',
+          '--success-text': 'var(--toaster-success-text)',
+          '--error-bg': 'var(--toaster-error-bg)',
+          '--error-text': 'var(--toaster-error-text)',
+          '--warning-bg': 'var(--toaster-warning-bg)',
+          '--warning-text': 'var(--toaster-warning-text)',
         } as React.CSSProperties
       }
+      className="toaster group backdrop-blur-md"
       position="top-right"
-      duration={Infinity}
+      duration={3000}
       richColors
-      closeButton
       toastOptions={{
-        className: 'text-lg font-medium text-gray-900',
+        className: 'font-sans shadow-lg !border-0',
       }}
       {...props}
     />
