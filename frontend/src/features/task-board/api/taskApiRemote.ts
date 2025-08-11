@@ -3,16 +3,8 @@ import { AxiosResponse } from 'axios';
 import { axiosWithAuth } from '@/shared/api';
 import { API } from '@/shared/config';
 
-import {
-  transformFormDateToPayload,
-  transformResponseToTask,
-} from '../lib/transformTask';
-import {
-  TaskFormData,
-  TaskPayload,
-  TaskResponse,
-  TasksApi,
-} from '../model/types';
+import { transformResponseToTask } from '../lib/transformTask';
+import { TaskPayload, TaskResponse, TasksApi } from '../model/types';
 
 export const tasksApiRemote: TasksApi = {
   fetchTasks: async function () {
@@ -23,13 +15,11 @@ export const tasksApiRemote: TasksApi = {
     return response.data.map(task => transformResponseToTask(task));
   },
 
-  createTask: async function (formData: TaskFormData) {
-    const payload: TaskPayload = transformFormDateToPayload(formData);
+  createTask: async function (payload: TaskPayload) {
     await axiosWithAuth.post(`${API.tasks()}`, payload);
   },
 
-  updateTask: async function (taskId: string, formData: TaskFormData) {
-    const payload: TaskPayload = transformFormDateToPayload(formData);
+  updateTask: async function (taskId: string, payload: TaskPayload) {
     await axiosWithAuth.put(`${API.tasks(taskId)}`, payload);
   },
 

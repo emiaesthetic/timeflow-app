@@ -1,7 +1,7 @@
 import { Button } from '@/shared/ui/Button';
 import { Dialog } from '@/shared/ui/Dialog';
 
-import { transformTaskToFormDate } from '../lib/transformTask';
+import { transformTaskToFormData } from '../lib/transformTask';
 import { Task, TaskFormData } from '../model/types';
 
 import { TaskForm } from './TaskForm';
@@ -31,7 +31,7 @@ export function TaskEditor({
 
         <TaskForm
           key={task.id}
-          currentTask={transformTaskToFormDate(task)}
+          currentTask={transformTaskToFormData(task)}
           onSubmit={formData => {
             onSubmit(task.id, formData);
           }}

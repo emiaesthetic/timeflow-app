@@ -2,7 +2,7 @@ import { Task, TaskFormData, TaskResponse } from '../model/types';
 
 import { dateApi } from './dateApi';
 
-export function transformTaskToFormDate(task: Task): TaskFormData {
+export function transformTaskToFormData(task: Task): TaskFormData {
   return {
     ...task,
     time: dateApi.formatTimeForInput(task.date),
@@ -10,7 +10,7 @@ export function transformTaskToFormDate(task: Task): TaskFormData {
   };
 }
 
-export function transformFormDateToPayload(
+export function transformFormDataToPayload(
   formData: TaskFormData,
 ): Omit<Task, 'id'> {
   return {

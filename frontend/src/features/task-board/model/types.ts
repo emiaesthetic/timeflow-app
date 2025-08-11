@@ -31,8 +31,8 @@ export type TaskResponse = {
 
 export type TasksApi = {
   fetchTasks: () => Promise<Task[]>;
-  createTask: (formData: TaskFormData) => Promise<void>;
-  updateTask: (taskId: string, formData: TaskFormData) => Promise<void>;
+  createTask: (payload: TaskPayload) => Promise<void>;
+  updateTask: (taskId: string, payload: TaskPayload) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
 };
 

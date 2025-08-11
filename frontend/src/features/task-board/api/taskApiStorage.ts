@@ -2,17 +2,8 @@ import { createId } from '@paralleldrive/cuid2';
 
 import { CONFIG } from '@/shared/config';
 
-import {
-  transformFormDateToPayload,
-  transformResponseToTask,
-} from '../lib/transformTask';
-import {
-  Task,
-  TaskFormData,
-  TaskPayload,
-  TaskResponse,
-  TasksApi,
-} from '../model/types';
+import { transformResponseToTask } from '../lib/transformTask';
+import { Task, TaskPayload, TaskResponse, TasksApi } from '../model/types';
 
 export const tasksApiStorage: TasksApi = {
   fetchTasks: async function () {
@@ -24,9 +15,7 @@ export const tasksApiStorage: TasksApi = {
     );
   },
 
-  createTask: async function (formData: TaskFormData) {
-    const payload: TaskPayload = transformFormDateToPayload(formData);
-
+  createTask: async function (payload: TaskPayload) {
     const newTask: Task = {
       id: createId(),
       ...payload,
@@ -41,9 +30,7 @@ export const tasksApiStorage: TasksApi = {
     );
   },
 
-  updateTask: async function (taskId: string, formData: TaskFormData) {
-    const payload: TaskPayload = transformFormDateToPayload(formData);
-
+  updateTask: async function (taskId: string, payload: TaskPayload) {
     const tasks = await this.fetchTasks();
     const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
