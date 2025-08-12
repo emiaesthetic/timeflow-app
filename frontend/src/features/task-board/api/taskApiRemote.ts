@@ -4,7 +4,7 @@ import { axiosWithAuth } from '@/shared/api';
 import { API } from '@/shared/config';
 
 import { transformResponseToTask } from '../lib/transformTask';
-import { TaskPayload, TaskResponse, TasksApi } from '../model/types';
+import { TaskId, TaskPayload, TaskResponse, TasksApi } from '../model/types';
 
 export const tasksApiRemote: TasksApi = {
   fetchTasks: async function () {
@@ -19,11 +19,11 @@ export const tasksApiRemote: TasksApi = {
     await axiosWithAuth.post(`${API.tasks()}`, payload);
   },
 
-  updateTask: async function (taskId: string, payload: TaskPayload) {
+  updateTask: async function (taskId: TaskId, payload: TaskPayload) {
     await axiosWithAuth.put(`${API.tasks(taskId)}`, payload);
   },
 
-  deleteTask: async function (taskId: string) {
+  deleteTask: async function (taskId: TaskId) {
     await axiosWithAuth.delete(`${API.tasks(taskId)}`);
   },
 };

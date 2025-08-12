@@ -1,8 +1,16 @@
+import { toast } from 'sonner';
+
+import { getErrorMessage } from '@/shared/api';
+
 import { useDialog } from './lib/useDialog';
 import { Task, TaskFormData } from './model/types';
+import { useCreateTaskMutation } from './model/useCreateTaskMutation';
 import { useCurrentTask } from './model/useCurrentTask';
-import { useTasks } from './model/useTasks';
+import { useDeleteTaskMutation } from './model/useDeleteTaskMutation';
+import { useTasksMigration } from './model/useTasksMigration';
+import { useTasksQuery } from './model/useTasksQuery';
 import { useTimer } from './model/useTimer';
+import { useUpdateTaskMutation } from './model/useUpdateTaskMutation';
 import { Header } from './ui/Header';
 import { TaskBoardLayout } from './ui/TaskBoardLayout';
 import { TaskCreator } from './ui/TaskCreator';
@@ -12,24 +20,20 @@ import { TaskList } from './ui/TaskList';
 import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
-  const { tasks, createTask, updateTask, deleteTask } = useTasks();
+  const { tasks, isPending, isError, error } = useTasksQuery();
+  const createTaskMutation = useCreateTaskMutation();
+  const updateTaskMutation = useUpdateTaskMutation();
+  const deleteTaskMutation = useDeleteTaskMutation();
+
+  useTasksMigration();
+
   const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
   const creator = useDialog();
   const editor = useDialog();
   const timer = useTimer(currentTask?.duration);
 
-  const handleOpenTimer = (task: Task) => {
-    selectCurrentTask(task);
-    timer.open();
-  };
-
-  const handleTimerOpenChange = (open: boolean) => {
-    timer.toggle();
-    if (!open) resetCurrentTask();
-  };
-
   const handleCreatorSubmit = (formData: TaskFormData) => {
-    createTask(formData);
+    createTaskMutation.mutate(formData);
     creator.close();
   };
 
@@ -44,9 +48,24 @@ export function TaskBoard() {
   };
 
   const handleEditorSubmit = (taskId: string, formData: TaskFormData) => {
-    updateTask(taskId, formData);
+    updateTaskMutation.mutate({ taskId, formData });
     editor.close();
   };
+
+  const handleOpenTimer = (task: Task) => {
+    selectCurrentTask(task);
+    timer.open();
+  };
+
+  const handleTimerOpenChange = (open: boolean) => {
+    timer.toggle();
+    if (!open) resetCurrentTask();
+  };
+
+  if (isPending) return <div>Loading...</div>;
+  if (isError) {
+    toast.error(getErrorMessage(error));
+  }
 
   return (
     <TaskBoardLayout>
@@ -60,7 +79,7 @@ export function TaskBoard() {
               task={task}
               onOpenTimer={() => handleOpenTimer(task)}
               onOpenEditor={() => handleOpenEditor(task)}
-              deleteTask={deleteTask}
+              deleteTask={deleteTaskMutation.mutate}
             />
           </>
         )}
