@@ -7,6 +7,7 @@ import { Task, TaskFormData } from './model/types';
 import { useCreateTaskMutation } from './model/useCreateTaskMutation';
 import { useCurrentTask } from './model/useCurrentTask';
 import { useDeleteTaskMutation } from './model/useDeleteTaskMutation';
+import { useTasksFilter } from './model/useTasksFilter';
 import { useTasksMigration } from './model/useTasksMigration';
 import { useTasksQuery } from './model/useTasksQuery';
 import { useTimer } from './model/useTimer';
@@ -21,13 +22,15 @@ import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
   const { tasks, isPending, isError, error } = useTasksQuery();
+  const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
+  const { filteredTasks, handleChangeFilter } = useTasksFilter(tasks);
+
   const createTaskMutation = useCreateTaskMutation();
   const updateTaskMutation = useUpdateTaskMutation();
   const deleteTaskMutation = useDeleteTaskMutation();
 
   useTasksMigration();
 
-  const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
   const creator = useDialog();
   const editor = useDialog();
   const timer = useTimer(currentTask?.duration);
@@ -70,10 +73,13 @@ export function TaskBoard() {
 
   return (
     <TaskBoardLayout>
-      <Header isEmpty={tasks.length === 0} onOpenCreator={creator.open} />
+      <Header
+        onChangeFilter={handleChangeFilter}
+        onOpenCreator={creator.open}
+      />
 
       <TaskList
-        tasks={tasks}
+        tasks={filteredTasks}
         renderTask={task => (
           <>
             <TaskItem
