@@ -32,6 +32,9 @@ export function useTasksMigration() {
       queryClient.invalidateQueries({
         queryKey: queryKeys.tasks(isAuthenticated),
       });
+      queryClient.removeQueries({
+        queryKey: queryKeys.tasks(false),
+      });
     } catch (error) {
       toast.error(getErrorMessage(error));
     }

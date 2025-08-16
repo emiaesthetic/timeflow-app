@@ -1,11 +1,23 @@
 import { AxiosResponse } from 'axios';
 
-import { axiosClassic } from '@/shared/api';
+import { axiosClassic, axiosWithAuth } from '@/shared/api';
 import { API } from '@/shared/config';
 
-import { AuthResponse, LoginFormData, RegisterFormData } from '../model/types';
+import {
+  AuthResponse,
+  LoginFormData,
+  RegisterFormData,
+  User,
+} from '../model/types';
 
 export const authApi = {
+  getCurrentUser: async () => {
+    const response: AxiosResponse<User> = await axiosWithAuth.get(
+      `${API.users('me')}`,
+    );
+    return response.data;
+  },
+
   register: async (payload: RegisterFormData) => {
     const response: AxiosResponse<AuthResponse> = await axiosClassic.post(
       `${API.auth('signup')}`,

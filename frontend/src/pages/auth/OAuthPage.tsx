@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { useAuth } from '@/features/auth';
+import {
+  authStore,
+  useLoginWithGithubMutation,
+  useLoginWithGoogleMutation,
+} from '@/features/auth';
 
 import { CONFIG } from '@/shared/config';
 
 import { AuthLayout } from './ui/AuthLayout';
 
 function OAuthPage() {
-  const { isAuthenticated, error, loginWithGithub, loginWithGoogle } =
-    useAuth();
+  const isAuthenticated = authStore(state => state.isAuthenticated);
+  const { mutate: loginWithGithub } = useLoginWithGithubMutation();
+  const { mutate: loginWithGoogle } = useLoginWithGoogleMutation();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -25,7 +31,7 @@ function OAuthPage() {
       }
 
       searchParams.delete('code');
-      searchParams.delete('provider');
+      searchParams.delete('state');
       setSearchParams(searchParams);
     }
   }, [searchParams, setSearchParams, loginWithGithub, loginWithGoogle]);
@@ -34,11 +40,7 @@ function OAuthPage() {
     if (isAuthenticated) {
       navigate(CONFIG.ROUTES.HOME, { replace: true });
     }
-
-    if (error) {
-      navigate(CONFIG.ROUTES.LOGIN, { replace: true });
-    }
-  }, [isAuthenticated, error, navigate]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <AuthLayout withCard={false}>

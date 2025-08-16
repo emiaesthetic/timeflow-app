@@ -1,5 +1,4 @@
-const TASKS = 'tasks';
-
 export const queryKeys = {
-  tasks: (isAuthenticated: boolean) => [TASKS, isAuthenticated] as const,
+  tasks: (isAuthenticated: boolean) => ['tasks', isAuthenticated] as const,
+  user: () => ['users', 'me'] as const,
 };

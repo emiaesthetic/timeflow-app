@@ -1,3 +1,6 @@
 export { axiosClassic } from './axiosClassic';
-export { axiosWithAuth, initAxiosWithAuth } from './axiosWithAuth';
+export { axiosWithAuth } from './axiosWithAuth';
+export type { ApiErrorResponse } from './lib/apiErrorResponse';
 export { getErrorMessage } from './lib/getErrorMessage';
+export { commonErrorInterceptor } from './lib/commonErrorInterceptor';
+export { queryClient } from './queryClient';

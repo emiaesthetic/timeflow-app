@@ -1,5 +1,7 @@
-export { AuthButton } from './ui/AuthButton';
 export { LoginForm } from './ui/LoginForm';
 export { RegisterForm } from './ui/RegisterForm';
-export { useAuth } from './model/useAuth';
 export { UserProfile } from './ui/UserProfile';
+export { AuthButton } from './ui/AuthButton';
+export { useLoginWithGithubMutation } from './model/useLoginWithGithubMutation';
+export { useLoginWithGoogleMutation } from './model/useLoginWithGoogleMutation';
+export { authStore } from './model/authStore';

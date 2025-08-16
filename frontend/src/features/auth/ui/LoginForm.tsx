@@ -9,7 +9,7 @@ import { Form } from '@/shared/ui/Form';
 import { Input } from '@/shared/ui/Input';
 
 import { LoginFormData, LoginFormSchema } from '../model/types';
-import { useAuth } from '../model/useAuth';
+import { useLoginMutation } from '../model/useLoginMutation';
 
 import { OAuthProviders } from './OAuthProviders';
 
@@ -18,7 +18,7 @@ export function LoginForm() {
     resolver: zodResolver(LoginFormSchema),
   });
 
-  const { isLoading, login } = useAuth();
+  const { isPending, mutate: login } = useLoginMutation();
 
   return (
     <Card className="flex-1 bg-transparent">
@@ -54,7 +54,7 @@ export function LoginForm() {
                       type="email"
                       id="email"
                       {...field}
-                      disabled={isLoading}
+                      disabled={isPending}
                     />
                     <Form.Message />
                   </Form.Item>
@@ -72,7 +72,7 @@ export function LoginForm() {
                       type="password"
                       id="password"
                       {...field}
-                      disabled={isLoading}
+                      disabled={isPending}
                     />
                     <Form.Message />
                   </Form.Item>
@@ -80,7 +80,7 @@ export function LoginForm() {
               />
             </div>
 
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={isPending}>
               Login
             </Button>
           </form>
@@ -88,7 +88,7 @@ export function LoginForm() {
       </Card.Content>
 
       <Card.Footer>
-        <OAuthProviders isLoading={isLoading} />
+        <OAuthProviders isLoading={isPending} />
       </Card.Footer>
     </Card>
   );

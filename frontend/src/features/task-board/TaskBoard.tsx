@@ -63,6 +63,7 @@ export function TaskBoard() {
   };
 
   if (isPending) return <div>Loading...</div>;
+
   if (isError) {
     toast.error(getErrorMessage(error));
   }

@@ -9,7 +9,7 @@ import { Form } from '@/shared/ui/Form';
 import { Input } from '@/shared/ui/Input';
 
 import { RegisterFormData, RegisterFormSchema } from '../model/types';
-import { useAuth } from '../model/useAuth';
+import { useRegisterMutation } from '../model/useRegisterMutation';
 
 import { OAuthProviders } from './OAuthProviders';
 
@@ -18,7 +18,7 @@ export function RegisterForm() {
     resolver: zodResolver(RegisterFormSchema),
   });
 
-  const { isLoading, register } = useAuth();
+  const { isPending, mutate: register } = useRegisterMutation();
 
   return (
     <Card className="flex-1 bg-transparent">
@@ -51,7 +51,7 @@ export function RegisterForm() {
                       type="email"
                       id="email"
                       {...field}
-                      disabled={isLoading}
+                      disabled={isPending}
                     />
                     <Form.Message />
                   </Form.Item>
@@ -69,7 +69,7 @@ export function RegisterForm() {
                       type="name"
                       id="name"
                       {...field}
-                      disabled={isLoading}
+                      disabled={isPending}
                     />
                     <Form.Message />
                   </Form.Item>
@@ -90,7 +90,7 @@ export function RegisterForm() {
               />
             </div>
 
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={isPending}>
               Create account
             </Button>
           </form>
@@ -98,7 +98,7 @@ export function RegisterForm() {
       </Card.Content>
 
       <Card.Footer>
-        <OAuthProviders isLoading={isLoading} />
+        <OAuthProviders isLoading={isPending} />
       </Card.Footer>
     </Card>
   );

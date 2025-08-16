@@ -39,7 +39,6 @@ export function useCreateTaskMutation() {
 
       return { prevTasks, optimisticId };
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
     onError: (error, _, context) => {
       if (context?.prevTasks) {
         queryClient.setQueryData(queryKey, context.prevTasks);
@@ -47,6 +46,7 @@ export function useCreateTaskMutation() {
 
       toast.error(getErrorMessage(error));
     },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
   return mutation;

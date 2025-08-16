@@ -2,10 +2,12 @@ import { Button } from '@/shared/ui/Button';
 import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 import { Link } from '@/shared/ui/Link';
 
-import { useAuth } from '../model/useAuth';
+import { useLogoutMutation } from '../model/useLogoutMutation';
+import { useUserQuery } from '../model/useUserQuery';
 
 export function UserProfile() {
-  const { user, logout } = useAuth();
+  const { user } = useUserQuery();
+  const { isPending, mutate: logout } = useLogoutMutation();
 
   if (!user) return null;
 
@@ -49,7 +51,8 @@ export function UserProfile() {
               className="bg-transparent hover:bg-transparent"
               variant="ghost"
               size="sm"
-              onClick={logout}
+              onClick={() => logout()}
+              disabled={isPending}
             >
               Logout
             </Button>

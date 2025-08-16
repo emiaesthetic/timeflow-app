@@ -27,7 +27,6 @@ export function useDeleteTaskMutation() {
 
       return { prevTasks };
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
     onError: (error, _, context) => {
       if (context?.prevTasks) {
         queryClient.setQueryData(queryKey, context.prevTasks);
@@ -35,6 +34,7 @@ export function useDeleteTaskMutation() {
 
       toast.error(getErrorMessage(error));
     },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
   return mutation;

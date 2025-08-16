@@ -1,4 +1,4 @@
-import { AuthButton, UserProfile, useAuth } from '@/features/auth';
+import { AuthButton, UserProfile, authStore } from '@/features/auth';
 
 import { CONFIG } from '@/shared/config';
 import { Layout } from '@/shared/ui/Layout';
@@ -6,7 +6,7 @@ import { Link } from '@/shared/ui/Link';
 import { LogoIcon } from '@/shared/ui/icons/Logo';
 
 function Header() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = authStore();
 
   return (
     <header className="py-6">
