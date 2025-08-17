@@ -18,7 +18,7 @@ model User {
   email        String?       @unique
   name         String
   password     String        @default("")
-  picture      String        @default("/uploads/no-user-image.png")
+  picture      String        @default("/uploads/no-user-image.svg")
   tasks        Task[]
   RefreshToken RefreshToken?
 

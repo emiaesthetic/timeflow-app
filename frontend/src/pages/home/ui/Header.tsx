@@ -14,10 +14,11 @@ function Header() {
         <div className="border-muted flex items-center justify-between gap-x-8">
           <Link
             variant="ghost"
-            className="p-0 hover:bg-transparent"
+            size="icon"
+            className="hover:bg-primary/10"
             to={CONFIG.ROUTES.HOME}
           >
-            <LogoIcon className="size-8" />
+            <LogoIcon className="size-9" />
           </Link>
           {isAuthenticated ? <UserProfile /> : <AuthButton />}
         </div>

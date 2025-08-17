@@ -14,7 +14,11 @@ export function UserProfile() {
   return (
     <DropdownMenu>
       <DropdownMenu.Trigger asChild>
-        <Button className="size-10 rounded-md p-0">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-primary/10 size-10 rounded-md p-0"
+        >
           <img
             className="h-full w-full rounded-md object-cover"
             src={user.picture}
