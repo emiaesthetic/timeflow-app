@@ -28,6 +28,9 @@ export class TasksRepository {
   }
 
   async getUserTasks(userId: string): Promise<Task[]> {
-    return this.prisma.task.findMany({ where: { userId } });
+    return this.prisma.task.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'asc' },
+    });
   }
 }

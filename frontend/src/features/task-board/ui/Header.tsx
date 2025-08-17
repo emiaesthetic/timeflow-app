@@ -15,7 +15,10 @@ export function Header({
   return (
     <header className="mb-8 flex items-start justify-between gap-x-4">
       <h2 className="text-3xl font-bold">Today's tasks</h2>
-      <Select onValueChange={value => onChangeFilter(value as FilterState)}>
+      <Select
+        defaultValue="ALL"
+        onValueChange={value => onChangeFilter(value as FilterState)}
+      >
         <Select.Trigger
           className="bg-primary text-primary-foreground data-[placeholder]:text-primary-foreground [&_svg:not([class*='text-'])]:text-primary-foreground hover:bg-primary/90 focus-visible:bg-primary/90 ml-auto size-10 border-0 px-2 py-2 shadow-xs sm:size-auto sm:px-4 [&>svg:last-child]:hidden"
           aria-label="Filter tasks"
@@ -26,11 +29,11 @@ export function Header({
 
         <Select.Content>
           <Select.Item value="ALL">All</Select.Item>
-          <Select.Item value="IN_PROCESS">Process</Select.Item>
+          <Select.Item value="PROCESS">Process</Select.Item>
           <Select.Item value="DONE">Done</Select.Item>
           <Select.Item value="LOW">Low</Select.Item>
           <Select.Item value="MEDIUM">Medium</Select.Item>
-          <Select.Item value="HIGH">Hight</Select.Item>
+          <Select.Item value="HIGH">High</Select.Item>
         </Select.Content>
       </Select>
       <Button

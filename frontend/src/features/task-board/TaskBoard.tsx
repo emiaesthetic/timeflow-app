@@ -2,6 +2,7 @@ import { toast } from 'sonner';
 
 import { getErrorMessage } from '@/shared/api';
 
+import { transformTaskToFormData } from './lib/transformTask';
 import { useDialog } from './lib/useDialog';
 import { Task, TaskFormData } from './model/types';
 import { useCreateTaskMutation } from './model/useCreateTaskMutation';
@@ -65,6 +66,17 @@ export function TaskBoard() {
     if (!open) resetCurrentTask();
   };
 
+  const handleUpdateStatus = (task: Task) => {
+    const formData = transformTaskToFormData(task);
+    updateTaskMutation.mutate({
+      taskId: task.id,
+      formData: {
+        ...formData,
+        status: formData.status === 'PROCESS' ? 'DONE' : 'PROCESS',
+      },
+    });
+  };
+
   if (isPending) return <div>Loading...</div>;
 
   if (isError) {
@@ -84,6 +96,7 @@ export function TaskBoard() {
           <>
             <TaskItem
               task={task}
+              onUpdateStatus={() => handleUpdateStatus(task)}
               onOpenTimer={() => handleOpenTimer(task)}
               onOpenEditor={() => handleOpenEditor(task)}
               deleteTask={deleteTaskMutation.mutate}

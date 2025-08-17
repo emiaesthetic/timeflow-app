@@ -15,11 +15,13 @@ import { Task } from '../model/types';
 
 export function TaskItem({
   task,
+  onUpdateStatus,
   onOpenTimer,
   onOpenEditor,
   deleteTask,
 }: {
   task: Task;
+  onUpdateStatus: () => void;
   onOpenTimer: () => void;
   onOpenEditor: () => void;
   deleteTask: (id: string) => void;
@@ -40,10 +42,20 @@ export function TaskItem({
         aria-hidden="true"
       />
 
-      <div className="grid h-full w-full grid-cols-[1fr_auto] grid-rows-1 place-items-center gap-6 p-6">
+      <div
+        className={cn(
+          'grid h-full w-full grid-cols-[1fr_auto] grid-rows-1 place-items-center gap-6 p-6',
+          task.status === 'DONE' && 'text-muted-foreground',
+        )}
+      >
         <div className="row-span-2 flex h-full w-full min-w-0 grid-cols-[2fr_1fr] flex-col justify-between gap-x-8">
           <div className="mb-4">
-            <h3 className="mb-2 overflow-x-hidden text-2xl font-semibold text-ellipsis">
+            <h3
+              className={cn(
+                'mb-2 overflow-x-hidden text-2xl font-semibold text-ellipsis',
+                task.status === 'DONE' && 'line-through',
+              )}
+            >
               {task.title}
             </h3>
             <p className="overflow-x-hidden font-normal text-ellipsis">
@@ -67,7 +79,7 @@ export function TaskItem({
           </div>
         </div>
 
-        <div className="relative self-start bg-inherit">
+        <div className="relative self-start">
           <DropdownMenu>
             <DropdownMenu.Trigger asChild>
               <Button size="icon" aria-label="Open menu">
@@ -76,28 +88,32 @@ export function TaskItem({
             </DropdownMenu.Trigger>
             <DropdownMenu.Content className="w-40" align="end">
               <DropdownMenu.Group>
-                <DropdownMenu.Item>
-                  <Button
-                    className="w-full justify-start bg-transparent hover:bg-transparent"
-                    variant="ghost"
-                    onClick={onOpenTimer}
-                  >
-                    <CirclePlayIcon />
-                    Start
-                  </Button>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item>
-                  <Button
-                    className="w-full justify-start bg-transparent hover:bg-transparent"
-                    variant="ghost"
-                    size="sm"
-                    onClick={onOpenEditor}
-                  >
-                    <SquarePenIcon />
-                    Edit
-                  </Button>
-                </DropdownMenu.Item>
-                <DropdownMenu.Separator />
+                {task.status === 'PROCESS' && (
+                  <>
+                    <DropdownMenu.Item>
+                      <Button
+                        className="w-full justify-start bg-transparent hover:bg-transparent"
+                        variant="ghost"
+                        onClick={onOpenTimer}
+                      >
+                        <CirclePlayIcon />
+                        Start
+                      </Button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item>
+                      <Button
+                        className="w-full justify-start bg-transparent hover:bg-transparent"
+                        variant="ghost"
+                        size="sm"
+                        onClick={onOpenEditor}
+                      >
+                        <SquarePenIcon />
+                        Edit
+                      </Button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                  </>
+                )}
                 <DropdownMenu.Item>
                   <Button
                     className="w-full justify-start bg-transparent hover:bg-transparent"
@@ -118,6 +134,8 @@ export function TaskItem({
           className="border-primary [grid-column:2] [grid-row:2] border-2"
           name="complete"
           aria-label="Mark task as complete"
+          onClick={onUpdateStatus}
+          checked={task.status === 'DONE'}
         />
       </div>
     </article>
