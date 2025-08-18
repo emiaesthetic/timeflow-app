@@ -5,9 +5,20 @@ import { Link } from '@/shared/ui/Link';
 import { useLogoutMutation } from '../model/useLogoutMutation';
 import { useUserQuery } from '../model/useUserQuery';
 
+function UserProfileSkeleton() {
+  return (
+    <div
+      className="bg-primary/30 size-10 animate-pulse rounded-md p-0"
+      aria-label="Loading user profile"
+    ></div>
+  );
+}
+
 export function UserProfile() {
-  const { user } = useUserQuery();
-  const { isPending, mutate: logout } = useLogoutMutation();
+  const { user, isPending: isUserPending } = useUserQuery();
+  const { isPending: isLogoutPending, mutate: logout } = useLogoutMutation();
+
+  if (isUserPending) return <UserProfileSkeleton />;
 
   if (!user) return null;
 
@@ -56,7 +67,7 @@ export function UserProfile() {
               variant="ghost"
               size="sm"
               onClick={() => logout()}
-              disabled={isPending}
+              disabled={isLogoutPending}
             >
               Logout
             </Button>

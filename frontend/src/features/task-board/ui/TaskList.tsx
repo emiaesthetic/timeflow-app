@@ -2,7 +2,23 @@ import { Task } from '../model/types';
 
 import emptyImg from './img/empty.svg';
 
-export function TaskList({
+function TaskListSkeleton({
+  taskItemSkeleton,
+}: {
+  taskItemSkeleton: React.ReactNode;
+}) {
+  return (
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-busy="true">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <li className="h-full" key={index}>
+          {taskItemSkeleton}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function TaskList({
   tasks,
   renderTask,
 }: {
@@ -31,3 +47,5 @@ export function TaskList({
     </>
   );
 }
+
+export { TaskList, TaskListSkeleton };

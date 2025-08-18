@@ -17,8 +17,8 @@ import { Header } from './ui/Header';
 import { TaskBoardLayout } from './ui/TaskBoardLayout';
 import { TaskCreator } from './ui/TaskCreator';
 import { TaskEditor } from './ui/TaskEditor';
-import { TaskItem } from './ui/TaskItem';
-import { TaskList } from './ui/TaskList';
+import { TaskItem, TaskItemSkeleton } from './ui/TaskItem';
+import { TaskList, TaskListSkeleton } from './ui/TaskList';
 import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
@@ -77,8 +77,6 @@ export function TaskBoard() {
     });
   };
 
-  if (isPending) return <div>Loading...</div>;
-
   if (isError) {
     toast.error(getErrorMessage(error));
   }
@@ -90,20 +88,24 @@ export function TaskBoard() {
         onOpenCreator={creator.open}
       />
 
-      <TaskList
-        tasks={filteredTasks}
-        renderTask={task => (
-          <>
-            <TaskItem
-              task={task}
-              onUpdateStatus={() => handleUpdateStatus(task)}
-              onOpenTimer={() => handleOpenTimer(task)}
-              onOpenEditor={() => handleOpenEditor(task)}
-              deleteTask={deleteTaskMutation.mutate}
-            />
-          </>
-        )}
-      />
+      {isPending ? (
+        <TaskListSkeleton taskItemSkeleton={<TaskItemSkeleton />} />
+      ) : (
+        <TaskList
+          tasks={filteredTasks}
+          renderTask={task => (
+            <>
+              <TaskItem
+                task={task}
+                onUpdateStatus={() => handleUpdateStatus(task)}
+                onOpenTimer={() => handleOpenTimer(task)}
+                onOpenEditor={() => handleOpenEditor(task)}
+                deleteTask={deleteTaskMutation.mutate}
+              />
+            </>
+          )}
+        />
+      )}
 
       <TaskCreator
         isOpen={creator.isOpen}
