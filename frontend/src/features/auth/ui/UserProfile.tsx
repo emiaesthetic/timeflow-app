@@ -1,3 +1,4 @@
+import { useSkeleton } from '@/shared/lib/useSkeleton';
 import { Button } from '@/shared/ui/Button';
 import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 import { Link } from '@/shared/ui/Link';
@@ -17,8 +18,9 @@ function UserProfileSkeleton() {
 export function UserProfile() {
   const { user, isPending: isUserPending } = useUserQuery();
   const { isPending: isLogoutPending, mutate: logout } = useLogoutMutation();
+  const { isShowSkeleton } = useSkeleton({ isPending: isUserPending });
 
-  if (isUserPending) return <UserProfileSkeleton />;
+  if (isShowSkeleton) return <UserProfileSkeleton />;
 
   if (!user) return null;
 

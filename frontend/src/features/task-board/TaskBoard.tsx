@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 
 import { getErrorMessage } from '@/shared/api';
+import { useSkeleton } from '@/shared/lib/useSkeleton';
 
 import { transformTaskToFormData } from './lib/transformTask';
 import { useDialog } from './lib/useDialog';
@@ -35,6 +36,8 @@ export function TaskBoard() {
   const creator = useDialog();
   const editor = useDialog();
   const timer = useTimer(currentTask?.duration);
+
+  const { isShowSkeleton } = useSkeleton({ isPending });
 
   const handleCreatorSubmit = (formData: TaskFormData) => {
     createTaskMutation.mutate(formData);
@@ -88,7 +91,7 @@ export function TaskBoard() {
         onOpenCreator={creator.open}
       />
 
-      {isPending ? (
+      {isShowSkeleton ? (
         <TaskListSkeleton taskItemSkeleton={<TaskItemSkeleton />} />
       ) : (
         <TaskList
