@@ -1,48 +1,52 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useNow } from '../lib/useNow';
 
-export function useTimer(timestamp: number = 0) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [startAt, setStartAt] = useState<number | undefined>();
-  const [accumulatedTime, setAccumulatedTime] = useState(0);
-  const now = useNow({ updateInterval: 1000, isEnabled: !!startAt });
+export type TimerStatus = 'idle' | 'running' | 'paused';
 
-  const elapsedTime = accumulatedTime + now - (startAt ?? now);
-  const remainingTime = Math.max(0, timestamp - elapsedTime);
+type TimerOptions = {
+  initialAccumulatedTime?: number;
+  intervalMs?: number;
+};
 
-  const toggleRunning = () => {
-    if (startAt) {
-      setAccumulatedTime(prev => prev + now - startAt);
-      setStartAt(undefined);
-    } else {
-      setStartAt(Date.now());
+export function useTimer(options?: TimerOptions) {
+  const { initialAccumulatedTime = 0, intervalMs = 1000 } = options || {};
+
+  const [status, setStatus] = useState<TimerStatus>('idle');
+  const [startAt, setStartAt] = useState<number | null>(null);
+  const [accumulatedTime, setAccumulatedTime] = useState(
+    initialAccumulatedTime,
+  );
+
+  const currentTime = useNow({ isEnabled: status === 'running', intervalMs });
+
+  const elapsedTime = useMemo(() => {
+    if (status === 'running' && startAt !== null) {
+      return accumulatedTime + currentTime - startAt;
     }
+    return accumulatedTime;
+  }, [status, startAt, accumulatedTime, currentTime]);
+
+  const start = () => {
+    if (status === 'running') return;
+
+    setStatus('running');
+    setStartAt(Date.now());
   };
 
-  const open = () => {
-    setIsOpen(true);
-    toggleRunning();
+  const pause = () => {
+    if (status === 'paused') return;
+
+    setStatus('paused');
+    setStartAt(null);
+    setAccumulatedTime(prev => prev + (Date.now() - (startAt || Date.now())));
   };
 
-  const close = () => {
-    setIsOpen(false);
-    setStartAt(undefined);
-    setAccumulatedTime(0);
+  const reset = () => {
+    setStatus('idle');
+    setStartAt(null);
+    setAccumulatedTime(initialAccumulatedTime);
   };
 
-  const toggle = () => {
-    if (!isOpen) open();
-    if (isOpen) close();
-  };
-
-  return {
-    isOpen,
-    isRunning: !!startAt,
-    remainingTime,
-    open,
-    close,
-    toggle,
-    toggleRunning,
-  };
+  return { status, elapsedTime, start, pause, stop, reset };
 }

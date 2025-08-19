@@ -24,49 +24,53 @@ import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
   const { tasks, isPending, isError, error } = useTasksQuery();
-  const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
   const { filteredTasks, handleChangeFilter } = useTasksFilter(tasks);
+  const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
 
   const createTaskMutation = useCreateTaskMutation();
   const updateTaskMutation = useUpdateTaskMutation();
   const deleteTaskMutation = useDeleteTaskMutation();
-
   useTasksMigration();
 
-  const creator = useDialog();
-  const editor = useDialog();
-  const timer = useTimer(currentTask?.duration);
+  const creatorDialog = useDialog();
+  const editorDialog = useDialog();
+  const timerDialog = useDialog();
+  const timerLogic = useTimer();
 
   const { isShowSkeleton } = useSkeleton({ isPending });
 
   const handleCreatorSubmit = (formData: TaskFormData) => {
     createTaskMutation.mutate(formData);
-    creator.close();
+    creatorDialog.close();
   };
 
   const handleOpenEditor = (task: Task) => {
     selectCurrentTask(task);
-    editor.open();
+    editorDialog.open();
   };
 
   const handleEditorOpenChange = (open: boolean) => {
-    editor.toggle();
+    editorDialog.toggle();
     if (!open) resetCurrentTask();
   };
 
   const handleEditorSubmit = (taskId: string, formData: TaskFormData) => {
     updateTaskMutation.mutate({ taskId, formData });
-    editor.close();
+    editorDialog.close();
   };
 
   const handleOpenTimer = (task: Task) => {
     selectCurrentTask(task);
-    timer.open();
+    timerDialog.open();
+    timerLogic.start();
   };
 
   const handleTimerOpenChange = (open: boolean) => {
-    timer.toggle();
-    if (!open) resetCurrentTask();
+    timerDialog.toggle();
+    if (!open) {
+      resetCurrentTask();
+      timerLogic.reset();
+    }
   };
 
   const handleUpdateStatus = (task: Task) => {
@@ -88,7 +92,7 @@ export function TaskBoard() {
     <TaskBoardLayout>
       <Header
         onChangeFilter={handleChangeFilter}
-        onOpenCreator={creator.open}
+        onOpenCreator={creatorDialog.open}
       />
 
       {isShowSkeleton ? (
@@ -111,26 +115,26 @@ export function TaskBoard() {
       )}
 
       <TaskCreator
-        isOpen={creator.isOpen}
-        toggleOpen={creator.toggle}
+        isOpen={creatorDialog.isOpen}
+        toggleOpen={creatorDialog.toggle}
         onSubmit={handleCreatorSubmit}
       />
 
       <TaskEditor
         task={currentTask}
-        isOpen={editor.isOpen}
+        isOpen={editorDialog.isOpen}
         onSubmit={handleEditorSubmit}
         onOpenChange={handleEditorOpenChange}
       />
 
       <TaskTimer
         task={currentTask}
-        isOpen={timer.isOpen}
-        isRunning={timer.isRunning}
-        remainingTime={timer.remainingTime}
-        toggleRunning={timer.toggleRunning}
+        isOpen={timerDialog.isOpen}
+        status={timerLogic.status}
+        elapsedTime={timerLogic.elapsedTime}
+        onStartTimer={timerLogic.start}
+        onPauseTimer={timerLogic.pause}
         onOpenChange={handleTimerOpenChange}
-        onStopTimer={timer.close}
       />
     </TaskBoardLayout>
   );

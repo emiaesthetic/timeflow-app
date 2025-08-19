@@ -17,7 +17,7 @@ export function TaskEditor({
   onOpenChange: (open: boolean) => void;
   onSubmit: (taskId: string, formData: TaskFormData) => void;
 }) {
-  if (!task) return;
+  if (!task) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

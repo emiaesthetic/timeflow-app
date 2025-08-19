@@ -1,11 +1,11 @@
 import { useLayoutEffect, useState } from 'react';
 
 export function useNow({
-  updateInterval,
   isEnabled,
+  intervalMs = 1000,
 }: {
-  updateInterval: number;
   isEnabled?: boolean;
+  intervalMs?: number;
 }) {
   const [now, setNow] = useState(Date.now());
 
@@ -16,10 +16,10 @@ export function useNow({
 
     const interval = setInterval(() => {
       setNow(Date.now());
-    }, updateInterval);
+    }, intervalMs);
 
     return () => clearInterval(interval);
-  }, [updateInterval, isEnabled]);
+  }, [intervalMs, isEnabled]);
 
   return now;
 }

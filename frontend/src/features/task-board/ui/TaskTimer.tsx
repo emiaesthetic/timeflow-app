@@ -4,27 +4,28 @@ import { MorphingBorder } from '@/shared/ui/MorphingBorder';
 
 import { formatTimer } from '../lib/formatTimer';
 import { Task } from '../model/types';
+import { TimerStatus } from '../model/useTimer';
 
 export function TaskTimer({
   task,
   isOpen,
-  isRunning,
-  remainingTime,
-  toggleRunning,
+  status,
+  elapsedTime,
+  onStartTimer,
+  onPauseTimer,
   onOpenChange,
-  onStopTimer,
 }: {
   task: Task | null;
   isOpen: boolean;
-  isRunning: boolean;
-  remainingTime: number;
-  toggleRunning: () => void;
+  status: TimerStatus;
+  elapsedTime: number;
+  onStartTimer: () => void;
+  onPauseTimer: () => void;
   onOpenChange: (open: boolean) => void;
-  onStopTimer: () => void;
 }) {
-  if (!task) return null;
+  const { hours, minutes, seconds } = formatTimer(elapsedTime);
 
-  const { hours, minutes, seconds } = formatTimer(remainingTime);
+  if (!task) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -60,12 +61,14 @@ export function TaskTimer({
         </MorphingBorder>
 
         <Dialog.Footer className="justify-center">
-          {isRunning ? (
-            <Button onClick={toggleRunning}>Pause</Button>
+          {status === 'running' ? (
+            <Button onClick={onPauseTimer}>Pause</Button>
           ) : (
             <div className="grid grid-cols-2 gap-4">
-              <Button onClick={toggleRunning}>Continue</Button>
-              <Button onClick={onStopTimer}>Stop</Button>
+              <Button onClick={onStartTimer}>
+                {elapsedTime ? 'Continue' : 'Start'}
+              </Button>
+              <Button onClick={() => onOpenChange(false)}>Stop</Button>
             </div>
           )}
         </Dialog.Footer>
