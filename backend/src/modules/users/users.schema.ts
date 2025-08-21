@@ -3,7 +3,6 @@ import { z } from 'zod';
 export const UpdateUserSchema = z.object({
   email: z.string().optional(),
   name: z.string().optional(),
-  password: z.string().optional(),
   picture: z.string().optional(),
 });
 

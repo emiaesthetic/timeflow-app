@@ -1,12 +1,15 @@
 import fastifyCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
+import fastifyMultipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import Fastify from 'fastify';
 import {
   ZodTypeProvider,
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod';
+import * as path from 'path';
 
 import { CONFIG } from './common/config';
 import { errorHandler } from './common/errors/errorHandler';
@@ -28,19 +31,34 @@ export async function buildApp() {
   await app.register(cors, {
     origin: 'http://localhost:5173',
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 
   await app.register(fastifyCookie);
+
   await app.register(fastifyJwt, {
     secret: CONFIG.JWT_SECRET,
     sign: { expiresIn: '15m' },
   });
+
   await app.register(fastifyJwt, {
     secret: CONFIG.JWT_REFRESH_SECRET,
     cookie: { cookieName: 'refreshToken', signed: false },
     namespace: 'refresh',
     sign: { expiresIn: '7d' },
+  });
+
+  await app.register(fastifyMultipart, {
+    limits: {
+      files: 1,
+      fileSize: 1024 * 1024 * 5,
+      parts: 1000,
+    },
+  });
+
+  await app.register(fastifyStatic, {
+    root: path.join(__dirname, '..', 'public'),
+    prefix: '/',
   });
 
   await app.register(authPlugin);

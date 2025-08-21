@@ -13,6 +13,15 @@ export const errorHandler = (
 
   if (error.code) {
     switch (error.code) {
+      case 'FST_REQ_FILE_TOO_LARGE':
+        apiError = ApiError.badRequest(
+          'File size exceeds the allowed limit (5MB).',
+          {
+            originalCode: error.code,
+            originalMessage: error.message,
+          },
+        );
+        break;
       case 'FST_JWT_BAD_REQUEST':
       case 'FST_JWT_BAD_COOKIE_REQUEST':
         apiError = ApiError.badRequest(

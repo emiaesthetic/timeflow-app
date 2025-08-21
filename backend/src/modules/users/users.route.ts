@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import z from 'zod';
 
 import { UsersController } from './users.controller';
-import { UpdateUserSchema, UserResponseSchema } from './users.schema';
+import { UserResponseSchema } from './users.schema';
 
 export async function usersRoutes(fastify: FastifyInstance) {
   const controller = new UsersController(fastify.prisma);
@@ -21,11 +21,11 @@ export async function usersRoutes(fastify: FastifyInstance) {
     controller.getCurrentUserHandler.bind(controller),
   );
 
-  fastify.put(
+  fastify.patch(
     '/me',
     {
       schema: {
-        body: UpdateUserSchema,
+        consumes: ['multipart/form-data'],
         response: {
           200: UserResponseSchema,
         },
