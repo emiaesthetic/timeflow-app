@@ -23,16 +23,31 @@ export const AUTH = {
   REDIRECT_URI: 'http://localhost:5173/auth/oauth',
 
   GITHUB: {
-    CLIENT_ID: getEnv('GITHUB_CLIENT_ID'),
-    CLIENT_SECRET: getEnv('GITHUB_CLIENT_SECRET'),
+    API_URL: 'https://api.github.com',
     TOKEN_URL: 'https://github.com/login/oauth/access_token',
-    USER_API: 'https://api.github.com/user',
+
+    getTokenExchangeParams(code: string) {
+      return {
+        client_id: getEnv('GITHUB_CLIENT_ID'),
+        client_secret: getEnv('GITHUB_CLIENT_SECRET'),
+        redirect_uri: AUTH.REDIRECT_URI,
+        code,
+      };
+    },
   },
 
   GOOGLE: {
-    CLIENT_ID: getEnv('GOOGLE_CLIENT_ID'),
-    CLIENT_SECRET: getEnv('GOOGLE_CLIENT_SECRET'),
+    API_URL: 'https://www.googleapis.com/oauth2/v1',
     TOKEN_URL: 'https://accounts.google.com/o/oauth2/token',
-    USER_API: 'https://www.googleapis.com/oauth2/v1/userinfo',
+
+    getTokenExchangeParams(code: string) {
+      return {
+        client_id: getEnv('GOOGLE_CLIENT_ID'),
+        client_secret: getEnv('GOOGLE_CLIENT_SECRET'),
+        redirect_uri: AUTH.REDIRECT_URI,
+        grant_type: 'authorization_code',
+        code,
+      };
+    },
   },
 };

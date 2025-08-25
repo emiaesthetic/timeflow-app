@@ -12,7 +12,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  provider          String @default("timeflow")
+  provider          Provider @default(EMAIL_PASSWORD)
   providerAccountId String
 
   email        String?       @unique
@@ -68,4 +68,10 @@ enum Priority {
 enum Status {
   PROCESS
   DONE
+}
+
+enum Provider {
+  EMAIL_PASSWORD
+  GITHUB
+  GOOGLE
 }

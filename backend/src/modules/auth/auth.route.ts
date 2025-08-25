@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import {
   AuthResponseSchema,
   LoginSchema,
-  OAuthSchema,
+  OAuthCodeSchema,
   RegisterSchema,
 } from './auth.schema';
 
@@ -21,7 +21,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    controller.registerHandler.bind(controller),
+    controller.registerWithEmailPasswordHandler.bind(controller),
   );
 
   fastify.post(
@@ -34,14 +34,14 @@ export async function authRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    controller.loginHandler.bind(controller),
+    controller.loginWithEmailPasswordHandler.bind(controller),
   );
 
   fastify.post(
     '/github',
     {
       schema: {
-        body: OAuthSchema,
+        body: OAuthCodeSchema,
         response: {
           200: AuthResponseSchema,
         },
@@ -54,7 +54,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     '/google',
     {
       schema: {
-        body: OAuthSchema,
+        body: OAuthCodeSchema,
         response: {
           200: AuthResponseSchema,
         },

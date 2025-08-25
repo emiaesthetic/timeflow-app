@@ -1,44 +1,71 @@
+import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
-import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { AUTH } from '@/common/config';
 import { ApiError } from '@/common/errors/apiError';
 
 import { UserService } from '../users/users.service';
 
-import { AuthRepository } from './auth.repository';
-import {
-  GithubUserResponse,
-  GoogleUserResponse,
-  LoginPayload,
-  RefreshTokenPayload,
-  RegisterPayload,
-  TokenResponse,
-} from './auth.schema';
+import { LoginPayload, OAuthUserProfile, RegisterPayload } from './auth.schema';
+import { GithubOAuthService } from './github.service';
+import { GoogleOAuthService } from './google.service';
 
 export class AuthService {
-  private authRepository: AuthRepository;
-  private userService: UserService;
+  private readonly userService: UserService;
+  private readonly githubOAuthService: GithubOAuthService;
+  private readonly googleOAuthService: GoogleOAuthService;
 
-  constructor(authRepository: AuthRepository, userService: UserService) {
-    this.authRepository = authRepository;
+  constructor({
+    userService,
+    githubOAuthService,
+    googleOAuthService,
+  }: {
+    userService: UserService;
+    githubOAuthService: GithubOAuthService;
+    googleOAuthService: GoogleOAuthService;
+  }) {
     this.userService = userService;
+    this.githubOAuthService = githubOAuthService;
+    this.googleOAuthService = googleOAuthService;
   }
 
-  async register(payload: RegisterPayload) {
+  async registerWithEmailPassword(payload: RegisterPayload) {
+    const existingUser = await this.userService.getUserByEmail(payload.email);
+
+    if (existingUser) {
+      switch (existingUser.provider) {
+        case 'GITHUB':
+          throw ApiError.badRequest(
+            'User with this email already registered via GitHub.',
+          );
+        case 'GOOGLE':
+          throw ApiError.badRequest(
+            'User with this email already registered via Google.',
+          );
+        default:
+          throw ApiError.conflict('User with this email already exists.');
+      }
+    }
+
     const newUser = await this.userService.createUser({
       ...payload,
+      provider: 'EMAIL_PASSWORD',
       password: await hash(payload.password),
     });
 
     return newUser;
   }
 
-  async login(payload: LoginPayload) {
+  async loginWithEmailPassword(payload: LoginPayload) {
     const user = await this.userService.getUserByEmail(payload.email);
 
     if (!user) {
       throw ApiError.invalidCredentials();
+    }
+
+    if (user.provider === 'GITHUB' || user.provider === 'GOOGLE') {
+      throw ApiError.badRequest(
+        `This email address is registered via ${user.provider}. Please use the "Login with ${user.provider}" button.`,
+      );
     }
 
     const isPasswordValid = await verify(user.password, payload.password);
@@ -50,147 +77,50 @@ export class AuthService {
     return user;
   }
 
-  async loginWithGithub(code: string) {
-    try {
-      const tokenResponse: AxiosResponse<TokenResponse> = await axios.post(
-        AUTH.GITHUB.TOKEN_URL,
-        null,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-          params: {
-            client_id: AUTH.GITHUB.CLIENT_ID,
-            client_secret: AUTH.GITHUB.CLIENT_SECRET,
-            redirect_uri: AUTH.REDIRECT_URI,
-            code,
-          },
-        },
-      );
+  async loginWithOAuth(provider: User['provider'], code: string) {
+    let unifiedProfile: OAuthUserProfile;
 
-      const token = tokenResponse.data.access_token;
+    switch (provider) {
+      case 'GITHUB':
+        unifiedProfile = await this.githubOAuthService.authenticate(code);
+        break;
+      case 'GOOGLE':
+        unifiedProfile = await this.googleOAuthService.authenticate(code);
+        break;
+      default:
+        throw ApiError.badRequest('Unsupported OAuth provider');
+    }
 
-      const userResponse: AxiosResponse<GithubUserResponse> = await axios.get(
-        AUTH.GITHUB.USER_API,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+    return this.findOrCreateOAuthUser(unifiedProfile);
+  }
 
-      const userProfile = userResponse.data;
+  async findOrCreateOAuthUser(unifiedProfile: OAuthUserProfile): Promise<User> {
+    let user = await this.userService.getUserByProvider({
+      provider: unifiedProfile.provider,
+      providerAccountId: unifiedProfile.providerAccountId,
+    });
 
-      let user = await this.userService.getUserByProvider({
-        provider: 'github',
-        providerAccountId: userProfile.id.toString(),
-      });
+    if (user) return user;
 
-      if (!user) {
-        user = await this.userService.createUser({
-          provider: 'github',
-          providerAccountId: userProfile.id.toString(),
-          email: userProfile.email,
-          name: userProfile.login,
-          picture: userProfile.avatar_url,
-        });
+    if (unifiedProfile.email) {
+      user = await this.userService.getUserByEmail(unifiedProfile.email);
+
+      if (user) {
+        if (
+          user.picture === '/uploads/no-user-image.svg' &&
+          unifiedProfile.picture
+        ) {
+          user = await this.userService.updateUser(user.id, {
+            picture: unifiedProfile.picture,
+            provider: unifiedProfile.provider,
+          });
+        }
+
+        return user;
       }
-
-      return user;
-    } catch (error) {
-      const message =
-        error instanceof AxiosError ? error.message : 'GitHub OAuth failed';
-      throw ApiError.githubAuthFailed(message, error);
-    }
-  }
-
-  async loginWithGoogle(code: string) {
-    try {
-      const tokenResponse: AxiosResponse<TokenResponse> = await axios.post(
-        AUTH.GOOGLE.TOKEN_URL,
-        null,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-          params: {
-            client_id: AUTH.GOOGLE.CLIENT_ID,
-            client_secret: AUTH.GOOGLE.CLIENT_SECRET,
-            redirect_uri: AUTH.REDIRECT_URI,
-            grant_type: 'authorization_code',
-            code,
-          },
-        },
-      );
-
-      const token = tokenResponse.data.access_token;
-
-      const userResponse: AxiosResponse<GoogleUserResponse> = await axios.get(
-        AUTH.GOOGLE.USER_API,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      const userProfile = userResponse.data;
-
-      let user = await this.userService.getUserByProvider({
-        provider: 'google',
-        providerAccountId: userProfile.id.toString(),
-      });
-
-      if (!user) {
-        user = await this.userService.createUser({
-          provider: 'google',
-          providerAccountId: userProfile.id,
-          email: userProfile.email,
-          name: userProfile.name,
-          picture: userProfile.picture,
-        });
-      }
-
-      return user;
-    } catch (error) {
-      const message =
-        error instanceof AxiosError ? error.message : 'Google OAuth failed';
-      throw ApiError.googleAuthFailed(message, error);
-    }
-  }
-
-  async upsertRefreshToken(payload: Omit<RefreshTokenPayload, 'expiryDate'>) {
-    const oldRefreshToken = await this.authRepository.findByUserId(
-      payload.userId,
-    );
-
-    const newRefreshToken = {
-      token: payload.token,
-      userId: payload.userId,
-      issuedAt: new Date(),
-      expiryDate: this.computeExpiryDate(),
-    };
-
-    if (oldRefreshToken) {
-      this.authRepository.update(newRefreshToken);
-    } else {
-      this.authRepository.create(newRefreshToken);
-    }
-  }
-
-  async deleteRefreshToken(token: string) {
-    await this.authRepository.delete(token);
-  }
-
-  async matchingTokens(token: string) {
-    const existingToken = await this.authRepository.findByToken(token);
-
-    if (!existingToken) {
-      throw ApiError.unauthorized('Invalid refresh token');
     }
 
-    return true;
-  }
-
-  computeExpiryDate() {
-    const now = new Date();
-    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-    return new Date(now.getTime() + sevenDaysInMs);
+    user = await this.userService.createUser(unifiedProfile);
+    return user;
   }
 }

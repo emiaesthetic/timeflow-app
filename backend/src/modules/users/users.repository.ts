@@ -1,9 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import { PrismaClient, User } from '@prisma/client';
 
-import { RegisterPayload, RegisterWithOAuthPayload } from '../auth/auth.schema';
-
-import { UpdateUserPayload } from './users.schema';
+import { CreateUserPayload, UpdateUserPayload } from './users.schema';
 
 export class UsersRepository {
   private prisma: PrismaClient;
@@ -12,17 +10,14 @@ export class UsersRepository {
     this.prisma = prisma;
   }
 
-  async create(
-    data: RegisterPayload | RegisterWithOAuthPayload,
-  ): Promise<User> {
+  async create(data: CreateUserPayload): Promise<User> {
     const generateId = createId();
+
     return this.prisma.user.create({
       data: {
         ...data,
         id: generateId,
-        ...('providerAccountId' in data
-          ? { providerAccountId: data.providerAccountId }
-          : { providerAccountId: generateId }),
+        providerAccountId: data.providerAccountId ?? generateId,
       },
     });
   }
@@ -45,7 +40,7 @@ export class UsersRepository {
   }
 
   async findByProvider(
-    provider: string,
+    provider: User['provider'],
     providerAccountId: string,
   ): Promise<User | null> {
     return this.prisma.user.findFirst({

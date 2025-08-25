@@ -1,11 +1,7 @@
 import '@fastify/jwt';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
-type AuthCookiePayload = {
-  id: string;
-  provider: string;
-  providerAccountId: string;
-};
+type AuthCookiePayload = Pick<User, 'id' | 'provider' | 'providerAccountId'>;
 
 declare module 'fastify' {
   interface FastifyRequest {

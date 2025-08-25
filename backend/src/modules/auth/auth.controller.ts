@@ -10,56 +10,75 @@ import {
 import { UsersRepository } from '../users/users.repository';
 import { UserService } from '../users/users.service';
 
-import { AuthRepository } from './auth.repository';
 import {
-  AuthCookiePayload,
   LoginPayload,
-  OAuthPayload,
+  OAuthCodePayload,
+  PublicUser,
   RegisterPayload,
 } from './auth.schema';
 import { AuthService } from './auth.service';
+import { GithubOAuthService } from './github.service';
+import { GoogleOAuthService } from './google.service';
+import { RefreshTokenRepository } from './refreshToken/refreshToken.repository';
+import { RefreshTokenService } from './refreshToken/refreshToken.service';
 
 export class AuthController {
-  private userService: UserService;
-  private authService: AuthService;
+  private readonly userService: UserService;
+  private readonly githubOAuthService: GithubOAuthService;
+  private readonly googleOAuthService: GoogleOAuthService;
+  private readonly authService: AuthService;
+  private readonly refreshTokenService: RefreshTokenService;
 
   constructor(fastify: FastifyInstance) {
     const userRepository = new UsersRepository(fastify.prisma);
-    const authRepository = new AuthRepository(fastify.prisma);
+    const tokenRepository = new RefreshTokenRepository(fastify.prisma);
 
     this.userService = new UserService(userRepository);
-    this.authService = new AuthService(authRepository, this.userService);
+    this.githubOAuthService = new GithubOAuthService();
+    this.googleOAuthService = new GoogleOAuthService();
+    this.authService = new AuthService({
+      userService: this.userService,
+      githubOAuthService: this.githubOAuthService,
+      googleOAuthService: this.googleOAuthService,
+    });
+    this.refreshTokenService = new RefreshTokenService(tokenRepository);
   }
 
-  async registerHandler(
+  async registerWithEmailPasswordHandler(
     request: FastifyRequest<{ Body: RegisterPayload }>,
     reply: FastifyReply,
   ) {
-    const user = await this.authService.register(request.body);
+    const user = await this.authService.registerWithEmailPassword(request.body);
     await this.handleAuthResponse({ reply, user: user, status: 201 });
   }
 
-  async loginHandler(
+  async loginWithEmailPasswordHandler(
     request: FastifyRequest<{ Body: LoginPayload }>,
     reply: FastifyReply,
   ) {
-    const user = await this.authService.login(request.body);
+    const user = await this.authService.loginWithEmailPassword(request.body);
     await this.handleAuthResponse({ reply, user: user });
   }
 
   async loginWithGithubHandler(
-    request: FastifyRequest<{ Body: OAuthPayload }>,
+    request: FastifyRequest<{ Body: OAuthCodePayload }>,
     reply: FastifyReply,
   ) {
-    const user = await this.authService.loginWithGithub(request.body.code);
+    const user = await this.authService.loginWithOAuth(
+      'GITHUB',
+      request.body.code,
+    );
     await this.handleAuthResponse({ reply, user });
   }
 
   async loginWithGoogleHandler(
-    request: FastifyRequest<{ Body: OAuthPayload }>,
+    request: FastifyRequest<{ Body: OAuthCodePayload }>,
     reply: FastifyReply,
   ) {
-    const user = await this.authService.loginWithGoogle(request.body.code);
+    const user = await this.authService.loginWithOAuth(
+      'GOOGLE',
+      request.body.code,
+    );
     await this.handleAuthResponse({ reply, user });
   }
 
@@ -71,7 +90,7 @@ export class AuthController {
 
     try {
       await request.refreshJwtVerify();
-      await this.authService.matchingTokens(refreshToken);
+      await this.refreshTokenService.findRefreshToken(refreshToken);
 
       const userId = request.user.id;
       const user = await this.userService.getCurrentUser(userId);
@@ -94,7 +113,7 @@ export class AuthController {
       }
 
       await request.refreshJwtVerify();
-      await this.authService.deleteRefreshToken(refreshToken);
+      await this.refreshTokenService.deleteRefreshToken(refreshToken);
 
       clearRefreshTokenCookie(reply);
       reply.status(200).send();
@@ -104,16 +123,19 @@ export class AuthController {
     }
   }
 
-  private mapUserToPublicUser(user: User) {
+  private mapUserToPublicUser(user: User): PublicUser {
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       picture: user.picture,
+      provider: user.provider,
     };
   }
 
-  private mapUserToAuthCookiePayload(user: User) {
+  private mapUserToJwtPayload(
+    user: User,
+  ): Pick<User, 'id' | 'provider' | 'providerAccountId'> {
     return {
       id: user.id,
       provider: user.provider,
@@ -121,12 +143,10 @@ export class AuthController {
     };
   }
 
-  private async generateTokens(
-    reply: FastifyReply,
-    userData: AuthCookiePayload,
-  ) {
-    const accessToken = await reply.jwtSign(userData);
-    const refreshToken = await reply.refreshJwtSign(userData);
+  private async generateTokens(reply: FastifyReply, user: User) {
+    const jwtPayload = this.mapUserToJwtPayload(user);
+    const accessToken = await reply.jwtSign(jwtPayload);
+    const refreshToken = await reply.refreshJwtSign(jwtPayload);
     return { accessToken, refreshToken };
   }
 
@@ -139,10 +159,9 @@ export class AuthController {
     user: User;
     status?: number;
   }) {
-    const jwtPayload = this.mapUserToAuthCookiePayload(user);
-    const newTokens = await this.generateTokens(reply, jwtPayload);
+    const newTokens = await this.generateTokens(reply, user);
 
-    await this.authService.upsertRefreshToken({
+    await this.refreshTokenService.upsertRefreshToken({
       token: newTokens.refreshToken,
       userId: user.id,
     });

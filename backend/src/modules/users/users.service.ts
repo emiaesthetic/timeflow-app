@@ -2,10 +2,8 @@ import { User } from '@prisma/client';
 
 import { ApiError } from '@/common/errors/apiError';
 
-import { RegisterPayload, RegisterWithOAuthPayload } from '../auth/auth.schema';
-
 import { UsersRepository } from './users.repository';
-import { UpdateUserPayload } from './users.schema';
+import { CreateUserPayload, UpdateUserPayload } from './users.schema';
 
 export class UserService {
   private usersRepository: UsersRepository;
@@ -14,13 +12,11 @@ export class UserService {
     this.usersRepository = userRepository;
   }
 
-  async createUser(
-    payload: RegisterPayload | RegisterWithOAuthPayload,
-  ): Promise<User> {
+  async createUser(payload: CreateUserPayload): Promise<User> {
     const existingUser = await this.usersRepository.findByEmail(payload.email);
 
     if (existingUser) {
-      throw ApiError.badRequest('User with this email already exists');
+      throw ApiError.conflict('User with this email already exists');
     }
 
     return await this.usersRepository.create(payload);
@@ -68,7 +64,7 @@ export class UserService {
     provider,
     providerAccountId,
   }: {
-    provider: string;
+    provider: User['provider'];
     providerAccountId: string;
   }): Promise<User | null> {
     return this.usersRepository.findByProvider(provider, providerAccountId);

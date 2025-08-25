@@ -1,8 +1,8 @@
 import { PrismaClient, RefreshToken } from '@prisma/client';
 
-import { RefreshTokenPayload } from './auth.schema';
+import { RefreshTokenPayload } from './refreshToken.schema';
 
-export class AuthRepository {
+export class RefreshTokenRepository {
   private prisma: PrismaClient;
 
   constructor(prisma: PrismaClient) {

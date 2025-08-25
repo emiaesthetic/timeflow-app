@@ -9,7 +9,11 @@ import { ApiError } from '@/common/errors/apiError';
 import * as fs from 'fs/promises';
 
 import { UsersRepository } from './users.repository';
-import { UpdateUserPayload, UpdateUserSchema } from './users.schema';
+import {
+  PublicUser,
+  UpdateUserPayload,
+  UpdateUserSchema,
+} from './users.schema';
 import { UserService } from './users.service';
 
 export class UsersController {
@@ -57,12 +61,13 @@ export class UsersController {
     reply.status(204).send(null);
   }
 
-  private toPublicUser(user: User) {
+  private toPublicUser(user: User): PublicUser {
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       picture: user.picture,
+      provider: user.provider,
     };
   }
 
