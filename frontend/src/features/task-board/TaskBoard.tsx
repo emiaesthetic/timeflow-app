@@ -1,19 +1,23 @@
 import { toast } from 'sonner';
 
+import { useTasksQuery } from '@/entities/task';
+import { Task } from '@/entities/task';
+import {
+  useCreateTaskMutation,
+  useDeleteTaskMutation,
+  useTasksMigration,
+  useUpdateTaskMutation,
+} from '@/entities/task';
+
 import { getErrorMessage } from '@/shared/api';
 import { useSkeleton } from '@/shared/lib/useSkeleton';
 
-import { transformTaskToFormData } from './lib/transformTask';
+import { mapFormDataToPayload } from './lib/taskMappers';
 import { useDialog } from './lib/useDialog';
-import { Task, TaskFormData } from './model/types';
-import { useCreateTaskMutation } from './model/useCreateTaskMutation';
+import { TaskFormData } from './model/types';
 import { useCurrentTask } from './model/useCurrentTask';
-import { useDeleteTaskMutation } from './model/useDeleteTaskMutation';
 import { useTasksFilter } from './model/useTasksFilter';
-import { useTasksMigration } from './model/useTasksMigration';
-import { useTasksQuery } from './model/useTasksQuery';
 import { useTimer } from './model/useTimer';
-import { useUpdateTaskMutation } from './model/useUpdateTaskMutation';
 import { Header } from './ui/Header';
 import { TaskBoardLayout } from './ui/TaskBoardLayout';
 import { TaskCreator } from './ui/TaskCreator';
@@ -23,14 +27,21 @@ import { TaskList, TaskListSkeleton } from './ui/TaskList';
 import { TaskTimer } from './ui/TaskTimer';
 
 export function TaskBoard() {
-  const { tasks, isPending, isError, error } = useTasksQuery();
+  const { tasks, isPending, error: tasksQueryError } = useTasksQuery();
   const { filteredTasks, handleChangeFilter } = useTasksFilter(tasks);
   const { currentTask, selectCurrentTask, resetCurrentTask } = useCurrentTask();
 
   const createTaskMutation = useCreateTaskMutation();
   const updateTaskMutation = useUpdateTaskMutation();
   const deleteTaskMutation = useDeleteTaskMutation();
-  useTasksMigration();
+  const migrationMutation = useTasksMigration();
+
+  const taskBoardError =
+    tasksQueryError ||
+    createTaskMutation.error ||
+    updateTaskMutation.error ||
+    deleteTaskMutation.error ||
+    migrationMutation.error;
 
   const creatorDialog = useDialog();
   const editorDialog = useDialog();
@@ -40,7 +51,8 @@ export function TaskBoard() {
   const { isShowSkeleton } = useSkeleton({ isPending });
 
   const handleCreatorSubmit = (formData: TaskFormData) => {
-    createTaskMutation.mutate(formData);
+    const payload = mapFormDataToPayload(formData);
+    createTaskMutation.mutate(payload);
     creatorDialog.close();
   };
 
@@ -55,7 +67,8 @@ export function TaskBoard() {
   };
 
   const handleEditorSubmit = (taskId: string, formData: TaskFormData) => {
-    updateTaskMutation.mutate({ taskId, formData });
+    const payload = mapFormDataToPayload(formData);
+    updateTaskMutation.mutate({ taskId, payload });
     editorDialog.close();
   };
 
@@ -74,18 +87,17 @@ export function TaskBoard() {
   };
 
   const handleUpdateStatus = (task: Task) => {
-    const formData = transformTaskToFormData(task);
     updateTaskMutation.mutate({
       taskId: task.id,
-      formData: {
-        ...formData,
-        status: formData.status === 'PROCESS' ? 'DONE' : 'PROCESS',
+      payload: {
+        ...task,
+        status: task.status === 'PROCESS' ? 'DONE' : 'PROCESS',
       },
     });
   };
 
-  if (isError) {
-    toast.error(getErrorMessage(error));
+  if (taskBoardError) {
+    toast.error(getErrorMessage(taskBoardError));
   }
 
   return (

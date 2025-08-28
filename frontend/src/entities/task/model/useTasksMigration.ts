@@ -1,8 +1,6 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
-import { getErrorMessage } from '@/shared/api';
 import { CONFIG } from '@/shared/config';
 import { queryKeys } from '@/shared/constants';
 
@@ -14,14 +12,10 @@ import { useTasksApi } from './TasksApiContext';
 export function useTasksMigration() {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useTasksApi();
-  const isMigration = useRef(false);
+  const isMigrationPerformed = useRef(false);
 
-  const migrateTasks = useCallback(async () => {
-    if (isMigration.current) return;
-
-    isMigration.current = true;
-
-    try {
+  const migrationMutation = useMutation({
+    mutationFn: async () => {
       const localStorageTasks = await tasksApiStorage.fetchTasks();
 
       for (const task of localStorageTasks) {
@@ -29,20 +23,27 @@ export function useTasksMigration() {
       }
 
       localStorage.removeItem(CONFIG.STORAGE_KEYS.TASKS);
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.tasks(isAuthenticated),
       });
       queryClient.removeQueries({
         queryKey: queryKeys.tasks(false),
       });
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    }
-  }, [queryClient, isAuthenticated]);
+    },
+    onError: () => {
+      isMigrationPerformed.current = false;
+    },
+  });
 
   useEffect(() => {
-    if (isAuthenticated) {
-      migrateTasks();
+    if (isAuthenticated && !isMigrationPerformed.current) {
+      isMigrationPerformed.current = true;
+
+      migrationMutation.mutate();
     }
-  }, [isAuthenticated, migrateTasks]);
+  }, [isAuthenticated, isMigrationPerformed, migrationMutation]);
+
+  return migrationMutation;
 }

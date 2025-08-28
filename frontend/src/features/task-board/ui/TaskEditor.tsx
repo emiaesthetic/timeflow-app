@@ -1,8 +1,10 @@
+import { Task } from '@/entities/task';
+
 import { Button } from '@/shared/ui/Button';
 import { Dialog } from '@/shared/ui/Dialog';
 
-import { transformTaskToFormData } from '../lib/transformTask';
-import { Task, TaskFormData } from '../model/types';
+import { mapTaskToFormData } from '../lib/taskMappers';
+import { TaskFormData } from '../model/types';
 
 import { TaskForm } from './TaskForm';
 
@@ -31,7 +33,7 @@ export function TaskEditor({
 
         <TaskForm
           key={task.id}
-          currentTask={transformTaskToFormData(task)}
+          currentTask={mapTaskToFormData(task)}
           onSubmit={formData => {
             onSubmit(task.id, formData);
           }}

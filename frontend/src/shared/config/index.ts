@@ -37,15 +37,18 @@ export const API = {
   BASE_URL: `${CONFIG.SERVER_URL}/api/v1`,
 
   auth(path = '', params?: Record<string, string>) {
-    return withParams(`${API.BASE_URL}/auth/${path}`, params);
+    const endpoint = path ? `auth/${path}` : 'auth';
+    return withParams(`${API.BASE_URL}/${endpoint}`, params);
   },
 
   users(path = '', params?: Record<string, string>) {
-    return withParams(`${API.BASE_URL}/users/${path}`, params);
+    const endpoint = path ? `users/${path}` : 'users';
+    return withParams(`${API.BASE_URL}/${endpoint}`, params);
   },
 
   tasks(path = '', params?: Record<string, string>) {
-    return withParams(`${API.BASE_URL}/tasks/${path}`, params);
+    const endpoint = path ? `tasks/${path}` : 'tasks';
+    return withParams(`${API.BASE_URL}/${endpoint}`, params);
   },
 };
 
@@ -54,6 +57,7 @@ export const AUTH = {
     const params = new URLSearchParams({
       client_id: CONFIG.GITHUB_CLIENT_ID,
       redirect_uri: `${CONFIG.APP_URL}${CONFIG.ROUTES.OAUTH}`,
+      scope: 'user:email',
       state: 'github',
     });
     return `https://github.com/login/oauth/authorize?${params}`;

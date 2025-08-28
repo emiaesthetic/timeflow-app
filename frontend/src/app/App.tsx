@@ -3,7 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import { authStore } from '@/features/auth';
 import { setupAxiosWithAuth } from '@/features/auth/api/setupAxiosWithAuth';
-import { TasksApiProvider } from '@/features/task-board';
+
+import { TasksApiProvider } from '@/entities/task';
 
 import { Toaster } from '@/shared/ui/Sonner';
 

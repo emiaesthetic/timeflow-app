@@ -5,7 +5,6 @@ export const errorMessages: Record<string, string> = {
   INTERNAL_SERVER_ERROR: 'A server error occurred. Please try again later.',
   UNAUTHORIZED: 'Please log in again.',
   FORBIDDEN: 'You do not have access to this resource.',
-  CONFLICT: 'A record with this data already exists.',
   VALIDATION_ERROR: 'Some fields are invalid. Please check the form.',
 
   FRONTEND_NETWORK_ERROR: 'Network error. Please check your connection.',

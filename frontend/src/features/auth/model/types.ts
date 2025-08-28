@@ -13,14 +13,3 @@ export const LoginFormSchema = z.object({
 
 export type RegisterFormData = z.infer<typeof RegisterFormSchema>;
 export type LoginFormData = z.infer<typeof LoginFormSchema>;
-
-export type User = {
-  email: string;
-  name: string;
-  picture: string;
-};
-
-export type AuthResponse = {
-  token: string;
-  user: User;
-};

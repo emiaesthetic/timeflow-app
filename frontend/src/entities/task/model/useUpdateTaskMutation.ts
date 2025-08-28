@@ -1,40 +1,32 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 
-import { getErrorMessage } from '@/shared/api';
 import { queryKeys } from '@/shared/constants';
 
-import { transformFormDataToPayload } from '../lib/transformTask';
-
 import { useTasksApi } from './TasksApiContext';
-import { Task, TaskFormData, TaskId } from './types';
+import { Task, TaskId } from './types';
 
 export function useUpdateTaskMutation() {
   const queryClient = useQueryClient();
   const { isAuthenticated, api } = useTasksApi();
   const queryKey = queryKeys.tasks(isAuthenticated);
 
-  const mutation = useMutation({
+  return useMutation({
+    mutationKey: queryKey,
     mutationFn: ({
       taskId,
-      formData,
+      payload,
     }: {
       taskId: TaskId;
-      formData: TaskFormData;
-    }) => {
-      const payload = transformFormDataToPayload(formData);
-      return api.updateTask(taskId, payload);
-    },
+      payload: Partial<Task>;
+    }) => api.updateTask(taskId, payload),
     onMutate: async ({
       taskId,
-      formData,
+      payload,
     }: {
       taskId: TaskId;
-      formData: TaskFormData;
+      payload: Partial<Task>;
     }) => {
       await queryClient.cancelQueries({ queryKey });
-
-      const payload = transformFormDataToPayload(formData);
 
       const prevTasks = queryClient.getQueryData<Task[]>(queryKey) || [];
 
@@ -46,15 +38,11 @@ export function useUpdateTaskMutation() {
 
       return { prevTasks };
     },
-    onError: (error, _, context) => {
+    onError: (_, __, context) => {
       if (context?.prevTasks) {
         queryClient.setQueryData(queryKey, context.prevTasks);
       }
-
-      toast.error(getErrorMessage(error));
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
-
-  return mutation;
 }

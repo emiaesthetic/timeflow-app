@@ -3,26 +3,22 @@ import { AxiosError } from 'axios';
 
 import { queryKeys } from '@/shared/constants';
 
-import { authApi } from '../api/authApi';
+import { userApi } from '../api/userApi';
 
-import { authStore } from './authStore';
 import { User } from './types';
 
-export function useUserQuery() {
-  const { isAuthenticated } = authStore();
-  const queryKey = queryKeys.user();
-
+export function useUserQuery(options?: { enabled: boolean }) {
   const {
     data: user,
     isPending,
     isError,
     error,
   } = useQuery<User, AxiosError, User>({
-    queryKey,
-    queryFn: authApi.getCurrentUser,
+    queryKey: queryKeys.user(),
+    queryFn: userApi.getMe,
     staleTime: Infinity,
     gcTime: Infinity,
-    enabled: isAuthenticated,
+    enabled: options?.enabled ?? true,
   });
 
   return { user, isPending, isError, error };

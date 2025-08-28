@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Task } from './types';
+import { Task } from '@/entities/task';
 
 export function useCurrentTask() {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);

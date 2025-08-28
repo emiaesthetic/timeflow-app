@@ -2,20 +2,18 @@ import { createId } from '@paralleldrive/cuid2';
 
 import { CONFIG } from '@/shared/config';
 
-import { transformResponseToTask } from '../lib/transformTask';
-import { Task, TaskPayload, TaskResponse, TasksApi } from '../model/types';
+import { mapTaskResponse } from '../lib/mapTaskResponse';
+import { Task, TaskId, TaskResponse, TasksApi } from '../model/types';
 
 export const tasksApiStorage: TasksApi = {
   fetchTasks: async function () {
     const tasks = localStorage.getItem(CONFIG.STORAGE_KEYS.TASKS);
     if (!tasks) return [];
 
-    return JSON.parse(tasks).map((task: TaskResponse) =>
-      transformResponseToTask(task),
-    );
+    return JSON.parse(tasks).map((task: TaskResponse) => mapTaskResponse(task));
   },
 
-  createTask: async function (payload: TaskPayload) {
+  createTask: async function (payload: Omit<Task, 'id'>) {
     const newTask: Task = {
       id: createId(),
       ...payload,
@@ -30,7 +28,7 @@ export const tasksApiStorage: TasksApi = {
     );
   },
 
-  updateTask: async function (taskId: string, payload: TaskPayload) {
+  updateTask: async function (taskId: TaskId, payload: Partial<Task>) {
     const tasks = await this.fetchTasks();
     const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
@@ -45,7 +43,7 @@ export const tasksApiStorage: TasksApi = {
     );
   },
 
-  deleteTask: async function (taskId: string) {
+  deleteTask: async function (taskId: TaskId) {
     const tasks = await this.fetchTasks();
     const filteredTasks = tasks.filter(task => task.id !== taskId);
 

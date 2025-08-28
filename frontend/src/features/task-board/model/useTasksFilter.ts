@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 
-import { dateApi } from '../lib/dateApi';
+import { Task } from '@/entities/task';
 
-import { Task } from './types';
+import { dateApi } from '../lib/dateApi';
 
 export type FilterState =
   | 'ALL'

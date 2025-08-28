@@ -1,7 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 
-import { getErrorMessage } from '@/shared/api';
 import { queryKeys } from '@/shared/constants';
 
 import { useTasksApi } from './TasksApiContext';
@@ -12,7 +10,7 @@ export function useDeleteTaskMutation() {
   const { isAuthenticated, api } = useTasksApi();
   const queryKey = queryKeys.tasks(isAuthenticated);
 
-  const mutation = useMutation({
+  return useMutation({
     mutationFn: (taskId: TaskId) => {
       return api.deleteTask(taskId);
     },
@@ -27,15 +25,11 @@ export function useDeleteTaskMutation() {
 
       return { prevTasks };
     },
-    onError: (error, _, context) => {
+    onError: (_, __, context) => {
       if (context?.prevTasks) {
         queryClient.setQueryData(queryKey, context.prevTasks);
       }
-
-      toast.error(getErrorMessage(error));
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
-
-  return mutation;
 }

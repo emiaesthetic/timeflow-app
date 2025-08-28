@@ -3,8 +3,8 @@ import { AxiosResponse } from 'axios';
 import { axiosWithAuth } from '@/shared/api';
 import { API } from '@/shared/config';
 
-import { transformResponseToTask } from '../lib/transformTask';
-import { TaskId, TaskPayload, TaskResponse, TasksApi } from '../model/types';
+import { mapTaskResponse } from '../lib/mapTaskResponse';
+import { Task, TaskId, TaskResponse, TasksApi } from '../model/types';
 
 export const tasksApiRemote: TasksApi = {
   fetchTasks: async function () {
@@ -12,14 +12,14 @@ export const tasksApiRemote: TasksApi = {
       `${API.tasks()}`,
     );
 
-    return response.data.map(task => transformResponseToTask(task));
+    return response.data.map(task => mapTaskResponse(task));
   },
 
-  createTask: async function (payload: TaskPayload) {
+  createTask: async function (payload: Omit<Task, 'id'>) {
     await axiosWithAuth.post(`${API.tasks()}`, payload);
   },
 
-  updateTask: async function (taskId: TaskId, payload: TaskPayload) {
+  updateTask: async function (taskId: TaskId, payload: Partial<Task>) {
     await axiosWithAuth.put(`${API.tasks(taskId)}`, payload);
   },
 

@@ -1,41 +1,5 @@
 import { z } from 'zod';
 
-export type TaskId = string;
-
-export type PRIORITY = 'LOW' | 'MEDIUM' | 'HIGH';
-
-export type STATUS = 'PROCESS' | 'DONE';
-
-export type TaskPayload = {
-  title: string;
-  description?: string;
-  date: Date;
-  duration: number;
-  priority: PRIORITY;
-  status: STATUS;
-};
-
-export type Task = {
-  id: TaskId;
-} & TaskPayload;
-
-export type TaskResponse = {
-  id: string;
-  title: string;
-  description?: string;
-  date: string;
-  duration: number;
-  priority: PRIORITY;
-  status: STATUS;
-};
-
-export type TasksApi = {
-  fetchTasks: () => Promise<Task[]>;
-  createTask: (payload: TaskPayload) => Promise<void>;
-  updateTask: (taskId: string, payload: TaskPayload) => Promise<void>;
-  deleteTask: (taskId: string) => Promise<void>;
-};
-
 export const TaskFormSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),

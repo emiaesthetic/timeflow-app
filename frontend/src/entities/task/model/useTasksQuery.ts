@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { useMemo } from 'react';
 
 import { queryKeys } from '@/shared/constants';
@@ -14,12 +13,13 @@ const statusOrder: Record<Task['status'], number> = {
 
 export function useTasksQuery() {
   const { isAuthenticated, api } = useTasksApi();
+
   const {
     data: tasks = [],
     isPending,
     isError,
     error,
-  } = useQuery<Task[], AxiosError, Task[]>({
+  } = useQuery({
     queryKey: queryKeys.tasks(isAuthenticated),
     queryFn: api.fetchTasks,
   });

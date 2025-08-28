@@ -1,10 +1,13 @@
+import { useUserQuery } from '@/entities/user';
+
+import { CONFIG } from '@/shared/config';
 import { useSkeleton } from '@/shared/lib/useSkeleton';
 import { Button } from '@/shared/ui/Button';
 import { DropdownMenu } from '@/shared/ui/DropdownMenu';
 import { Link } from '@/shared/ui/Link';
 
+import { authStore } from '../model/authStore';
 import { useLogoutMutation } from '../model/useLogoutMutation';
-import { useUserQuery } from '../model/useUserQuery';
 
 function UserProfileSkeleton() {
   return (
@@ -16,7 +19,10 @@ function UserProfileSkeleton() {
 }
 
 export function UserProfile() {
-  const { user, isPending: isUserPending } = useUserQuery();
+  const { isAuthenticated } = authStore();
+  const { user, isPending: isUserPending } = useUserQuery({
+    enabled: isAuthenticated,
+  });
   const { isPending: isLogoutPending, mutate: logout } = useLogoutMutation();
   const { isShowSkeleton } = useSkeleton({ isPending: isUserPending });
 
@@ -34,7 +40,11 @@ export function UserProfile() {
         >
           <img
             className="h-full w-full rounded-md object-cover"
-            src={user.picture}
+            src={
+              user.provider === 'EMAIL_PASSWORD'
+                ? `${CONFIG.SERVER_URL}${user.picture}`
+                : user.picture
+            }
             alt="Profile avatar"
           />
         </Button>
@@ -47,19 +57,9 @@ export function UserProfile() {
               className="bg-transparent hover:bg-transparent"
               variant="ghost"
               size="sm"
-              to="/profile"
+              to={`/profile/${user.id}`}
             >
               Profile
-            </Link>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item>
-            <Link
-              className="bg-transparent hover:bg-transparent"
-              variant="ghost"
-              size="sm"
-              to="/settings"
-            >
-              Settings
             </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Separator />
